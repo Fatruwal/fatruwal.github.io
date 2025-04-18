@@ -54,26 +54,34 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
         <div>
           <div>
             <nav>
-              <ul className="mt-4 space-y-2 text-sm text-primary-900 md:text-sm">
+              <ul className="mt-4 space-y-2 text-sm md:text-sm">
                 {links.map(link =>
                   !link.childrens ? (
                     <li className="px-6 py-[16px] leading-4 tracking-[0.04rem]">
-                      <Link to={link.path}>{link.title}</Link>
+                      <Link
+                        className="text-primary-900 transition-colors hover:text-primary-300"
+                        to={link.path}
+                      >
+                        {link.title}
+                      </Link>
                     </li>
                   ) : (
                     <Accordion type="single" collapsible>
                       <AccordionItem
                         value="item-1"
-                        className="w-full data-[state=open]:bg-primary-100"
+                        className="data-[state=open]:bg-primary-25 w-full"
                       >
-                        <AccordionTrigger className="px-6 py-4 font-normal no-underline hover:no-underline data-[state=open]:bg-primary-300 data-[state=open]:text-white">
+                        <AccordionTrigger className="data-[state=open]-text-white px-6 py-4 font-normal text-primary-900 no-underline transition-colors hover:no-underline data-[state=open]:bg-primary-300 data-[state=open]:text-white">
                           {link.title}
                         </AccordionTrigger>
                         <AccordionContent>
                           <div className="mt-2 grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
                             {link.childrens!.map(children => (
                               <li>
-                                <Link to={children.path} className="block">
+                                <Link
+                                  to={children.path}
+                                  className="block text-primary-900 transition-colors hover:text-primary-300"
+                                >
                                   {children.title}
                                 </Link>
                               </li>

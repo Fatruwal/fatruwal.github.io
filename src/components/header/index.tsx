@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import logo from "@/assets/logo.webp"
 import logo_sgs from "@/assets/logo-sgs.png"
 import { FaWhatsapp } from "react-icons/fa"
@@ -11,6 +11,9 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
+import { DrawerClose, DrawerHeader } from "../ui/drawer"
+import BudgetForm from "./budget-form"
+import { MdOutlineClose } from "react-icons/md"
 
 export const links: FatherLinkTitle[] = [
   {
@@ -94,7 +97,7 @@ const Header: React.FC = () => {
   return (
     <header className="shadow-lg">
       {/* Topbar */}
-      <section className="max-h-[40px] bg-primary-800 py-[8px] text-white">
+      <section className="max-h-[40px] bg-primary-700 py-[8px] text-white">
         <div className="mx-auto mb-[5px] flex w-10/12 max-w-screen-2xl items-center justify-center px-4 lg:max-w-[1320px] lg:justify-between">
           <div className="flex space-x-6">
             <span>
@@ -271,7 +274,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* Right Section - Desktop Navigation & Badge */}
-            <div className="hidden text-sm md:flex md:items-center md:space-x-6">
+            <div className="hidden text-sm text-primary-900 hover:text-[#0E6ABF] md:flex md:items-center md:space-x-6">
               {/* Desktop Navigation */}
               <nav className="mr-[1.1rem] hidden md:block">
                 <ul className="flex space-x-[36px]">
@@ -280,7 +283,7 @@ const Header: React.FC = () => {
                       <li>
                         <Link
                           to={link.path}
-                          className="transition-colors hover:text-[#006CCF]"
+                          className="text-primary-900 transition-colors hover:text-[#0E6ABF]"
                         >
                           {link.title}
                         </Link>
@@ -288,7 +291,7 @@ const Header: React.FC = () => {
                     ) : (
                       <DropdownMenu>
                         <DropdownMenuTrigger>
-                          <div className="flex cursor-pointer items-center transition-colors hover:text-[#006CCF]">
+                          <div className="flex cursor-pointer items-center text-primary-900 transition-colors hover:text-[#0E6ABF]">
                             Produtos
                             <svg
                               className="ml-1 h-4 w-4"
@@ -317,7 +320,7 @@ const Header: React.FC = () => {
                               >
                                 <Link
                                   to={child.path}
-                                  className="block px-4 py-2 text-sm hover:bg-primary-100 hover:text-[#006CCF]"
+                                  className="hover:bg-primary-25 block px-4 py-2 text-sm transition-all hover:font-medium hover:text-primary-300"
                                 >
                                   {child.title}
                                 </Link>
@@ -335,11 +338,7 @@ const Header: React.FC = () => {
               <div className="hidden h-[3.5rem] w-[1px] bg-primary-800 md:block"></div>
 
               <div className="pb-1 pr-4 text-center">
-                <img
-                  src={logo_sgs}
-                  alt="Logo SGS"
-                  className="h-[3.8rem] w-auto"
-                />
+                <BudgetForm />
               </div>
             </div>
           </div>
