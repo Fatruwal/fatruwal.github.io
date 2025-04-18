@@ -52,3 +52,7 @@ Thumbs.db
 .cache/
 public/page-data
 public/~partytown
+public/static
+public/favicon*
+public/manifest*
+public/icons/
