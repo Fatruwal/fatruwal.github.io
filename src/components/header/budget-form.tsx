@@ -7,19 +7,35 @@ import { Label } from "@/components/ui/label"
 import { FaWhatsapp } from "react-icons/fa"
 import { BiPhone } from "react-icons/bi"
 import { MdEmail } from "react-icons/md"
-import { PiNewspaperClipping } from "react-icons/pi"
+import BudgetFormIcon from "@/assets/BudgetFormIcon"
 
-const Budget: React.FC<unknown> = () => {
+const BudgetForm: React.FC<{
+  sizeInSmallScreen?: "small" | "medium"
+}> = ({ sizeInSmallScreen = "small" }) => {
   return (
     <Dialog>
-      <DialogTrigger>
-        <button className="flex items-center border-0 bg-transparent text-primary-800">
-          <PiNewspaperClipping className="text-4xl" />
-          <div className="flex flex-col items-center justify-center text-sm leading-3">
-            <span className="font-normal">Solicite um </span>
-            <strong>orçamento </strong>
-          </div>
-        </button>
+      <DialogTrigger className="flex items-center border-0 bg-transparent text-primary-800">
+        <BudgetFormIcon
+          data-size-in-small-screen={sizeInSmallScreen}
+          className="bg-white data-[size-in-small-screen='medium']:mr-1 data-[size-in-small-screen='small']:mr-1 data-[size-in-small-screen='medium']:h-[30px] data-[size-in-small-screen='medium']:w-[30px] md:mr-2"
+        />
+        <div
+          data-size-in-small-screen={sizeInSmallScreen}
+          className="flex flex-col items-center justify-center data-[size-in-small-screen='medium']:text-sm data-[size-in-small-screen='medium']:leading-5 data-[size-in-small-screen='small']:leading-[10px] md:text-sm md:leading-5"
+        >
+          <span
+            data-size-in-small-screen={sizeInSmallScreen}
+            className="data-[size-in-small-screen='small']:text-xxs font-normal data-[size-in-small-screen='medium']:text-sm md:text-sm"
+          >
+            Solicite um
+          </span>
+          <strong
+            data-size-in-small-screen={sizeInSmallScreen}
+            className="data-[size-in-small-screen='small']:text-xxs data-[size-in-small-screen='medium']:text-sm md:text-sm"
+          >
+            Orçamento{" "}
+          </strong>
+        </div>
       </DialogTrigger>
 
       <DialogContent className="max-h-[80vh] w-[95vw] max-w-5xl overflow-y-auto border-none bg-white p-0 sm:rounded-lg">
@@ -170,4 +186,4 @@ const Budget: React.FC<unknown> = () => {
   )
 }
 
-export default Budget
+export default BudgetForm

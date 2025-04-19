@@ -16,6 +16,7 @@ import {
 } from "../ui/accordion"
 import BudgetForm from "./budget-form"
 import { FatherLinkTitle } from "./model"
+import MenuIcon from "@/assets/MenuIcon"
 
 const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
   return (
@@ -25,20 +26,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
       shouldScaleBackground={false}
     >
       <DrawerTrigger>
-        <svg
-          className="h-6 w-6 text-primary-500"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          ></path>
-        </svg>
+        <MenuIcon />
       </DrawerTrigger>
       <DrawerContent
         style={{ height: "calc(100vh - 40px)" }}
@@ -46,7 +34,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
         overlayDisabled
       >
         <DrawerHeader className="mx-4 flex items-center justify-between border-b py-3">
-          <BudgetForm />
+          <BudgetForm sizeInSmallScreen="medium" />
           <DrawerClose>
             <MdOutlineClose className="text-[1.3rem] text-primary-800" />
           </DrawerClose>
@@ -57,7 +45,10 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
               <ul className="mt-4 space-y-2 text-sm md:text-sm">
                 {links.map(link =>
                   !link.childrens ? (
-                    <li className="px-6 py-[16px] leading-4 tracking-[0.04rem]">
+                    <li
+                      key={link.title}
+                      className="px-6 py-[16px] leading-4 tracking-[0.04rem]"
+                    >
                       <Link
                         className="text-primary-900 transition-colors hover:text-primary-300"
                         to={link.path}
@@ -66,7 +57,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
                       </Link>
                     </li>
                   ) : (
-                    <Accordion type="single" collapsible>
+                    <Accordion key={link.title} type="single" collapsible>
                       <AccordionItem
                         value="item-1"
                         className="data-[state=open]:bg-primary-25 w-full"
@@ -77,7 +68,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
                         <AccordionContent>
                           <div className="mt-2 grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
                             {link.childrens!.map(children => (
-                              <li>
+                              <li key={link.title}>
                                 <Link
                                   to={children.path}
                                   className="block text-primary-900 transition-colors hover:text-primary-300"
