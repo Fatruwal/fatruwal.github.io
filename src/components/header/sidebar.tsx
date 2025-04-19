@@ -14,7 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion"
-import BudgetForm from "./budget-form"
+import BudgetModal from "./budget-modal"
 import { FatherLinkTitle } from "./model"
 import MenuIcon from "@/assets/MenuIcon"
 
@@ -34,7 +34,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
         overlayDisabled
       >
         <DrawerHeader className="mx-4 flex items-center justify-between border-b py-3">
-          <BudgetForm sizeInSmallScreen="medium" />
+          <BudgetModal sizeInSmallScreen="medium" />
           <DrawerClose>
             <MdOutlineClose className="text-[1.3rem] text-primary-800" />
           </DrawerClose>

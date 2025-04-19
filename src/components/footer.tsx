@@ -156,7 +156,7 @@ const Footer: React.FC = () => {
                 <img
                   width="112"
                   height="73"
-                  src="/images/iso9001.png"
+                  src={""}
                   alt="Empresa com certificação ISO 9001"
                 />
               </div>
@@ -180,11 +180,7 @@ const Footer: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img
-                  src="/images/5minds.svg"
-                  alt="5minds logo"
-                  className="h-6"
-                />
+                <img src="" alt="5minds logo" className="h-6" />
               </a>
             </div>
           </div>

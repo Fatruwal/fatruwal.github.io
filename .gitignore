@@ -51,3 +51,5 @@ Thumbs.db
 # Gatsby
 .cache/
 public/
+
+.env.development

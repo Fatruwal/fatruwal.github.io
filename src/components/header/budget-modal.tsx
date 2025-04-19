@@ -9,7 +9,7 @@ import { BiPhone } from "react-icons/bi"
 import { MdEmail } from "react-icons/md"
 import BudgetFormIcon from "@/assets/BudgetFormIcon"
 
-const BudgetForm: React.FC<{
+const BudgetModal: React.FC<{
   sizeInSmallScreen?: "small" | "medium"
 }> = ({ sizeInSmallScreen = "small" }) => {
   return (
@@ -186,4 +186,4 @@ const BudgetForm: React.FC<{
   )
 }
 
-export default BudgetForm
+export default BudgetModal
