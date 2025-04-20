@@ -32,7 +32,7 @@ const iconVariant = cva("", {
   variants: {
     icons: {
       rounded:
-        "text-5xl text-primary-foreground-100 bg-primary-500 rounded-sm p-2",
+        "text-4xl sm:text-5xl text-primary-foreground-100 bg-primary-500 rounded-sm p-2",
       blank: "text-xl text-primary-foreground-100",
     },
   },
