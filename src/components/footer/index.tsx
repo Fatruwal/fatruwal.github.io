@@ -1,7 +1,48 @@
 import React from "react"
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa"
+import CertificateSGS from "@/assets/CertificateSGS.png"
+import { BottomBar } from "./BottomBar"
+import { ContactsNumber } from "../ContactsNumber"
+import { graphql, Link, useStaticQuery } from "gatsby"
+
+interface MenuQueryData {
+  allWpMenuItem: {
+    nodes: Array<{
+      label: string
+      path: string
+    }>
+  }
+}
+
+type LinkTitle = {
+  path: string
+  title: string
+}
 
 const Footer: React.FC = () => {
+  const data = useStaticQuery<MenuQueryData>(graphql`
+    query FooterMenuQuery {
+      allWpMenuItem(
+        filter: {
+          menu: { node: { name: { eq: "footer-menu" } } }
+          parentId: { eq: null }
+        }
+        sort: { order: ASC }
+      ) {
+        nodes {
+          label
+          path
+        }
+      }
+    }
+  `)
+  console.log("footer", data)
+
+  const menuItems: LinkTitle[] = data.allWpMenuItem.nodes.map(item => ({
+    path: item.path || "/",
+    title: item.label,
+  }))
+
   return (
     <footer className="bg-white text-white">
       <div className="bg-primary-500 py-10">
@@ -86,77 +127,33 @@ const Footer: React.FC = () => {
               </div>
             </div>
 
-            {/* Second column */}
-            <div className="mt-8 md:mt-0">
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href="https://fatruwal.com.br"
-                    className="transition duration-200 hover:text-blue-600"
-                  >
-                    Home
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://fatruwal.com.br/quem-somos"
-                    className="transition duration-200 hover:text-blue-600"
-                  >
-                    Quem somos
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://fatruwal.com.br/qualidade"
-                    className="transition duration-200 hover:text-blue-600"
-                  >
-                    Qualidade
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://fatruwal.com.br/blog"
-                    className="transition duration-200 hover:text-blue-600"
-                  >
-                    Blog
-                  </a>
-                </li>
+            <div className="mt-8 border-l-hairline border-l-white pl-8 md:mt-0">
+              <ul className="space-y-3 text-white first-line:font-bold">
+                {menuItems.map(link => (
+                  <li>
+                    <Link
+                      to={link.path}
+                      className="text-white transition duration-200"
+                    >
+                      {link.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            {/* Third column */}
-            <div className="mt-8 md:mt-0">
+            <div className="border-l-hairline border-l-white md:mt-0">
               <h3 className="mb-4 text-lg font-semibold">Contatos</h3>
-              <div className="space-y-2">
-                <div>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://api.whatsapp.com/send?phone=5511963014309&text=Ol%C3%A1%20gostaria%20de%20solicitar%20mais%20informa%C3%A7%C3%B5es"
-                    className="text-gray-600 transition duration-200 hover:text-blue-600"
-                  >
-                    11 96301-4309
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="tel:1126683227"
-                    className="text-gray-600 transition duration-200 hover:text-blue-600"
-                  >
-                    11 2668-3227
-                  </a>
-                </div>
-              </div>
+              <ContactsNumber direction="column" />
             </div>
 
-            {/* Fourth column */}
             <div className="mt-8 md:mt-0">
-              <h3 className="mb-4 text-lg font-semibold">Certificado</h3>
+              <h3 className="mb-4 text-lg font-semibold">Certificados</h3>
               <div>
                 <img
-                  width="112"
-                  height="73"
-                  src={""}
+                  width="92"
+                  height="90"
+                  src={CertificateSGS}
                   alt="Empresa com certificação ISO 9001"
                 />
               </div>
@@ -164,28 +161,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Footer bottom */}
-      <div className="bg-primary-700 py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col items-center justify-between md:flex-row">
-            <p className="mb-4 text-[12px] text-white md:mb-0">
-              K2 PRODUTOS INDUSTRIAIS EIRELI - ME - CNPJ: 12.228.969/0001-01 ©
-              Todos os direitos reservados. {new Date().getFullYear()}
-            </p>
-            <div className="flex items-center">
-              <span className="mr-2 text-[12px] text-white">Developed by</span>
-              <a
-                href="https://www.5minds.com.br"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="" alt="5minds logo" className="h-6" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BottomBar />
     </footer>
   )
 }

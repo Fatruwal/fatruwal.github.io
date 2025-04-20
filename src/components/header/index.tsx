@@ -13,15 +13,13 @@ import Topbar from "./Topbar"
 
 interface MenuQueryData {
   allWpMenuItem: {
-    totalCount: number
     nodes: Array<{
       label: string
-      path: string | null
-      parentId: string | null
+      path: string
       childItems: {
         nodes: Array<{
           label: string
-          path: string | null
+          path: string
         }>
       }
     }>
@@ -30,9 +28,14 @@ interface MenuQueryData {
 
 const Header: React.FC = () => {
   const data = useStaticQuery<MenuQueryData>(graphql`
-    query MenuQuery {
-      allWpMenuItem(filter: { parentId: { eq: null } }) {
-        totalCount
+    query HeaderMenuQuery {
+      allWpMenuItem(
+        filter: {
+          menu: { node: { name: { eq: "header-menu" } } }
+          parentId: { eq: null }
+        }
+        sort: { order: ASC }
+      ) {
         nodes {
           label
           path
@@ -46,14 +49,13 @@ const Header: React.FC = () => {
       }
     }
   `)
-  console.log(data)
   const menuItems: FatherLinkTitle[] = data.allWpMenuItem.nodes.map(item => ({
     path: item.path || "/",
     title: item.label,
     childrens:
       item.childItems.nodes.length > 0
         ? item.childItems.nodes.map(child => ({
-            path: child.path || "",
+            path: child.path || "/",
             title: child.label,
           }))
         : undefined,
@@ -132,7 +134,7 @@ const Header: React.FC = () => {
                               >
                                 <Link
                                   to={child.path}
-                                  className="hover:bg-primary-25 block px-4 py-2 text-sm transition-all hover:font-medium hover:text-primary-300"
+                                  className="block px-4 py-2 text-sm transition-all hover:bg-primary-25 hover:font-medium hover:text-primary-300"
                                 >
                                   {child.title}
                                 </Link>
@@ -147,7 +149,7 @@ const Header: React.FC = () => {
               </nav>
 
               {/* Vertical Divider */}
-              <div className="hidden h-[3.5rem] w-[1px] bg-primary-800 md:block"></div>
+              <div className="hidden h-[3.5rem] w-[1px] bg-primary-500 md:block"></div>
 
               <div className="pb-1 pr-4 text-center">
                 <BudgetModal />
