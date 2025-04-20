@@ -30,7 +30,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
       </DrawerTrigger>
       <DrawerContent
         style={{ height: "calc(100vh - 40px)" }}
-        className="max-w-full md:hidden"
+        className="max-w-full lg:hidden"
         overlayDisabled
       >
         <DrawerHeader className="mx-4 flex items-center justify-between border-b py-3">
@@ -60,7 +60,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
                     <Accordion key={link.title} type="single" collapsible>
                       <AccordionItem
                         value="item-1"
-                        className="data-[state=open]:bg-primary-25 w-full"
+                        className="w-full data-[state=open]:bg-primary-25"
                       >
                         <AccordionTrigger className="data-[state=open]-text-white px-6 py-4 font-normal text-primary-900 no-underline transition-colors hover:no-underline data-[state=open]:bg-primary-300 data-[state=open]:text-white">
                           {link.title}

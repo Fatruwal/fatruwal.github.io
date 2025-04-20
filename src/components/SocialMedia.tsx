@@ -1,8 +1,43 @@
 import React from "react"
+import { cva, VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa"
-export const SocialMedia = () => {
+
+const socialMediaVariant = cva("mb-0 flex items-center space-x-2", {
+  variants: {
+    variant: {
+      occutable: "hidden lg:flex",
+      always: "flex",
+    },
+    theme: {
+      light: "text-primary-500 text-sm",
+      dark: "text-primary-900 text-sm",
+    },
+    size: {
+      sm: "text-sm",
+      lg: "text-lg",
+    },
+  },
+  defaultVariants: {
+    variant: "always",
+    theme: "light",
+    size: "sm",
+  },
+})
+
+export interface SocialMediaProps
+  extends React.ComponentProps<"ul">,
+    VariantProps<typeof socialMediaVariant> {}
+
+export const SocialMedia = ({
+  className,
+  theme,
+  variant,
+  size,
+  ...props
+}: SocialMediaProps) => {
   return (
-    <ul className="mb-0 hidden items-center space-x-2 lg:flex">
+    <ul {...props} className={cn(socialMediaVariant({ variant }), className)}>
       <li className="rounded-full border-4 bg-white">
         <a
           href="https://www.facebook.com/Fatruwal/?locale=pt_BR"
@@ -10,7 +45,7 @@ export const SocialMedia = () => {
           target="_blank"
           rel="noreferrer"
         >
-          <FaFacebook className="color-primary-500 text-sm" />
+          <FaFacebook className={cn(socialMediaVariant({ theme, size }))} />
         </a>
       </li>
       <li className="rounded-full border-4 bg-white">
@@ -20,7 +55,7 @@ export const SocialMedia = () => {
           target="_blank"
           rel="noreferrer"
         >
-          <FaInstagram className="color-primary-500 text-sm" />
+          <FaInstagram className={cn(socialMediaVariant({ theme, size }))} />
         </a>
       </li>
       <li className="rounded-full border-4 bg-white">
@@ -30,7 +65,7 @@ export const SocialMedia = () => {
           target="_blank"
           rel="noreferrer"
         >
-          <FaLinkedin className="color-primary-500 text-sm" />
+          <FaLinkedin className={cn(socialMediaVariant({ theme, size }))} />
         </a>
       </li>
       <li className="rounded-full border-4 bg-white">
@@ -40,7 +75,7 @@ export const SocialMedia = () => {
           target="_blank"
           rel="noreferrer"
         >
-          <FaYoutube className="color-primary-500 text-sm" />
+          <FaYoutube className={cn(socialMediaVariant({ theme, size }))} />
         </a>
       </li>
     </ul>

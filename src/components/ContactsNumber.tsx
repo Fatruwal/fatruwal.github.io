@@ -1,17 +1,31 @@
+import { cn } from "@/lib/utils"
+import { cva, VariantProps } from "class-variance-authority"
 import React from "react"
 import { BsTelephone } from "react-icons/bs"
 import { FaWhatsapp } from "react-icons/fa"
 
-interface Props {
-  direction?: "row" | "column"
-}
+const contactNumberVariant = cva("flex ", {
+  variants: {
+    direction: {
+      row: "gap-4",
+      column: "flex-col gap-2",
+    },
+  },
+  defaultVariants: {
+    direction: "row",
+  },
+})
 
-export const ContactsNumber = ({ direction = "row" }: Props) => {
+export interface ContactNumberProps
+  extends React.ComponentProps<"div">,
+    VariantProps<typeof contactNumberVariant> {}
+
+export const ContactsNumber = ({
+  direction,
+  className,
+}: ContactNumberProps) => {
   return (
-    <div
-      data-direction={direction}
-      className="flex gap-2 data-[direction='column']:flex-col data-[direction='row']:gap-4"
-    >
+    <div className={cn(contactNumberVariant({ direction }), className)}>
       <span>
         <a
           className="flex items-center gap-2 text-white"
