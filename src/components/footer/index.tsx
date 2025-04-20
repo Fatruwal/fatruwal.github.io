@@ -128,7 +128,7 @@ const Footer: React.FC = () => {
             <div className="border-t-hairline border-white pt-8 lg:col-span-2 lg:border-l-hairline lg:border-t-0 lg:pl-8">
               <ul className="flex flex-col items-center space-y-3 text-white">
                 {menuItems.map(link => (
-                  <li className="first-of-type:font-bold">
+                  <li key={link.title} className="first-of-type:font-bold">
                     <Link to={link.path} className="text-white">
                       {link.title}
                     </Link>
