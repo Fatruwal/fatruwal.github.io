@@ -10,6 +10,12 @@
  })
 
 module.exports = {
+  siteMetadata: {
+      title: `Fatruwal - Fabricando Soluções`,
+      description: `Soluções em borracha para indústria e serviços de fabricação de equipamentos.`,
+      siteUrl: `https://www.fatruwal.com.br`, // Required for sitemap
+      author: `@fatruwal`,
+  },
   /**
    * Adding plugins to this array adds them to your Gatsby site.
    *
@@ -94,6 +100,13 @@ module.exports = {
 
     // See https://www.gatsbyjs.com/plugins/gatsby-plugin-react-helmet/?=gatsby-plugin-react-helmet
     `gatsby-plugin-react-helmet`,
+    {
+      resolve: 'gatsby-plugin-robots-txt',
+      options: {
+        host: 'https://www.fatruwal.com.br',
+        policy: [{ userAgent: '*', allow: '/' }]
+      }
+    },
 
     /**
      * this (optional) plugin enables Progressive Web App + Offline functionality

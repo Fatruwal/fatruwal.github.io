@@ -1,12 +1,7 @@
 import DOMPurify from "dompurify"
 
 export class HtmlFormat {
-
-  static sanitaze(htmlString: string) {
-    return DOMPurify.sanitize(htmlString)
-  }
-
-   static getFirstParagraph(htmlString: string) {
+  static getFirstParagraph(htmlString: string) {
     const tempDiv = document.createElement("div")
     tempDiv.innerHTML = DOMPurify.sanitize(htmlString)
 

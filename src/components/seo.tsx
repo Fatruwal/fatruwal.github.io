@@ -1,46 +1,60 @@
-/**
- * Seo component that queries for data with
- *  Gatsby's useStaticQuery React hook
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
-
 import React from "react"
-import PropTypes from "prop-types"
 import { Helmet } from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
 
-const Seo = ({ description, lang, meta, title }) => {
-  const { wp, wpUser } = useStaticQuery(graphql`
+interface SeoQuery {
+  wp: {
+    generalSettings: {
+      title: string
+      description: string
+      language: string
+    }
+  }
+}
+
+interface SeoProps {
+  title?: string
+}
+
+const Seo = ({ title: overrideTitle }: SeoProps) => {
+  const {
+    wp: { generalSettings },
+  } = useStaticQuery<SeoQuery>(graphql`
     query {
       wp {
         generalSettings {
           title
           description
+          language
         }
-      }
-
-      # if there's more than one user this would need to be filtered to the main user
-      wpUser {
-        twitter: name
       }
     }
   `)
 
-  const metaDescription = description || wp.generalSettings?.description
-  const defaultTitle = wp.generalSettings?.title
+  const { title: siteTitle, description, language } = generalSettings
+  const title = overrideTitle || siteTitle
 
+  const metaDescription = description || wp.generalSettings?.description
+  const socialMedia = {
+    instagram: `https://www.instagram.com/fatruwal/`,
+    facebook: `https://www.facebook.com/fatruwal`,
+    youtube: `https://www.youtube.com/channel/UCZl4Cc307IZNlMhmQLayWyw`,
+    linkedin: `https://www.linkedin.com/company/fatruwalfabricandosolucoes/`,
+  }
   return (
     <Helmet
       htmlAttributes={{
-        lang,
+        lang: language || `pt`,
       }}
       title={title}
-      titleTemplate={defaultTitle ? `%s | ${defaultTitle}` : null}
       meta={[
         {
           name: `description`,
           content: metaDescription,
+        },
+        {
+          name: `keywords`,
+          content: `fatruwal, borracharia, indústria, serviços, fabricação, equipamentos, coxins, retentores, anéis de vedação, diafragmas, juntas, ventosas, peças, arruelas, buchas`,
         },
         {
           property: `og:title`,
@@ -55,37 +69,33 @@ const Seo = ({ description, lang, meta, title }) => {
           content: `website`,
         },
         {
-          name: `twitter:card`,
-          content: `summary`,
+          property: `og:locale`,
+          content: language || `pt_BR`,
         },
         {
-          name: `twitter:creator`,
-          content: wpUser?.twitter || ``,
+          property: `og:url`,
+          content: `https://www.fatruwal.com.br/`,
         },
         {
-          name: `twitter:title`,
-          content: title,
+          property: `og:see_also`,
+          content: socialMedia.instagram,
         },
         {
-          name: `twitter:description`,
-          content: metaDescription,
+          property: `og:see_also`,
+          content: socialMedia.facebook,
         },
-      ].concat(meta)}
+
+        {
+          property: `og:see_also`,
+          content: socialMedia.youtube,
+        },
+        {
+          property: `og:see_also`,
+          content: socialMedia.linkedin,
+        },
+      ]}
     />
   )
-}
-
-Seo.defaultProps = {
-  lang: `en`,
-  meta: [],
-  description: ``,
-}
-
-Seo.propTypes = {
-  description: PropTypes.string,
-  lang: PropTypes.string,
-  meta: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired,
 }
 
 export default Seo

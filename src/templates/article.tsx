@@ -1,8 +1,7 @@
 import React from "react"
-import Layout from "../components/layout"
+import Layout from "./layout"
 import { PageProps } from "gatsby"
-import { Card } from "@/components/ui/card"
-import { HtmlFormat } from "@/common/HtmlString"
+import Seo from "@/components/seo"
 
 interface ArticleTemplateProps {
   data: {
@@ -20,12 +19,10 @@ const ArticleTemplate = ({
 
   return (
     <Layout>
-      <article style={{ paddingBottom: 24 }} className="block bg-[#F3F3F3]">
+      <article className="block bg-[#F3F3F3] pb-6">
         <div className="w-full">
           <img
-            className="mb-8 w-full object-cover"
-            height={360}
-            style={{ maxHeight: "360px", objectFit: "cover" }}
+            className="mb-8 h-96 w-full object-cover"
             src={data.banner}
             alt={data.title}
           />
@@ -36,7 +33,7 @@ const ArticleTemplate = ({
             <div
               className="text-sm"
               dangerouslySetInnerHTML={{
-                __html: HtmlFormat.sanitaze(data.content),
+                __html: data.content, // don't sanitized because this is a trusted source and the content use sensitive html tags such as script for render images.
               }}
             />
           </div>
@@ -45,4 +42,7 @@ const ArticleTemplate = ({
     </Layout>
   )
 }
+
+export const Head = () => <Seo title="artigos" />
+
 export default ArticleTemplate

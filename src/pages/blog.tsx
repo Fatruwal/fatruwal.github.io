@@ -1,7 +1,8 @@
 import React from "react"
-import Layout from "../components/layout"
+import Layout from "@/templates/layout"
 import { graphql, useStaticQuery } from "gatsby"
 import { BlogCard } from "@/components/BlogCard"
+import Seo from "@/components/seo"
 
 interface GraphqlBlogQuery {
   allWpPost: {
@@ -56,6 +57,7 @@ const Blog = () => {
 
   return (
     <Layout>
+      <Seo />
       <section className="flex justify-center bg-[#F3F3F3]">
         <div className="mx-8 mb-32 max-w-screen-2xl justify-start xl:w-10/12">
           <h2 className="mt-4 font-bold uppercase">Blog Fatruwal</h2>
@@ -84,5 +86,7 @@ const Blog = () => {
     </Layout>
   )
 }
+
+export const Head = () => <Seo title="Blog" />
 
 export default Blog

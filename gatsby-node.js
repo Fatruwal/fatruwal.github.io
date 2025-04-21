@@ -8,6 +8,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         "@/assets": path.resolve(__dirname, "src/assets"),
         "@/components": path.resolve(__dirname, "src/components"),
         "@/lib/utils": path.resolve(__dirname, "src/lib/utils"),
+        "@/templates": path.resolve(__dirname, "src/templates"),
       },
     },
   })
@@ -19,7 +20,6 @@ exports.onCreateWebpackConfig = ({ actions }) => {
  exports.createPages = async ({ graphql, actions, reporter }) => {
    const { createPage } = actions
 
-   // Query for WordPress blog posts
    const result = await graphql(`
      query {
        allWpPost {
@@ -29,11 +29,9 @@ exports.onCreateWebpackConfig = ({ actions }) => {
            slug
            modified
            content
-           imagemBlogDestaque {
-             imagemBlogDestaque {
-               node {
-                 sourceUrl
-               }
+           featuredImage {
+             node {
+               publicUrl
              }
            }
          }
@@ -47,7 +45,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
    }
 
    const posts = result.data.allWpPost.nodes.map(p => ({
-      banner: p.imagemBlogDestaque?.imagemBlogDestaque?.node.sourceUrl,
+      banner: p.featuredImage?.node.publicUrl,
       title: p.title,
       modified: p.modified,
       content: p.content,

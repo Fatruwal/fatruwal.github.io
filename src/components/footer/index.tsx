@@ -1,12 +1,5 @@
 import React from "react"
-import {
-  FaEnvelope,
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-  FaRegEnvelope,
-  FaYoutube,
-} from "react-icons/fa"
+import { FaRegEnvelope } from "react-icons/fa"
 import { useForm } from "react-hook-form"
 import CertificateSGS from "@/assets/CertificateSGS.png"
 import { BottomBar } from "./BottomBar"
@@ -15,7 +8,6 @@ import { graphql, Link, useStaticQuery } from "gatsby"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,

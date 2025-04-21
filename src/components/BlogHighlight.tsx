@@ -13,7 +13,7 @@ interface GraphqlBlogQuery {
         fieldGroupName: string
         imagemBlogDestaque: {
           node: {
-            sourceUrl: string
+            publicUrl: string
           }
         }
       }
@@ -31,10 +31,9 @@ export const BlogHighligth = () => {
           slug
           content
           imagemBlogDestaque {
-            fieldGroupName
             imagemBlogDestaque {
               node {
-                sourceUrl
+                publicUrl
               }
             }
           }
@@ -48,7 +47,7 @@ export const BlogHighligth = () => {
     path: `/blog/${post.slug}`,
     modified: post.modified,
     content: post.content,
-    banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.sourceUrl,
+    banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
   }))
 
   return (

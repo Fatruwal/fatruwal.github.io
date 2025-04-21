@@ -1,7 +1,8 @@
 import React from "react"
-import { DateFormat } from "@/common/DateFormat"
-import { HtmlFormat } from "@/common/HtmlString"
 import { Link } from "gatsby"
+
+import { DateFormat } from "@/common/DateFormat"
+import { HtmlFormat } from "@/common/HtmlFormat"
 interface BlogCardProps extends React.ComponentProps<"div"> {
   data: {
     banner: string
