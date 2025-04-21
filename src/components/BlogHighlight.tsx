@@ -8,7 +8,7 @@ interface GraphqlBlogQuery {
       title: string
       modified: string
       content: string
-      link: string
+      slug: string
       imagemBlogDestaque: {
         fieldGroupName: string
         imagemBlogDestaque: {
@@ -28,7 +28,7 @@ export const BlogHighligth = () => {
         nodes {
           title
           modified
-          link
+          slug
           content
           imagemBlogDestaque {
             fieldGroupName
@@ -45,7 +45,7 @@ export const BlogHighligth = () => {
 
   const posts = data.allWpPost.nodes.map(post => ({
     title: post.title,
-    path: post.link,
+    path: `/blog/${post.slug}`,
     modified: post.modified,
     content: post.content,
     banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.sourceUrl,

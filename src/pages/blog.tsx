@@ -6,10 +6,11 @@ import { BlogCard } from "@/components/BlogCard"
 interface GraphqlBlogQuery {
   allWpPost: {
     nodes: Array<{
+      id: string
       title: string
       modified: string
       content: string
-      link: string
+      slug: string
       imagemBlogDestaque: {
         fieldGroupName: string
         imagemBlogDestaque: {
@@ -27,9 +28,10 @@ const Blog = () => {
     query ListBlogQuery {
       allWpPost(limit: 1000, sort: { modified: DESC }) {
         nodes {
+          id
           title
           modified
-          link
+          slug
           content
           imagemBlogDestaque {
             fieldGroupName
@@ -46,7 +48,7 @@ const Blog = () => {
 
   const posts = data.allWpPost.nodes.map(post => ({
     title: post.title,
-    path: post.link,
+    path: `/blog/${post.slug}`,
     modified: post.modified,
     content: post.content,
     banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.sourceUrl,
