@@ -1,29 +1,41 @@
-# README #
+# Fatruwal
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Está é uma Landing Page da Fatruwal.
 
-### What is this repository for? ###
+## Tecnologias Utilizadas
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+- React
+- TypeScript
+- Tailwind CSS
+- Gatsby
+- GraphQL
+- Wordpress Headless
 
-### How do I get set up? ###
+## Instalação
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+```bash
+# Instalação das dependências
+npm install
+```
 
-### Contribution guidelines ###
+## Execução
+Copie o arquivo `.env.development.example` para `.env.development` e adicione as variáveis de ambiente necessárias.
 
-* Writing tests
-* Code review
-* Other guidelines
+É necessário ter o wordpress instalado e rodando localmente ou em um servidor remoto.
 
-### Who do I talk to? ###
+```bash
+# Execução do projeto
+gatsby develop
+```
 
-* Repo owner or admin
-* Other community or team contact
+## Configurações do Wordpress
+
+Para que o projeto funcione corretamente, é necessário instalar os seguintes plugins no Wordpress:
+- WP GraphQL
+- WP Gatsby
+
+### Conteúdos
+
+É preciso que seja criado 2 menus com nomes:
+- header-menu
+- footer-menu

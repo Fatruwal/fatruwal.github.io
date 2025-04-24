@@ -48,3 +48,8 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Gatsby
+.cache/
+public/
+
+.env.development
