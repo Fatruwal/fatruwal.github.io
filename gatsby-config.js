@@ -5,16 +5,16 @@
  * https://www.gatsbyjs.com/docs/gatsby-config/
  *
  */
- require("dotenv").config({
-   path: `.env.${process.env.NODE_ENV}`,
- })
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
 
 module.exports = {
   siteMetadata: {
-      title: `Fatruwal - Fabricando Soluções`,
-      description: `Soluções em borracha para indústria e serviços de fabricação de equipamentos.`,
-      siteUrl: `https://www.fatruwal.com.br`, // Required for sitemap
-      author: `@fatruwal`,
+    title: `Fatruwal - Fabricando Soluções`,
+    description: `Soluções em borracha para indústria e serviços de fabricação de equipamentos.`,
+    siteUrl: `https://www.fatruwal.com.br`, // Required for sitemap
+    author: `@fatruwal`,
   },
   /**
    * Adding plugins to this array adds them to your Gatsby site.
@@ -58,7 +58,35 @@ module.exports = {
       resolve: `gatsby-source-wordpress`,
       options: {
         // the only required plugin option for WordPress is the GraphQL url.
-        url: process.env.WPGRAPHQL_URL || `http://localhost:8080/graphql`,
+        url: process.env.WPGRAPHQL_URL,
+        type: {
+          Product: {
+            limit: 1000,
+          },
+        },
+        develop: {
+          hardCacheMediaFiles: true,
+        },
+      },
+    },
+    {
+      resolve: "@pasdo501/gatsby-source-woocommerce",
+      options: {
+        api: process.env.WOOCOMMERCE_URL || "fatruwal.5minds.com.br",
+        https: true,
+        api_keys: {
+          consumer_key: process.env.CONSUMER_KEY,
+          consumer_secret: process.env.CONSUMER_SECRET,
+        },
+        api_version: "wc/v3",
+        wpAPIPrefix: "wp-json",
+        fields: ["products", "products/categories", "products/attributes"],
+
+        queryStringAuth: true,
+        verboseOutput: true,
+
+        perPage: 100,
+        requestConcurrency: 5,
       },
     },
 
@@ -101,11 +129,11 @@ module.exports = {
     // See https://www.gatsbyjs.com/plugins/gatsby-plugin-react-helmet/?=gatsby-plugin-react-helmet
     `gatsby-plugin-react-helmet`,
     {
-      resolve: 'gatsby-plugin-robots-txt',
+      resolve: "gatsby-plugin-robots-txt",
       options: {
-        host: 'https://www.fatruwal.com.br',
-        policy: [{ userAgent: '*', allow: '/' }]
-      }
+        host: "https://www.fatruwal.com.br",
+        policy: [{ userAgent: "*", allow: "/" }],
+      },
     },
 
     /**

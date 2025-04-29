@@ -1,10 +1,15 @@
-import React, { PropsWithChildren } from "react"
+import React, { PropsWithChildren, ReactHTMLElement } from "react"
 import Header from "../components/header"
 import Footer from "../components/footer"
+import { cn } from "@/lib/utils"
 
-const Layout = ({ children }: PropsWithChildren<unknown>) => {
+const Layout = ({
+  children,
+  className,
+  ...props
+}: PropsWithChildren<React.ComponentProps<"div">>) => {
   return (
-    <div>
+    <div {...props} className={cn("", className)}>
       <Header />
       <main>{children}</main>
       <Footer />

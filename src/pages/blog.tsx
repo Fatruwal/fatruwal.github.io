@@ -77,7 +77,7 @@ const Blog = () => {
           <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:mx-0 xl:grid-cols-4 xl:gap-4">
             {posts.map(p => (
               <li key={p.title} className="mx-auto max-w-96 xl:max-w-sm">
-                <BlogCard data={p} />
+                <BlogCard className="p-4" data={p} />
               </li>
             ))}
           </ul>

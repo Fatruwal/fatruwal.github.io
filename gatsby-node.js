@@ -17,48 +17,252 @@ exports.onCreateWebpackConfig = ({ actions }) => {
 /**
  * This function creates all the individual blog pages in this site
  */
- exports.createPages = async ({ graphql, actions, reporter }) => {
-   const { createPage } = actions
+exports.createPages = async ({ graphql, actions, reporter }) => {
+  await CreateWpPages({ graphql, actions, reporter })
+  await CreateArticlePage({ graphql, actions, reporter })
+}
 
-   const result = await graphql(`
-     query {
-       allWpPost {
-         nodes {
-           id
-           title
-           slug
-           modified
-           content
-           featuredImage {
-             node {
-               publicUrl
-             }
-           }
-         }
-       }
-     }
-   `)
+async function CreateWpPages({ graphql, actions, reporter }) {
+  const { createPage } = actions
 
-   if (result.errors) {
-     reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
-     return
-   }
+  const result = await graphql(`
+    query {
+      allWpPage {
+        nodes {
+          slug
+          title
+          content
+          template {
+            templateName
+            ... on WpTemplate_Qualidade {
+              templateName
+              certificadosNaTelaDeQualidade {
+                headerOfCertificate
+                headerQualityAndGuarantee
+                imageOfCertificate {
+                  node {
+                    altText
+                    publicUrl
+                  }
+                }
+                imageOfQualityAndGuarantee {
+                  node {
+                    altText
+                    publicUrl
+                  }
+                }
+                downloadCertificate {
+                  node {
+                    altText
+                    publicUrl
+                  }
+                }
+              }
+            }
+            ... on WpTemplate_QuemSomos {
+              quemSomosConteudo {
+                quemSomosConteudo {
+                  description
+                  icon {
+                    node {
+                      publicUrl
+                      altText
+                    }
+                  }
+                  title
+                }
+                segundaColuna {
+                  description
+                  title
+                  icon {
+                    node {
+                      altText
+                      publicUrl
+                    }
+                  }
+                }
+                terceiraColuna {
+                  title
+                  description
+                  icon {
+                    node {
+                      altText
+                      publicUrl
+                    }
+                  }
+                }
+              }
+              templateName
+            }
+          }
+          featuredImage {
+            node {
+              publicUrl
+              altText
+            }
+          }
+        }
+      }
+    }
+  `)
 
-   const posts = result.data.allWpPost.nodes.map(p => ({
-      banner: p.featuredImage?.node.publicUrl,
+  if (result.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
+    return
+  }
+
+  const pages = result.data.allWpPage.nodes.map(p => {
+    let content
+    let banner
+
+    if (p.template?.templateName === "Qualidade") {
+      content = {
+        certificate: {
+          header: p.template.certificadosNaTelaDeQualidade?.headerOfCertificate,
+          image:
+            p.template.certificadosNaTelaDeQualidade?.imageOfCertificate?.node,
+        },
+        guarantee: {
+          header:
+            p.template.certificadosNaTelaDeQualidade?.headerQualityAndGuarantee,
+          image:
+            p.template.certificadosNaTelaDeQualidade?.imageOfQualityAndGuarantee
+              ?.node,
+        },
+        download: {
+          file: p.template.certificadosNaTelaDeQualidade?.downloadCertificate
+            ?.node?.publicUrl,
+        },
+      }
+    }
+
+    if (p.template?.templateName === "Quem Somos") {
+      content = {
+        firstColumn: {
+          title: p.template.quemSomosConteudo?.quemSomosConteudo.title,
+          description:
+            p.template.quemSomosConteudo?.quemSomosConteudo.description,
+          icon: p.template.quemSomosConteudo?.quemSomosConteudo.icon.node,
+        },
+        secondColumn: {
+          title: p.template.quemSomosConteudo?.segundaColuna.title,
+          description: p.template.quemSomosConteudo?.segundaColuna.description,
+          icon: p.template.quemSomosConteudo?.segundaColuna.icon.node,
+        },
+        thirdColumn: {
+          title: p.template.quemSomosConteudo?.terceiraColuna.title,
+          description: p.template.quemSomosConteudo?.terceiraColuna.description,
+          icon: p.template.quemSomosConteudo?.terceiraColuna.icon.node,
+        },
+      }
+    }
+
+    if (p.featuredImage?.node) {
+      banner = {
+        alt: p.featuredImage.node.altText,
+        url: p.featuredImage.node.publicUrl,
+      }
+    }
+
+    return {
+      slug: p.slug,
       title: p.title,
-      modified: p.modified,
       content: p.content,
-      path: `/blog/${p.slug}`,
-   }))
+      banner,
+      template: {
+        name: p.template?.templateName,
+        content,
+      },
+      path: `/${p.slug}`,
+    }
+  })
 
-   posts.forEach((row) => {
-     createPage({
-       path: row.path,
-       component: path.resolve("./src/templates/article.tsx"),
-       context: {
-         data: row,
-       },
-     })
-   })
- }
+  pages.forEach(page => {
+    createPage({
+      path: page.path,
+      component: path.resolve("./src/templates/page/index.tsx"),
+      context: {
+        page: page,
+      },
+    })
+  })
+}
+
+async function CreateArticlePage({ graphql, actions, reporter }) {
+  const { createPage } = actions
+
+  const article = await graphql(`
+    query {
+      allWpPost {
+        nodes {
+          id
+          title
+          slug
+          modified
+          content
+          featuredImage {
+            node {
+              publicUrl
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  if (article.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, article.errors)
+    return
+  }
+
+  const posts = article.data.allWpPost.nodes.map(p => ({
+    banner: p.featuredImage?.node.publicUrl,
+    title: p.title,
+    modified: p.modified,
+    content: p.content,
+    path: `/blog/${p.slug}`,
+  }))
+
+  const relatedArticles = await graphql(`
+    query {
+      allWpPost(limit: 3, sort: { modified: DESC }) {
+        nodes {
+          title
+          modified
+          slug
+          content
+          imagemBlogDestaque {
+            imagemBlogDestaque {
+              node {
+                publicUrl
+              }
+            }
+          }
+        }
+      }
+    }
+  `)
+  if (relatedArticles.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, relatedArticles)
+    return
+  }
+
+  const related = relatedArticles.data.allWpPost.nodes.map(r => ({
+    title: r.title,
+    path: `/blog/${r.slug}`,
+    modified: r.modified,
+    content: r.content,
+    banner: r.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
+  }))
+
+  posts.forEach(row => {
+    createPage({
+      path: row.path,
+      component: path.resolve("./src/templates/article.tsx"),
+      context: {
+        article: row,
+        related: related,
+      },
+    })
+  })
+}
