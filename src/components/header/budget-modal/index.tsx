@@ -3,8 +3,10 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { FaRegEnvelope } from "react-icons/fa"
 import BudgetBanner from "@/assets/BudgetBanner.png"
 import BudgetFormIcon from "@/assets/BudgetFormIcon"
-import { ContactsNumber } from "../../ContactsNumber"
+import { ContactComponent } from "../../ContactComponent"
 import { BudgetForm } from "./form"
+import GradientBar from "@/components/GradientBar"
+import { Budget } from "@/components/Budget"
 
 const BudgetModal: React.FC<{
   sizeInSmallScreen?: "small" | "medium"
@@ -44,33 +46,40 @@ const BudgetModal: React.FC<{
                   SOLICITE O SEU <br />
                   ORÇAMENTO!
                 </h2>
-                <span className="my-6 block h-1 w-48 bg-blue-gradient" />
+                <GradientBar className="my-6 w-48" />
                 <div className="px-2">
                   <p className="mb-8 text-xl text-gray-600">
                     Nos envie uma mensagem ou entre em contato através de uma
                     dos nossos canais de atendimento!
                   </p>
 
-                  <div className="mb-8 flex flex-col justify-center gap-4">
-                    <ContactsNumber
-                      className="mb-0 flex-col justify-between sm:flex"
-                      direction="row"
-                      icons="rounded"
-                      text="bold"
-                    />
+                  <div className="flex flex-col justify-center gap-4">
+                    <span className="mb-0 flex flex-col justify-between gap-4 sm:flex-row">
+                      <ContactComponent.Whatsapp
+                        size="md"
+                        icon="rounded"
+                        text="bold"
+                      />
+                      <ContactComponent.Phone
+                        size="md"
+                        icon="rounded"
+                        text="bold"
+                      />
+                    </span>
                     <div className="flex items-center gap-2">
-                      <div className="rounded-sm bg-primary-500">
-                        <FaRegEnvelope className="rounded-sm bg-primary-500 p-2 text-4xl text-primary-foreground-100 sm:text-5xl" />
-                      </div>
-                      <p className="text-lg font-bold text-primary-foreground-500">
-                        contato@fatruwal.com.br
-                      </p>
+                      <ContactComponent.Email
+                        size="md"
+                        icon="rounded"
+                        text="bold"
+                      />
                     </div>
                   </div>
-                  <img src={BudgetBanner} alt="Banner de contato" />
+                  <div className="flex items-center justify-center">
+                    <Budget.Banner />
+                  </div>
                 </div>
               </div>
-              <BudgetForm />
+              <Budget.Form />
             </div>
           </div>
         </div>

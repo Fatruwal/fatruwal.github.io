@@ -2,7 +2,7 @@ import React from "react"
 import Layout from "@/templates/layout"
 import { graphql, useStaticQuery } from "gatsby"
 import { BlogCard } from "@/components/BlogCard"
-import Seo from "@/components/seo"
+import Seo from "@/components/Seo"
 
 interface GraphqlBlogQuery {
   allWpPost: {

@@ -1,7 +1,7 @@
 import React from "react"
 import Layout from "@/templates/layout"
 import { BlogHighlight } from "@/components/BlogHighlight"
-import Seo from "@/components/seo"
+import Seo from "@/components/Seo"
 import { graphql, useStaticQuery } from "gatsby"
 interface GraphqlBlogQuery {
   allWpPost: {

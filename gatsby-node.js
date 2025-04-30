@@ -94,6 +94,19 @@ async function CreateWpPages({ graphql, actions, reporter }) {
               }
               templateName
             }
+            ... on WpTemplate_Contato {
+              templateName
+              camposNaTelaDeContatos {
+                location {
+                  location {
+                    longitude
+                    latitude
+                    zoom
+                  }
+                  title
+                }
+              }
+            }
           }
           featuredImage {
             node {
@@ -153,6 +166,18 @@ async function CreateWpPages({ graphql, actions, reporter }) {
           title: p.template.quemSomosConteudo?.terceiraColuna.title,
           description: p.template.quemSomosConteudo?.terceiraColuna.description,
           icon: p.template.quemSomosConteudo?.terceiraColuna.icon.node,
+        },
+      }
+    }
+    if (p.template?.templateName === "Contato") {
+      content = {
+        title: p.template.camposNaTelaDeContatos?.location.title,
+        location: {
+          longitude:
+            p.template.camposNaTelaDeContatos?.location?.location?.longitude,
+          latitude:
+            p.template.camposNaTelaDeContatos?.location?.location?.latitude,
+          zoom: p.template.camposNaTelaDeContatos?.location?.location?.zoom,
         },
       }
     }
