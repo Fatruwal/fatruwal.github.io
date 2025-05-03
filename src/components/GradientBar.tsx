@@ -8,7 +8,7 @@ export default function GradientBar({
   return (
     <span
       {...props}
-      className={cn("my-4 block w-40 bg-blue-gradient p-0.5", className)}
+      className={cn("my-6 block w-40 bg-blue-gradient p-0.5", className)}
     />
   )
 }

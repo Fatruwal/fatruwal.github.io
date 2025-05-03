@@ -6,6 +6,7 @@ import Quality, { QualityProps } from "./quality"
 import WhoWeAre, { WhoWeAreProps } from "./who-we-are"
 import Contacts, { ContactsProps } from "./contacts"
 import GradientBar from "@/components/GradientBar"
+import Container from "@/components/Container"
 
 interface PageBanner {
   alt: string
@@ -50,11 +51,11 @@ const Page = (props: PageProps<unknown, PageTemplateProps>) => {
         )}
       </div>
       <div className="flex justify-center">
-        <div className="mx-4 rounded-sm p-4 sm:w-10/12 xl:max-w-screen-2xl">
+        <Container className="rounded-sm p-4">
           <h1 className="font-bold">{title}</h1>
           <GradientBar className="my-6" />
           <div dangerouslySetInnerHTML={{ __html: content }} />
-        </div>
+        </Container>
       </div>
       {template.name === "Contato" && <Contacts content={template.content} />}
       {["qualidade", "quem-somos"].includes(slug) && (
