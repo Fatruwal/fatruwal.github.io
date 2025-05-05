@@ -302,6 +302,10 @@ async function CreateProductPages({ graphql, actions, reporter }) {
         nodes {
           name
           slug
+          attributes {
+            name
+            options
+          }
           categories {
             name
           }
@@ -341,14 +345,22 @@ async function CreateProductPages({ graphql, actions, reporter }) {
     short_description: r.short_description,
     description: r.description,
     path: `/product/${r.slug}`,
-    product_image: r.images[0]?.localFile?.publicURL || "",
-    product_image_alt: r.images[0]?.alt || r.images[0]?.name,
+    product: {
+      image: r.images[0]?.localFile?.publicURL || "",
+      alt: r.images[0]?.alt || r.images[0]?.name,
+    },
+    attributes: r.attributes.map(a => ({
+      name: a.name,
+      options: a.options,
+    })),
     related_products: r.related_products.map(p => ({
       name: p.name,
       short_description: p.short_description,
       path: `/product/${p.slug}`,
-      product_image: p.images[0]?.localFile?.publicURL || "",
-      product_image_alt: p.images[0]?.alt || p.images[0]?.name,
+      product: {
+        image: p.images[0]?.localFile?.publicURL || "",
+        alt: p.images[0]?.alt || p.images[0]?.name,
+      },
     })),
   }))
 

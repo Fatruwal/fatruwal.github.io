@@ -18,15 +18,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import { Card, CardContent } from "@/components/ui/card"
 import BudgetModal from "@/components/budget-modal"
 
 interface RelatedProduct {
   name: string
   short_description: string
   path: string
-  product_image: string
-  product_image_alt: string | undefined
+  product: {
+    image: string
+    alt: string | undefined
+  }
 }
 
 interface ProductPage {
@@ -35,8 +36,14 @@ interface ProductPage {
   short_description: string
   description: string
   path: string
-  product_image: string
-  product_image_alt: string | undefined
+  attributes: {
+    name: string
+    options: string[]
+  }[]
+  product: {
+    image: string
+    alt: string | undefined
+  }
   related_products: RelatedProduct[]
 }
 
@@ -50,11 +57,12 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
     name,
     category,
     short_description,
-    product_image,
-    product_image_alt,
+    product,
     description,
     related_products,
+    attributes,
   } = content
+  const catalog = attributes.find(attr => attr.name === "catalogo")
   return (
     <Layout className="bg-white">
       <div className="flex justify-center bg-secondary-foreground-100">
@@ -63,22 +71,24 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
             <div className="col-span-2 flex h-full w-full items-center justify-center rounded-sm bg-white p-0">
               <img
                 className="object-fill"
-                src={product_image}
-                alt={product_image_alt}
+                src={product.image}
+                alt={product.alt}
               />
             </div>
-            <div className="col-span-3">
-              <span className="text-lg uppercase text-primary-foreground-400">
-                {category}
-              </span>
-              <h2 className="mb-4 font-bold uppercase text-primary-700">
-                {name}
-              </h2>
+            <div className="col-span-3 flex flex-col justify-between lg:min-h-96">
+              <div>
+                <span className="text-lg uppercase text-primary-foreground-400">
+                  {category}
+                </span>
+                <h2 className="mb-4 font-bold uppercase text-primary-700">
+                  {name}
+                </h2>
+              </div>
               <div
                 className="text-sm text-primary-foreground-500"
                 dangerouslySetInnerHTML={{ __html: short_description }}
               />
-              <div className="my-6 flex flex-col gap-4 md:flex-row">
+              <div className="flex flex-col gap-4 md:flex-row">
                 <BudgetModal>
                   <Button
                     variant="outline"
@@ -93,16 +103,19 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                   rel="noreferrer"
                   href="https://api.whatsapp.com/send?phone=5511963014309&text=Ol%C3%A1%20gostaria%20de%20solicitar%20mais%20informa%C3%A7%C3%B5es"
                 >
-                  <FaWhatsapp className="mr-1" />
+                  <FaWhatsapp className="mr-1 text-lg" />
                   Orçamento pelo WhatsApp
                 </a>
-                <Button
-                  variant="outline"
-                  className="rounded-sm bg-primary-700 py-6 font-bold uppercase text-white transition-colors hover:bg-primary-500"
-                >
-                  <IoDownloadOutline className="mr-1" />
-                  Download do catalogo
-                </Button>
+                {catalog && catalog?.options.length > 0 && (
+                  <a
+                    href={catalog.options[0]}
+                    className="flex items-center gap-2 rounded-sm bg-primary-700 px-4 py-2 text-sm font-bold uppercase text-white transition-colors hover:bg-primary-500"
+                    target="_blank"
+                  >
+                    <IoDownloadOutline className="mr-1 text-lg" />
+                    Download do catalogo
+                  </a>
+                )}
               </div>
               <div className="shadown-sm border-r-1 flex flex-col gap-4 border-primary-50 bg-white p-6 md:flex-row">
                 <AboutCompanyCard
@@ -153,8 +166,8 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                           <div className="h-fit w-full">
                             <div className="mx-auto flex h-[140px] w-40 items-center justify-center rounded-sm lg:h-[200px] lg:w-10/12">
                               <img
-                                src={row.product_image}
-                                alt={row.product_image_alt}
+                                src={row.product.image}
+                                alt={row.product.alt}
                               />
                             </div>
                             <span className="px-4 text-start text-xl font-bold">
