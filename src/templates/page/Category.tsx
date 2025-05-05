@@ -59,7 +59,7 @@ export const Category = ({ content }: CategoryProps) => {
           </div>
         </Container>
       </div>
-      <div className="flex justify-center bg-[#F3F3F3]">
+      <div className="flex justify-center bg-[#F3F3F3] pb-10">
         <Container>
           <div
             className="text-sm text-primary-foreground-400"
