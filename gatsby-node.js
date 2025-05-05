@@ -35,6 +35,17 @@ async function CreateWpPages({ graphql, actions, reporter }) {
           content
           template {
             templateName
+            ... on WpTemplate_Categoria {
+              templateName
+              categorias {
+                catalogo {
+                  node {
+                    altText
+                    publicUrl
+                  }
+                }
+              }
+            }
             ... on WpTemplate_Qualidade {
               templateName
               certificadosNaTelaDeQualidade {
@@ -180,6 +191,13 @@ async function CreateWpPages({ graphql, actions, reporter }) {
             p.template.camposNaTelaDeContatos?.location?.location?.latitude,
           zoom: p.template.camposNaTelaDeContatos?.location?.location?.zoom,
         },
+      }
+    }
+
+    if (p.template?.templateName === "Categoria") {
+      content = {
+        download: p.template?.categorias?.catalogo?.node?.publicUrl,
+        products: [],
       }
     }
 
