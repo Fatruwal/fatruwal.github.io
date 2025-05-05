@@ -1,5 +1,6 @@
 import Container from "@/components/Container"
 import GradientBar from "@/components/GradientBar"
+import { ProductCard } from "@/components/ProductCard"
 import React from "react"
 
 export interface CategoryProps {
@@ -9,8 +10,9 @@ export interface CategoryProps {
     content: {
       download?: string
       products: Array<{
-        title: string
+        name: string
         text: string
+        path: string
         image: {
           alt: string
           url: string
@@ -23,7 +25,7 @@ export interface CategoryProps {
 export const Category = ({ content }: CategoryProps) => {
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex justify-center bg-[#F3F3F3]">
         <Container className="rounded-sm p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -32,35 +34,32 @@ export const Category = ({ content }: CategoryProps) => {
             {content.content?.download && (
               <a
                 href={content.content.download}
-                className="cursor-pointer bg-primary-700 p-3 px-6 text-center text-xs font-bold text-white hover:bg-primary-600"
+                className="text-md cursor-pointer bg-primary-700 p-3 px-6 text-center font-bold text-white hover:bg-primary-600"
                 target="_blank"
               >
                 Download do certificado
               </a>
             )}
           </div>
-          <GradientBar className="my-6" />
+          <GradientBar className="my-4" />
         </Container>
       </div>
-      <div>
-        {content.content?.products.map((product, index) => (
-          <div
-            key={index}
-            className="flex flex-col items-center justify-center gap-4 py-4"
-          >
-            <img
-              src={product.image.url}
-              alt={product.image.alt}
-              className="h-[200px] w-[200px] object-cover"
-            />
-            <h2 className="text-lg font-bold">{product.title}</h2>
-            <p className="text-sm text-primary-foreground-400">
-              {product.text}
-            </p>
+      <div className="flex justify-center bg-[#F3F3F3]">
+        <Container>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {content.content?.products.map((product, index) => (
+              <ProductCard
+                key={index}
+                html={product.text}
+                image={product.image}
+                path={product.path}
+                name={product.name}
+              />
+            ))}
           </div>
-        ))}
+        </Container>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center bg-[#F3F3F3]">
         <Container>
           <div
             className="text-sm text-primary-foreground-400"

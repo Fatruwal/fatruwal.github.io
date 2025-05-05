@@ -128,6 +128,24 @@ async function CreateWpPages({ graphql, actions, reporter }) {
           }
         }
       }
+      allWcProducts {
+        nodes {
+          name
+          slug
+          categories {
+            name
+          }
+          short_description
+          description
+          images {
+            name
+            alt
+            localFile {
+              publicURL
+            }
+          }
+        }
+      }
     }
   `)
 
@@ -135,6 +153,17 @@ async function CreateWpPages({ graphql, actions, reporter }) {
     reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
     return
   }
+
+  const products = result.data.allWcProducts.nodes.map(r => ({
+    name: r.name,
+    category: r.categories[0]?.name,
+    text: r.short_description || r.description || "",
+    path: `/product/${r.slug}`,
+    image: {
+      url: r.images[0]?.localFile?.publicURL || "",
+      alt: r.images[0]?.alt || r.images[0]?.name,
+    },
+  }))
 
   const pages = result.data.allWpPage.nodes.map(p => {
     let content
@@ -197,7 +226,7 @@ async function CreateWpPages({ graphql, actions, reporter }) {
     if (p.template?.templateName === "Categoria") {
       content = {
         download: p.template?.categorias?.catalogo?.node?.publicUrl,
-        products: [],
+        products: products.filter(r => r.category === p.title),
       }
     }
 
