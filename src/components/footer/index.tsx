@@ -3,7 +3,7 @@ import { FaRegEnvelope } from "react-icons/fa"
 import { useForm } from "react-hook-form"
 import CertificateSGS from "@/assets/CertificateSGS.png"
 import { BottomBar } from "./BottomBar"
-import { ContactsNumber } from "../ContactsNumber"
+import { ContactComponent } from "../ContactComponent"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import {
   Form,
@@ -133,10 +133,10 @@ const Footer: React.FC = () => {
               <h3 className="mb-4 text-center text-lg font-semibold lg:text-start">
                 Contatos
               </h3>
-              <ContactsNumber
-                direction="column"
-                className="mx-auto w-full items-center justify-center lg:items-start"
-              />
+              <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 lg:items-start">
+                <ContactComponent.Whatsapp />
+                <ContactComponent.Phone />
+              </div>
             </div>
 
             <div className="border-t-hairline border-white pt-8 md:mt-0 lg:col-span-2 lg:border-t-0">

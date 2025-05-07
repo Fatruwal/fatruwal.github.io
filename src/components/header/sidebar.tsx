@@ -14,9 +14,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion"
-import BudgetModal from "./budget-modal"
+import BudgetModal from "../budget-modal"
 import { FatherLinkTitle } from "./model"
 import MenuIcon from "@/assets/MenuIcon"
+import BudgetFormIcon from "@/assets/BudgetFormIcon"
 
 const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
   return (
@@ -34,7 +35,15 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
         overlayDisabled
       >
         <DrawerHeader className="mx-4 flex items-center justify-between border-b py-3">
-          <BudgetModal sizeInSmallScreen="medium" />
+          <BudgetModal>
+            <BudgetFormIcon className="mr-1 h-[30px] w-[30px] bg-white md:mr-2" />
+            <div className="flex flex-col items-center justify-center text-sm leading-5 md:text-sm md:leading-5">
+              <span className="text-sm font-normal md:text-sm">
+                Solicite um
+              </span>
+              <strong className="text-sm md:text-sm">Orçamento </strong>
+            </div>
+          </BudgetModal>
           <DrawerClose>
             <MdOutlineClose className="text-[1.3rem] text-primary-800" />
           </DrawerClose>

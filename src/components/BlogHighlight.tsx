@@ -1,16 +1,17 @@
 import React from "react"
 import { BlogCard } from "./BlogCard"
 import { cn } from "@/lib/utils"
+import GradientBar from "./GradientBar"
 
 const Container = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className="flex flex-col items-center justify-center gap-2 bg-primary-700 py-10">
+    <section className="flex flex-col items-center justify-center gap-2 bg-primary-700 py-10">
       <h3 className="my-2 text-center font-bold text-primary-foreground-100">
         Blog fatruwal
       </h3>
-      <span className="mb-4 h-1 w-40 bg-blue-gradient" />
+      <GradientBar className="mb-4" />
       {children}
-    </div>
+    </section>
   )
 }
 interface BlogCardListProps extends React.ComponentProps<"ul"> {

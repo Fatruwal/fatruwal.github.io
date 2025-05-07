@@ -1,8 +1,16 @@
 import React from "react"
 import Layout from "@/templates/layout"
 import { BlogHighlight } from "@/components/BlogHighlight"
-import Seo from "@/components/seo"
-import { graphql, useStaticQuery } from "gatsby"
+import Seo from "@/components/Seo"
+import { graphql, Link, useStaticQuery } from "gatsby"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import Container from "@/components/Container"
 interface GraphqlBlogQuery {
   allWpPost: {
     nodes: Array<{
@@ -20,11 +28,26 @@ interface GraphqlBlogQuery {
       }
     }>
   }
+  allWcProducts: {
+    nodes: Array<{
+      name: string
+      slug: string
+      short_description: string
+      description: string
+      images: Array<{
+        name: string
+        alt: string
+        localFile: {
+          publicURL: string
+        }
+      }>
+    }>
+  }
 }
 
 const Home = () => {
   const data = useStaticQuery<GraphqlBlogQuery>(graphql`
-    query BlogHighlightQuery {
+    query {
       allWpPost(limit: 3, sort: { modified: DESC }) {
         nodes {
           title
@@ -40,6 +63,21 @@ const Home = () => {
           }
         }
       }
+      allWcProducts {
+        nodes {
+          name
+          slug
+          short_description
+          description
+          images {
+            name
+            alt
+            localFile {
+              publicURL
+            }
+          }
+        }
+      }
     }
   `)
 
@@ -50,10 +88,22 @@ const Home = () => {
     content: post.content,
     banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
   }))
+
+  const products = data.allWcProducts.nodes.map(product => ({
+    name: product.name,
+    image: product.images[0].localFile.publicURL || "",
+    alt: product.images[0].alt || "produto",
+    short_description:
+      product.short_description?.trim().substring(0, 120).concat("...") ||
+      product.description?.trim().substring(0, 120).concat("...") ||
+      "",
+    path: `/produtos/${product.slug}`,
+  }))
+
   return (
     <Layout>
-      <Seo />
       <div className="min-h-dvh">
+        <ProductHighlight products={products} />
         <BlogHighlight.Container>
           <BlogHighlight.List data={posts} />
         </BlogHighlight.Container>
@@ -65,3 +115,83 @@ const Home = () => {
 export const Head = () => <Seo />
 
 export default Home
+
+const ProductHighlight = ({
+  products,
+}: {
+  products: Array<{
+    name: string
+    image: string
+    alt: string
+    short_description: string
+    path: string
+  }>
+}) => {
+  return (
+    <section className="flex justify-center">
+      <Container className="flex justify-center">
+        <Carousel
+          opts={{
+            align: "center",
+          }}
+          className="w-10/12 md:w-full"
+        >
+          <CarouselContent className="w-full p-1">
+            {products.map(row => (
+              <CarouselItem
+                key={row.name}
+                className="ml-2 md:basis-1/2 lg:ml-0 xl:basis-1/3 2xl:basis-1/4"
+              >
+                <div className="shadow-full h-fit w-full rounded-sm border-none bg-white">
+                  <div className="h-fit w-full">
+                    <div className="h-100 w-30 mx-auto flex items-center justify-center rounded-sm md:h-[140px] md:w-40 lg:h-[200px] lg:w-10/12">
+                      <img
+                        className="max-h-full max-w-full object-contain"
+                        src={row.image}
+                        alt={row.alt}
+                      />
+                    </div>
+                    <div className="rounded-b-sm bg-primary-500 py-4">
+                      <span className="px-4 text-start text-xl font-bold text-primary-foreground-100">
+                        {row.name}
+                      </span>
+                      <div className="mt-4 rounded-b-sm px-4 pt-4">
+                        <div
+                          className="text-xs text-primary-foreground-100"
+                          dangerouslySetInnerHTML={{
+                            __html: row.short_description,
+                          }}
+                        />
+                      </div>
+                      <div className="flex flex-col items-stretch justify-between gap-4 p-4 sm:flex-row">
+                        <Link
+                          to={row.path}
+                          className="flex items-center justify-center rounded-sm bg-primary-900 p-2 px-4 text-xs font-bold uppercase text-primary-foreground-100 transition-colors hover:bg-primary-700"
+                        >
+                          Veja mais
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+
+          <CarouselPrevious
+            data-xl-hidden={products.length <= 4}
+            data-lg-hidden={products.length <= 3}
+            data-md-hidden={products.length <= 2}
+            className="flex-initial md:data-[md-hidden=true]:hidden lg:data-[lg-hidden=true]:hidden xl:data-[xl-hidden=true]:hidden"
+          />
+          <CarouselNext
+            data-xl-hidden={products.length <= 4}
+            data-lg-hidden={products.length <= 3}
+            data-md-hidden={products.length <= 2}
+            className="flex-initial md:data-[md-hidden=true]:hidden lg:data-[lg-hidden=true]:hidden xl:data-[xl-hidden=true]:hidden"
+          />
+        </Carousel>
+      </Container>
+    </section>
+  )
+}

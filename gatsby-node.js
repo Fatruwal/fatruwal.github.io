@@ -20,6 +20,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
 exports.createPages = async ({ graphql, actions, reporter }) => {
   await CreateWpPages({ graphql, actions, reporter })
   await CreateArticlePage({ graphql, actions, reporter })
+  await CreateProductPages({ graphql, actions, reporter })
 }
 
 async function CreateWpPages({ graphql, actions, reporter }) {
@@ -34,6 +35,17 @@ async function CreateWpPages({ graphql, actions, reporter }) {
           content
           template {
             templateName
+            ... on WpTemplate_Categoria {
+              templateName
+              categorias {
+                catalogo {
+                  node {
+                    altText
+                    publicUrl
+                  }
+                }
+              }
+            }
             ... on WpTemplate_Qualidade {
               templateName
               certificadosNaTelaDeQualidade {
@@ -94,11 +106,42 @@ async function CreateWpPages({ graphql, actions, reporter }) {
               }
               templateName
             }
+            ... on WpTemplate_Contato {
+              templateName
+              camposNaTelaDeContatos {
+                location {
+                  location {
+                    longitude
+                    latitude
+                    zoom
+                  }
+                  title
+                }
+              }
+            }
           }
           featuredImage {
             node {
               publicUrl
               altText
+            }
+          }
+        }
+      }
+      allWcProducts {
+        nodes {
+          name
+          slug
+          categories {
+            name
+          }
+          short_description
+          description
+          images {
+            name
+            alt
+            localFile {
+              publicURL
             }
           }
         }
@@ -110,6 +153,17 @@ async function CreateWpPages({ graphql, actions, reporter }) {
     reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
     return
   }
+
+  const products = result.data.allWcProducts.nodes.map(r => ({
+    name: r.name,
+    category: r.categories[0]?.name,
+    text: r.short_description || r.description || "",
+    path: `/product/${r.slug}`,
+    image: {
+      url: r.images[0]?.localFile?.publicURL || "",
+      alt: r.images[0]?.alt || r.images[0]?.name,
+    },
+  }))
 
   const pages = result.data.allWpPage.nodes.map(p => {
     let content
@@ -154,6 +208,25 @@ async function CreateWpPages({ graphql, actions, reporter }) {
           description: p.template.quemSomosConteudo?.terceiraColuna.description,
           icon: p.template.quemSomosConteudo?.terceiraColuna.icon.node,
         },
+      }
+    }
+    if (p.template?.templateName === "Contato") {
+      content = {
+        title: p.template.camposNaTelaDeContatos?.location.title,
+        location: {
+          longitude:
+            p.template.camposNaTelaDeContatos?.location?.location?.longitude,
+          latitude:
+            p.template.camposNaTelaDeContatos?.location?.location?.latitude,
+          zoom: p.template.camposNaTelaDeContatos?.location?.location?.zoom,
+        },
+      }
+    }
+
+    if (p.template?.templateName === "Categoria") {
+      content = {
+        download: p.template?.categorias?.catalogo?.node?.publicUrl,
+        products: products.filter(r => r.category === p.title),
       }
     }
 
@@ -262,6 +335,88 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
       context: {
         article: row,
         related: related,
+      },
+    })
+  })
+}
+
+async function CreateProductPages({ graphql, actions, reporter }) {
+  const { createPage } = actions
+
+  const products = await graphql(`
+    query {
+      allWcProducts {
+        nodes {
+          name
+          slug
+          attributes {
+            name
+            options
+          }
+          categories {
+            name
+          }
+          short_description
+          description
+          images {
+            name
+            alt
+            localFile {
+              publicURL
+            }
+          }
+          related_products {
+            name
+            images {
+              alt
+              name
+              localFile {
+                publicURL
+              }
+            }
+            slug
+            short_description
+          }
+        }
+      }
+    }
+  `)
+  if (products.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, products)
+    return
+  }
+
+  const pages = products.data.allWcProducts.nodes.map(r => ({
+    name: r.name,
+    category: r.categories[0]?.name,
+    short_description: r.short_description,
+    description: r.description,
+    path: `/product/${r.slug}`,
+    product: {
+      image: r.images[0]?.localFile?.publicURL || "",
+      alt: r.images[0]?.alt || r.images[0]?.name,
+    },
+    attributes: r.attributes.map(a => ({
+      name: a.name,
+      options: a.options,
+    })),
+    related_products: r.related_products.map(p => ({
+      name: p.name,
+      short_description: p.short_description,
+      path: `/product/${p.slug}`,
+      product: {
+        image: p.images[0]?.localFile?.publicURL || "",
+        alt: p.images[0]?.alt || p.images[0]?.name,
+      },
+    })),
+  }))
+
+  pages.forEach(row => {
+    createPage({
+      path: row.path,
+      component: path.resolve("./src/templates/product.tsx"),
+      context: {
+        content: row,
       },
     })
   })

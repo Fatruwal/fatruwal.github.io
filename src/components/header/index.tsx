@@ -7,9 +7,10 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
-import BudgetModal from "./budget-modal"
+import BudgetModal from "../budget-modal"
 import LogoImage from "@/assets/logo"
 import Topbar from "./Topbar"
+import BudgetFormIcon from "@/assets/BudgetFormIcon"
 
 interface MenuQueryData {
   allWpMenuItem: {
@@ -79,7 +80,15 @@ const Header: React.FC = () => {
               </Link>
             </div>
             <div className="lg:hidden">
-              <BudgetModal />
+              <BudgetModal>
+                <BudgetFormIcon className="mr-1 bg-white md:mr-2" />
+                <div className="flex flex-col items-center justify-center leading-[10px] md:text-sm md:leading-5">
+                  <span className="text-xxs font-normal md:text-sm">
+                    Solicite um
+                  </span>
+                  <strong className="text-xxs md:text-sm">Orçamento </strong>
+                </div>
+              </BudgetModal>
             </div>
           </div>
 
@@ -149,7 +158,15 @@ const Header: React.FC = () => {
             <div className="hidden h-[3.5rem] w-[1px] bg-primary-500 md:block"></div>
 
             <div className="pb-1 pr-4 text-center lg:pr-0">
-              <BudgetModal />
+              <BudgetModal>
+                <BudgetFormIcon className="mr-1 bg-white md:mr-2" />
+                <div className="flex flex-col items-center justify-center leading-[10px] md:text-sm md:leading-5">
+                  <span className="text-xxs font-normal md:text-sm">
+                    Solicite um
+                  </span>
+                  <strong className="text-xxs md:text-sm">Orçamento </strong>
+                </div>
+              </BudgetModal>
             </div>
           </div>
         </div>

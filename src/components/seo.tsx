@@ -34,7 +34,7 @@ const Seo = ({ title: overrideTitle }: SeoProps) => {
   const { title: siteTitle, description, language } = generalSettings
   const title = overrideTitle || siteTitle
 
-  const metaDescription = description || wp.generalSettings?.description
+  const metaDescription = description
   const socialMedia = {
     instagram: `https://www.instagram.com/fatruwal/`,
     facebook: `https://www.facebook.com/fatruwal`,

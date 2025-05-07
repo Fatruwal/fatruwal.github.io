@@ -128,6 +128,9 @@ module.exports = {
       backgroundImage: {
         "blue-gradient": "linear-gradient(to bottom, #55EDF9, #0074E9)",
       },
+      boxShadow: {
+        "shadow-full": "box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.3)",
+      },
       // Typography scale
       fontSize: {
         h1: "var(--h1-font-size)",

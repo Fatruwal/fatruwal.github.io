@@ -1,9 +1,10 @@
 import React from "react"
 import Layout from "./layout"
 import { PageProps } from "gatsby"
-import Seo from "@/components/seo"
+import Seo from "@/components/Seo"
 import { BlogHighlight } from "@/components/BlogHighlight"
 import { BlogCard } from "@/components/BlogCard"
+import GradientBar from "@/components/GradientBar"
 
 interface ArticleTemplateProps {
   article: {
@@ -46,7 +47,7 @@ const ArticleTemplate = ({
         <div className="flex justify-center">
           <div className="mx-4 rounded-sm sm:w-9/12 lg:max-w-screen-sm xl:max-w-screen-2xl">
             <h2>Materiais relacionados</h2>
-            <span className="mb-4 mt-2 block h-1 w-40 bg-blue-gradient" />
+            <GradientBar className="mb-4 mt-2" />
             <BlogHighlight.List
               className="flex w-full justify-between"
               data={related}

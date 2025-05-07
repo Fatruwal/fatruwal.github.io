@@ -1,6 +1,8 @@
+import Container from "@/components/Container"
+import GradientBar from "@/components/GradientBar"
 import React from "react"
 
-type Content = {
+export type WhoWeAreContentComponent = {
   title: string
   description: string
   icon: {
@@ -11,21 +13,36 @@ type Content = {
 
 export interface WhoWeAreProps {
   content: {
-    firstColumn: Content
-    secondColumn: Content
-    thirdColumn: Content
+    title: string
+    text: string
+    content: {
+      firstColumn: WhoWeAreContentComponent
+      secondColumn: WhoWeAreContentComponent
+      thirdColumn: WhoWeAreContentComponent
+    }
   }
 }
 
 export default function WhoWeAre({ content }: WhoWeAreProps) {
   return (
-    <div className="my-8 w-full sm:w-10/12 xl:max-w-screen-2xl">
-      <div className="grid grid-cols-1 px-4 sm:px-8 lg:grid-cols-3 lg:gap-20">
-        <Column content={content.firstColumn} />
-        <Column content={content.secondColumn} />
-        <Column content={content.thirdColumn} />
+    <>
+      <div className="flex justify-center">
+        <Container className="rounded-sm p-4">
+          <h1 className="font-bold">{content.title}</h1>
+          <GradientBar className="my-6" />
+          <div dangerouslySetInnerHTML={{ __html: content.text }} />
+        </Container>
       </div>
-    </div>
+      <div className="flex flex-col items-center justify-center bg-primary-25">
+        <div className="my-8 w-full sm:w-10/12 xl:max-w-screen-2xl">
+          <div className="grid grid-cols-1 px-4 sm:px-8 lg:grid-cols-3 lg:gap-20">
+            <Column content={content.content.firstColumn} />
+            <Column content={content.content.secondColumn} />
+            <Column content={content.content.thirdColumn} />
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 
