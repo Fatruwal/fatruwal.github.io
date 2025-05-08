@@ -7,6 +7,7 @@ import {
   DrawerTrigger,
   DrawerHeader,
   DrawerClose,
+  DrawerTitle,
 } from "../ui/drawer"
 import {
   Accordion,
@@ -46,6 +47,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
               </div>
             </budget.Trigger>
           </budget.Modal>
+          <DrawerTitle></DrawerTitle>
           <DrawerClose>
             <MdOutlineClose className="text-[1.3rem] text-primary-800" />
           </DrawerClose>

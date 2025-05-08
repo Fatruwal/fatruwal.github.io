@@ -4,6 +4,7 @@ import { ContactComponent } from "../ContactComponent"
 import GradientBar from "@/components/GradientBar"
 import { Budget } from "@/components/Budget"
 import { cn } from "@/lib/utils"
+import { DialogTitle } from "@radix-ui/react-dialog"
 
 const Modal = ({
   children,
@@ -18,10 +19,10 @@ const Modal = ({
           <div className="px-4 py-10 pb-2 md:px-8">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               <div>
-                <h2 className="mb-2 text-[2.315rem] font-bold leading-[2.315rem]">
+                <DialogTitle className="mb-2 text-[2.315rem] font-bold leading-[2.315rem]">
                   SOLICITE O SEU <br />
                   ORÇAMENTO!
-                </h2>
+                </DialogTitle>
                 <GradientBar className="my-6 w-48" />
                 <div className="px-2">
                   <p className="mb-8 text-xl text-gray-600">

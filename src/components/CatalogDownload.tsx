@@ -1,6 +1,6 @@
 import React from "react"
 import { useForm } from "react-hook-form"
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog"
 import {
   Form,
   FormControl,
@@ -51,9 +51,9 @@ export const Modal = ({
               className="flex h-fit flex-col gap-4 rounded-sm bg-secondary-foreground-100 p-4 sm:p-8"
             >
               <div className="mb-4">
-                <h5 className="font-bold">
+                <DialogTitle className="text-h5 font-bold">
                   Preencha os dados e faça o download do catálogo!
-                </h5>
+                </DialogTitle>
                 <GradientBar className="my-2" />
               </div>
               <div className="max-h-24">
