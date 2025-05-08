@@ -21,6 +21,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   await CreateWpPages({ graphql, actions, reporter })
   await CreateArticlePage({ graphql, actions, reporter })
   await CreateProductPages({ graphql, actions, reporter })
+  await CreateHomePage({ graphql, actions, reporter })
 }
 
 async function CreateWpPages({ graphql, actions, reporter }) {
@@ -264,9 +265,16 @@ async function CreateWpPages({ graphql, actions, reporter }) {
 async function CreateArticlePage({ graphql, actions, reporter }) {
   const { createPage } = actions
 
-  const article = await graphql(`
+  const results = await graphql(`
     query {
-      allWpPost {
+      allWpPage(filter: { template: { templateName: { eq: "Blog" } } }) {
+        nodes {
+          slug
+          title
+          content
+        }
+      }
+      allWpPost(sort: { modified: DESC }) {
         nodes {
           id
           title
@@ -278,32 +286,6 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
               publicUrl
             }
           }
-        }
-      }
-    }
-  `)
-
-  if (article.errors) {
-    reporter.panicOnBuild(`Error while running GraphQL query.`, article.errors)
-    return
-  }
-
-  const posts = article.data.allWpPost.nodes.map(p => ({
-    banner: p.featuredImage?.node.publicUrl,
-    title: p.title,
-    modified: p.modified,
-    content: p.content,
-    path: `/blog/${p.slug}`,
-  }))
-
-  const relatedArticles = await graphql(`
-    query {
-      allWpPost(limit: 3, sort: { modified: DESC }) {
-        nodes {
-          title
-          modified
-          slug
-          content
           imagemBlogDestaque {
             imagemBlogDestaque {
               node {
@@ -315,12 +297,28 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
       }
     }
   `)
-  if (relatedArticles.errors) {
-    reporter.panicOnBuild(`Error while running GraphQL query.`, relatedArticles)
+
+  if (results.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, results.errors)
     return
   }
 
-  const related = relatedArticles.data.allWpPost.nodes.map(r => ({
+  const blogPages = results.data.allWpPage.nodes.map(p => ({
+    slug: p.slug,
+    title: p.title,
+    content: p.content,
+    path: `/${p.slug}`,
+  }))
+
+  const posts = results.data.allWpPost.nodes.map(p => ({
+    banner: p.featuredImage?.node.publicUrl,
+    title: p.title,
+    modified: p.modified,
+    content: p.content,
+    path: `/blog/${p.slug}`,
+  }))
+
+  const related = results.data.allWpPost.nodes.splice(0, 3).map(r => ({
     title: r.title,
     path: `/blog/${r.slug}`,
     modified: r.modified,
@@ -335,6 +333,16 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
       context: {
         article: row,
         related: related,
+      },
+    })
+  })
+  blogPages.forEach(row => {
+    createPage({
+      path: row.path,
+      component: path.resolve("./src/templates/blog.tsx"),
+      context: {
+        page: row,
+        articles: posts,
       },
     })
   })
@@ -419,5 +427,80 @@ async function CreateProductPages({ graphql, actions, reporter }) {
         content: row,
       },
     })
+  })
+}
+async function CreateHomePage({ graphql, actions, reporter }) {
+  const { createPage } = actions
+
+  const result = await graphql(`
+    query {
+      allWpPost {
+        nodes {
+          title
+          modified
+          slug
+          content
+          imagemBlogDestaque {
+            imagemBlogDestaque {
+              node {
+                publicUrl
+              }
+            }
+          }
+        }
+      }
+      allWcProducts {
+        nodes {
+          name
+          slug
+          short_description
+          description
+          images {
+            name
+            alt
+            localFile {
+              publicURL
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  // Check for errors
+  if (result.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
+    return
+  }
+
+  // Access the data through result.data, not directly from result
+  const posts = result.data.allWpPost.nodes.slice(0, 3).map(post => ({
+    title: post.title,
+    path: `/blog/${post.slug}`,
+    modified: post.modified,
+    content: post.content,
+    banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
+  }))
+
+  const products = result.data.allWcProducts.nodes
+    .slice(0, 20)
+    .map(product => ({
+      name: product.name,
+      image: product.images?.[0]?.localFile?.publicURL || "",
+      alt: product.images?.[0]?.alt || "produto",
+      short_description:
+        product.short_description?.trim().substring(0, 120).concat("...") ||
+        product.description?.trim().substring(0, 120).concat("...") ||
+        "",
+      path: `/product/${product.slug}`,
+    }))
+
+  createPage({
+    path: "/",
+    component: path.resolve("./src/templates/homepage.tsx"),
+    context: {
+      articles: posts,
+      products: products,
+    },
   })
 }

@@ -1,8 +1,8 @@
 import React from "react"
-import Layout from "@/templates/layout"
+import Layout from "@/components/layout"
 import { BlogHighlight } from "@/components/BlogHighlight"
 import Seo from "@/components/Seo"
-import { graphql, Link, useStaticQuery } from "gatsby"
+import { Link, PageProps } from "gatsby"
 import {
   Carousel,
   CarouselContent,
@@ -11,94 +11,26 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import Container from "@/components/Container"
-interface GraphqlBlogQuery {
-  allWpPost: {
-    nodes: Array<{
-      title: string
-      modified: string
-      content: string
-      slug: string
-      imagemBlogDestaque: {
-        fieldGroupName: string
-        imagemBlogDestaque: {
-          node: {
-            publicUrl: string
-          }
-        }
-      }
-    }>
-  }
-  allWcProducts: {
-    nodes: Array<{
-      name: string
-      slug: string
-      short_description: string
-      description: string
-      images: Array<{
-        name: string
-        alt: string
-        localFile: {
-          publicURL: string
-        }
-      }>
-    }>
-  }
+
+interface HomePageProps {
+  articles: Array<{
+    title: string
+    modified: string
+    content: string
+    path: string
+    banner: string
+  }>
+  products: Array<{
+    name: string
+    image: string
+    alt: string
+    short_description: string
+    path: string
+  }>
 }
 
-const Home = () => {
-  const data = useStaticQuery<GraphqlBlogQuery>(graphql`
-    query {
-      allWpPost(limit: 3, sort: { modified: DESC }) {
-        nodes {
-          title
-          modified
-          slug
-          content
-          imagemBlogDestaque {
-            imagemBlogDestaque {
-              node {
-                publicUrl
-              }
-            }
-          }
-        }
-      }
-      allWcProducts {
-        nodes {
-          name
-          slug
-          short_description
-          description
-          images {
-            name
-            alt
-            localFile {
-              publicURL
-            }
-          }
-        }
-      }
-    }
-  `)
-
-  const posts = data.allWpPost.nodes.map(post => ({
-    title: post.title,
-    path: `/blog/${post.slug}`,
-    modified: post.modified,
-    content: post.content,
-    banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
-  }))
-
-  const products = data.allWcProducts.nodes.map(product => ({
-    name: product.name,
-    image: product.images[0].localFile.publicURL || "",
-    alt: product.images[0].alt || "produto",
-    short_description:
-      product.short_description?.trim().substring(0, 120).concat("...") ||
-      product.description?.trim().substring(0, 120).concat("...") ||
-      "",
-    path: `/product/${product.slug}`,
-  }))
+const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
+  const { articles, products } = pageContext
 
   return (
     <Layout>
@@ -107,7 +39,7 @@ const Home = () => {
         <BlogHighlight.Container>
           <BlogHighlight.List
             className="items-center justify-center md:items-stretch"
-            data={posts}
+            data={articles}
           />
         </BlogHighlight.Container>
       </div>
@@ -115,7 +47,7 @@ const Home = () => {
   )
 }
 
-export const Head = () => <Seo />
+export const Head = () => <Seo title="homepage" />
 
 export default Home
 

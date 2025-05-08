@@ -1,7 +1,7 @@
 import React from "react"
 import Seo from "@/components/Seo"
 import { PageProps } from "gatsby"
-import Layout from "./layout"
+import Layout from "@/components/layout"
 import Container from "@/components/Container"
 import { FaWhatsapp } from "react-icons/fa"
 import { IoDownloadOutline } from "react-icons/io5"

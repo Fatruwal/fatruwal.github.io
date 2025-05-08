@@ -1,7 +1,7 @@
 import React from "react"
 import Seo from "@/components/Seo"
 import { PageProps } from "gatsby"
-import Layout from "../layout"
+import Layout from "@/components/layout"
 import Quality, { QualityComponent } from "./quality"
 import WhoWeAre, { WhoWeAreProps } from "./who-we-are"
 import Contacts, { ContactsProps } from "./contacts"
