@@ -52,17 +52,17 @@ export const zones: Zones[] = [
 
 export default function WeServeAllOfBrazil() {
   return (
-    <Tabs className="h-full w-full rounded-sm bg-white">
-      <TabsList
-        defaultChecked
-        defaultValue={zones[0].name}
-        className="border-forepround-100 mb-4 h-auto w-full grid-cols-11 flex-col justify-between gap-2 rounded-none border-b-[1px] p-2 pb-0 sm:flex-row lg:grid-cols-5"
-      >
+    <Tabs
+      defaultValue={zones[0].name}
+      className="h-full w-full rounded-sm bg-white"
+    >
+      <TabsList className="border-forepround-100 mb-4 h-auto w-full grid-cols-11 flex-col justify-between gap-2 rounded-none border-b-[1px] p-2 pb-0 sm:flex-row lg:grid-cols-5">
         {zones.map((zone, index) => (
           <TabsTrigger
             className={`text-lg ${index !== 0 && index !== zones.length - 1 ? "col-span-1 lg:col-span-3" : "col-span-1"} ${index === 0 ? "text-start" : "text-center"} ${index === zones.length - 1 ? "text-right" : ""} `}
             key={zone.name}
             value={zone.name}
+            data-state={zone.name}
           >
             {zone.name}
           </TabsTrigger>

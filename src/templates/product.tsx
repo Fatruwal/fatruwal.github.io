@@ -1,9 +1,8 @@
-import React, { JSX, ReactNode } from "react"
+import React from "react"
 import Seo from "@/components/Seo"
-import { Link, PageProps } from "gatsby"
+import { PageProps } from "gatsby"
 import Layout from "./layout"
 import Container from "@/components/Container"
-import { Button } from "@/components/ui/button"
 import { FaWhatsapp } from "react-icons/fa"
 import { IoDownloadOutline } from "react-icons/io5"
 import Winner from "@/assets/Winner"
@@ -18,8 +17,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import BudgetModal from "@/components/budget-modal"
+import { budget } from "@/components/budget-modal"
 import { ProductCard } from "@/components/ProductCard"
+import { CatalogDownload } from "@/components/CatalogDownload"
 
 interface RelatedProduct {
   name: string
@@ -68,7 +68,7 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
     <Layout className="bg-white">
       <div className="flex justify-center bg-secondary-foreground-100">
         <Container className="rounded-sm p-4">
-          <section className="flex flex-col gap-10 lg:grid lg:grid-cols-5">
+          <section className="flex flex-col gap-5 lg:grid lg:grid-cols-6 xl:gap-10">
             <div className="col-span-2 flex h-full w-full items-center justify-center rounded-sm bg-white p-0">
               <img
                 className="object-fill"
@@ -76,7 +76,7 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                 alt={product.alt}
               />
             </div>
-            <div className="col-span-3 flex flex-col justify-between lg:min-h-96">
+            <div className="flex flex-col justify-between lg:col-span-4 lg:min-h-96">
               <div>
                 <span className="text-lg uppercase text-primary-foreground-400">
                   {category}
@@ -89,17 +89,14 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                 className="text-sm text-primary-foreground-500"
                 dangerouslySetInnerHTML={{ __html: short_description }}
               />
-              <div className="flex flex-col gap-4 md:flex-row">
-                <BudgetModal>
-                  <Button
-                    variant="outline"
-                    className="rounded-sm bg-primary-500 py-6 font-bold uppercase text-white transition-colors hover:bg-primary-300"
-                  >
+              <div className="my-2 flex flex-col gap-4 md:flex-row">
+                <budget.Modal>
+                  <budget.Trigger className="rounded-sm bg-primary-500 px-4 py-7 font-bold uppercase text-white transition-colors hover:bg-primary-300">
                     Solicitar orçamento
-                  </Button>
-                </BudgetModal>
+                  </budget.Trigger>
+                </budget.Modal>
                 <a
-                  className="flex items-center gap-2 rounded-sm bg-[#28A745] px-4 py-2 text-sm font-bold uppercase text-white transition-colors hover:bg-[#29b845]"
+                  className="flex h-9 w-full items-center justify-center gap-2 rounded-sm bg-[#28A745] px-4 py-7 text-sm font-bold uppercase text-white transition-colors hover:bg-[#29b845]"
                   target="_blank"
                   rel="noreferrer"
                   href="https://api.whatsapp.com/send?phone=5511963014309&text=Ol%C3%A1%20gostaria%20de%20solicitar%20mais%20informa%C3%A7%C3%B5es"
@@ -108,17 +105,15 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                   Orçamento pelo WhatsApp
                 </a>
                 {catalog && catalog?.options.length > 0 && (
-                  <a
-                    href={catalog.options[0]}
-                    className="flex items-center gap-2 rounded-sm bg-primary-700 px-4 py-2 text-sm font-bold uppercase text-white transition-colors hover:bg-primary-500"
-                    target="_blank"
-                  >
-                    <IoDownloadOutline className="mr-1 text-lg" />
-                    Download do catalogo
-                  </a>
+                  <CatalogDownload.Modal link={catalog.options[0]}>
+                    <CatalogDownload.Trigger className="flex h-9 w-full items-center justify-center gap-2 rounded-sm bg-primary-900 px-4 py-7 text-sm font-bold uppercase text-white transition-colors hover:bg-primary-500">
+                      <IoDownloadOutline className="mr-1 text-lg" />
+                      Download do catalogo
+                    </CatalogDownload.Trigger>
+                  </CatalogDownload.Modal>
                 )}
               </div>
-              <div className="shadown-sm border-r-1 flex flex-col gap-4 border-primary-50 bg-white p-6 md:flex-row">
+              <div className="shadown-sm border-r-1 my-4 flex flex-col gap-4 border-primary-50 bg-white px-2 py-4 md:my-0 md:flex-row xl:p-6">
                 <AboutCompanyCard
                   Icon={IsoIcon}
                   title="Certificado"
@@ -210,7 +205,10 @@ const AboutCompanyCard = ({
   description: string
 }) => {
   return (
-    <div {...props} className={cn("flex items-center gap-2 px-4", className)}>
+    <div
+      {...props}
+      className={cn("flex items-center gap-1 px-2 lg:gap-2 lg:px-4", className)}
+    >
       <Icon className="h-10 w-20" />
       <div className="flex flex-col space-y-1">
         <h5 className="leading-2 text-sm font-bold uppercase">{title}</h5>

@@ -10,7 +10,7 @@ export default function Container({
     <div
       {...props}
       className={cn(
-        "mx-10 w-full gap-10 rounded-sm p-4 md:mx-4 lg:w-10/12 lg:gap-20 xl:max-w-screen-2xl",
+        "mx-4 w-full gap-10 rounded-sm p-4 px-4 md:mx-8 md:px-6 lg:w-11/12 xl:max-w-screen-2xl xl:gap-20",
         className,
       )}
     >

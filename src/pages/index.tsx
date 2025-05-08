@@ -97,7 +97,7 @@ const Home = () => {
       product.short_description?.trim().substring(0, 120).concat("...") ||
       product.description?.trim().substring(0, 120).concat("...") ||
       "",
-    path: `/produtos/${product.slug}`,
+    path: `/product/${product.slug}`,
   }))
 
   return (
@@ -105,7 +105,10 @@ const Home = () => {
       <div className="min-h-dvh">
         <ProductHighlight products={products} />
         <BlogHighlight.Container>
-          <BlogHighlight.List data={posts} />
+          <BlogHighlight.List
+            className="items-center justify-center md:items-stretch"
+            data={posts}
+          />
         </BlogHighlight.Container>
       </div>
     </Layout>

@@ -1,6 +1,5 @@
 import React from "react"
-import BudgetModal from "./budget-modal"
-import { Button } from "./ui/button"
+import { budget } from "./budget-modal"
 import { Link } from "gatsby"
 
 export type ProductCardProps = {
@@ -36,15 +35,15 @@ export const ProductCard = ({ html, image, path, name }: ProductCardProps) => {
         <div className="flex flex-col items-stretch justify-between gap-4 p-4 sm:flex-row">
           <Link
             to={path}
-            className="flex w-full items-center justify-center rounded-sm bg-primary-500 p-2 text-xs font-bold uppercase text-primary-foreground-100"
+            className="flex w-full items-center justify-center text-nowrap rounded-sm bg-primary-500 p-2 text-xs font-bold uppercase text-primary-foreground-100"
           >
             Saiba mais
           </Link>
-          <BudgetModal>
-            <Button className="w-full rounded-sm bg-primary-900 p-4 px-6 text-xs uppercase text-primary-foreground-100">
+          <budget.Modal>
+            <budget.Trigger className="w-full text-nowrap rounded-sm bg-primary-900 px-6 py-2 text-xs uppercase text-primary-foreground-100 lg:py-4">
               Orçar agora
-            </Button>
-          </BudgetModal>
+            </budget.Trigger>
+          </budget.Modal>
         </div>
       </div>
     </div>

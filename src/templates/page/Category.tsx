@@ -1,3 +1,4 @@
+import { CatalogDownload } from "@/components/CatalogDownload"
 import Container from "@/components/Container"
 import GradientBar from "@/components/GradientBar"
 import { ProductCard } from "@/components/ProductCard"
@@ -32,13 +33,11 @@ export const Category = ({ content }: CategoryProps) => {
               <h1 className="font-bold">{content.title}</h1>
             </div>
             {content.content?.download && (
-              <a
-                href={content.content.download}
-                className="text-md cursor-pointer bg-primary-700 p-3 px-6 text-center font-bold text-white hover:bg-primary-600"
-                target="_blank"
-              >
-                Download do certificado
-              </a>
+              <CatalogDownload.Modal link={content.content.download}>
+                <CatalogDownload.Trigger className="text-md lg:text-md mt-2 cursor-pointer rounded border-0 bg-primary-700 p-3 py-2 text-center text-sm font-bold uppercase text-primary-foreground-100 hover:bg-blue-700 hover:bg-primary-600 lg:px-6 lg:py-4">
+                  Download do catálogo
+                </CatalogDownload.Trigger>
+              </CatalogDownload.Modal>
             )}
           </div>
           <GradientBar className="my-4" />
@@ -46,7 +45,7 @@ export const Category = ({ content }: CategoryProps) => {
       </div>
       <div className="flex justify-center bg-[#F3F3F3]">
         <Container>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {content.content?.products.map((product, index) => (
               <ProductCard
                 key={index}

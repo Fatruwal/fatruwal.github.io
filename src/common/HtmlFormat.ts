@@ -14,10 +14,10 @@ export class HtmlFormat {
         /<\/?(?:strong|em|b|i|span|a|u|mark|sup|sub|small)(?:\s[^>]*)?>/gi,
         "",
       )
-      paragraphHtml = paragraphHtml.replace(/&nbsp;/g, ' ')
+      paragraphHtml = paragraphHtml.replace(/&nbsp;/g, " ")
 
       firstParagraph.innerHTML = paragraphHtml
-      const text = paragraphHtml.substring(0, 200).trim()
+      const text = paragraphHtml.substring(0, 120).trim()
       return text.length > 0 ? text + "..." : ""
     }
 

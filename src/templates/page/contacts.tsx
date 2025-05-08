@@ -19,7 +19,7 @@ export default function Contacts({ content }: ContactsProps) {
   const { title, location } = content
   return (
     <div>
-      <div className="-mt-8 flex flex-col items-center justify-center">
+      <div className="mt-8 flex flex-col items-center justify-center">
         <Container>
           <section className="flex w-full flex-col justify-between gap-10 rounded-sm md:flex-row md:items-stretch lg:gap-20">
             <div className="w-full md:w-2/5">

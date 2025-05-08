@@ -23,7 +23,7 @@ const List = ({ data, className, ...props }: BlogCardListProps) => {
     <ul
       {...props}
       className={cn(
-        "flex w-10/12 max-w-80 flex-col gap-4 md:max-w-screen-lg md:flex-row",
+        "grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10 xl:grid-cols-3",
         className,
       )}
     >
