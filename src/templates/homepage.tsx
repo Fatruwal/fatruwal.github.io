@@ -62,7 +62,7 @@ const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
 
   return (
     <Layout>
-      <div className="min-h-dvh">
+      <div>
         <ProductHighlight products={products} />
         <section className="mb-24 mt-8 flex w-full flex-col items-center justify-center gap-2 bg-[#80B6E710] py-10">
           <h3 className="text-center font-bold uppercase">
@@ -101,7 +101,6 @@ const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
             ))}
           </ul>
         </section>
-        )
       </div>
     </Layout>
   )
@@ -110,7 +109,6 @@ const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
 export const Head = () => <Seo title="homepage" />
 
 export default Home
-
 const ProductHighlight = ({
   products,
 }: {
@@ -131,48 +129,54 @@ const ProductHighlight = ({
           }}
           className="w-10/12 md:w-full"
         >
+          <h3 className="text-center font-bold uppercase">Nossos produtos</h3>
+          <GradientBar className="mx-auto mb-6 mt-6" />
           <CarouselContent className="w-full p-1">
             {products.map(row => (
               <CarouselItem
                 key={row.name}
-                className="ml-1 items-stretch md:basis-1/2 lg:ml-0 xl:basis-1/3 2xl:basis-1/4"
+                className="ml-1 md:basis-1/2 lg:ml-0 xl:basis-1/3 2xl:basis-1/4"
               >
-                <div className="shadow-full h-fit w-full rounded-sm border-none bg-white">
-                  <div className="h-fit w-full">
-                    <div className="h-100 w-30 mx-auto flex items-center justify-center rounded-sm md:h-[140px] md:w-40 lg:h-[200px] lg:w-10/12">
+                {/* Container principal com altura fixa */}
+                <div className="shadow-full flex h-[400px] w-full flex-col overflow-hidden rounded-sm border-none bg-white">
+                  {/* Área da imagem com altura fixa */}
+                  <div className="flex h-[140px] w-full items-center justify-center bg-white p-2 lg:h-[200px]">
+                    <div className="flex h-full w-40 items-center justify-center lg:w-10/12">
                       <img
                         className="max-h-full max-w-full object-contain"
                         src={row.image}
                         alt={row.alt}
                       />
                     </div>
-                    <div className="rounded-b-sm bg-primary-500 py-4">
-                      <span className="px-4 text-start text-xl font-bold text-primary-foreground-100">
-                        {row.name}
-                      </span>
-                      <div className="mt-4 rounded-b-sm px-4 pt-4">
-                        <div
-                          className="text-xs text-primary-foreground-100"
-                          dangerouslySetInnerHTML={{
-                            __html: row.short_description,
-                          }}
-                        />
-                      </div>
-                      <div className="flex flex-col items-stretch justify-between gap-4 p-4 sm:flex-row">
-                        <Link
-                          to={row.path}
-                          className="flex items-center justify-center rounded-sm bg-primary-900 p-2 px-4 text-xs font-bold uppercase text-primary-foreground-100 transition-colors hover:bg-primary-700"
-                        >
-                          Veja mais
-                        </Link>
-                      </div>
+                  </div>
+
+                  <div className="flex flex-1 flex-col overflow-hidden rounded-b-sm bg-primary-500">
+                    <h3 className="line-clamp-1 px-4 py-3 text-xl font-bold text-primary-foreground-100">
+                      {row.name}
+                    </h3>
+
+                    <div className="flex-1 overflow-hidden px-4">
+                      <div
+                        className="line-clamp-3 overflow-hidden text-xs text-primary-foreground-100"
+                        dangerouslySetInnerHTML={{
+                          __html: row.short_description,
+                        }}
+                      />
+                    </div>
+
+                    <div className="mt-auto px-4 pb-4 pt-2">
+                      <Link
+                        to={row.path}
+                        className="inline-flex items-center justify-center rounded-sm bg-primary-900 px-4 py-2 text-xs font-bold uppercase text-primary-foreground-100 transition-colors hover:bg-primary-700"
+                      >
+                        Veja mais
+                      </Link>
                     </div>
                   </div>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-
           <CarouselPrevious
             data-xl-hidden={products.length <= 4}
             data-lg-hidden={products.length <= 3}
