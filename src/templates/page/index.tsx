@@ -5,7 +5,6 @@ import Layout from "@/components/layout"
 import Quality, { QualityComponent } from "./quality"
 import WhoWeAre, { WhoWeAreProps } from "./who-we-are"
 import Contacts, { ContactsProps } from "./contacts"
-import { Category, CategoryProps } from "./Category"
 
 interface PageBanner {
   alt: string
@@ -26,11 +25,6 @@ type PageContactsTemplate = {
   content: ContactsProps["content"]
 }
 
-type PageCategoryTemplate = {
-  name: "Categoria"
-  content: CategoryProps["content"]["content"]
-}
-
 interface PageTemplateProps {
   page: {
     slug: string
@@ -41,7 +35,6 @@ interface PageTemplateProps {
       | PageQualidadeTemplate
       | PageWhoWeAreTemplate
       | PageContactsTemplate
-      | PageCategoryTemplate
     path: string
   }
 }
@@ -55,15 +48,6 @@ const Page = (props: PageProps<unknown, PageTemplateProps>) => {
           <img className="items-center" src={banner.url} alt={banner.alt} />
         )}
       </div>
-      {template.name === "Categoria" && (
-        <Category
-          content={{
-            text: content,
-            title,
-            content: template.content,
-          }}
-        />
-      )}
       {template.name === "Contato" && <Contacts content={template.content} />}
       {template.name === "Qualidade" && (
         <Quality

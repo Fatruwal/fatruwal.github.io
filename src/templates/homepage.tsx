@@ -12,6 +12,18 @@ import {
 import Container from "@/components/Container"
 import GradientBar from "@/components/GradientBar"
 import { BlogCard } from "@/components/BlogCard"
+import armac from "@/assets/armac.png"
+import astec from "@/assets/astec.png"
+import baxter from "@/assets/baxter.png"
+import weg from "@/assets/weg.png"
+import sabesp from "@/assets/sabesp.png"
+import prata from "@/assets/prata.png"
+import ferrero from "@/assets/ferrero.png"
+import fabercastel from "@/assets/fabercastel.png"
+import caraiba from "@/assets/caraiba.png"
+import intertank from "@/assets/intertank.png"
+import panco from "@/assets/panco.png"
+import petrobras from "@/assets/petrobras.png"
 
 interface HomePageProps {
   articles: Array<{
@@ -30,6 +42,21 @@ interface HomePageProps {
   }>
 }
 
+const logos = [
+  { alt: "armac", src: armac },
+  { alt: "astec", src: astec },
+  { alt: "prata", src: prata },
+  { alt: "ferrero", src: ferrero },
+  { alt: "fabercastel", src: fabercastel },
+  { alt: "caraiba", src: caraiba },
+  { alt: "intertank", src: intertank },
+  { alt: "weg", src: weg },
+  { alt: "baxter", src: baxter },
+  { alt: "sabesp", src: sabesp },
+  { alt: "panco", src: panco },
+  { alt: "petrobras", src: petrobras },
+]
+
 const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
   const { articles, products } = pageContext
 
@@ -37,6 +64,26 @@ const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
     <Layout>
       <div className="min-h-dvh">
         <ProductHighlight products={products} />
+        <section className="mb-24 mt-8 flex w-full flex-col items-center justify-center gap-2 bg-[#80B6E710] py-10">
+          <h3 className="text-center font-bold uppercase">
+            EMPRESAS QUE CONFIAM EM NOSSOS PRODUTOS
+          </h3>
+          <GradientBar className="mb-4" />
+          <ul className="grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-6">
+            {logos.map(logo => (
+              <li
+                key={logo.alt}
+                className="flex h-24 w-40 items-center justify-center rounded-sm bg-white p-2 shadow-md"
+              >
+                <img
+                  className="max-h-full max-w-full object-contain"
+                  src={logo.src}
+                  alt={logo.alt}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
         <section className="flex flex-col items-center justify-center gap-2 bg-primary-700 py-10">
           <h3 className="my-2 text-center font-bold text-primary-foreground-100">
             Blog fatruwal
@@ -88,7 +135,7 @@ const ProductHighlight = ({
             {products.map(row => (
               <CarouselItem
                 key={row.name}
-                className="ml-2 md:basis-1/2 lg:ml-0 xl:basis-1/3 2xl:basis-1/4"
+                className="ml-1 items-stretch md:basis-1/2 lg:ml-0 xl:basis-1/3 2xl:basis-1/4"
               >
                 <div className="shadow-full h-fit w-full rounded-sm border-none bg-white">
                   <div className="h-fit w-full">

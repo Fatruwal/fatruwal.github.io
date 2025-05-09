@@ -38,13 +38,8 @@ async function CreateWpPages({ graphql, actions, reporter }) {
             templateName
             ... on WpTemplate_Categoria {
               templateName
-              categorias {
-                catalogo {
-                  node {
-                    altText
-                    publicUrl
-                  }
-                }
+              taxonomyTerm {
+                linkParaOCatalogo
               }
             }
             ... on WpTemplate_Qualidade {
@@ -226,7 +221,7 @@ async function CreateWpPages({ graphql, actions, reporter }) {
 
     if (p.template?.templateName === "Categoria") {
       content = {
-        download: p.template?.categorias?.catalogo?.node?.publicUrl,
+        download: p.template?.taxonomyTerm?.linkParaOCatalogo,
         products: products.filter(r => r.category === p.title),
       }
     }
