@@ -52,10 +52,7 @@ const ArticleTemplate = ({
             <div>
               <ul className="flex flex-col items-center justify-between gap-4 xl:flex-row xl:items-stretch">
                 {related.map(p => (
-                  <li
-                    className="max-w-fit rounded-sm bg-white p-4"
-                    key={p.title}
-                  >
+                  <li className="max-w-fit rounded-sm" key={p.title}>
                     <BlogCard data={p} />
                   </li>
                 ))}

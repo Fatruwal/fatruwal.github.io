@@ -1,5 +1,7 @@
 import React from "react"
 import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog"
 import {
   Form,
@@ -14,31 +16,62 @@ import { Button } from "./ui/button"
 import GradientBar from "./GradientBar"
 import { cn } from "@/lib/utils"
 
-interface FormI {
-  name: string
-  company: string
-  email: string
-  phone: string
-  message: string
-}
+const formSchema = z.object({
+  name: z.string().min(4, {
+    message: "O nome deve ter pelo menos 4 caracteres.",
+  }),
+  company: z.string().min(2, {
+    message: "A empresa deve ter pelo menos 2 caracteres.",
+  }),
+  email: z.string().email({
+    message: "Por favor, insira um endereço de e-mail válido.",
+  }),
+  phone: z.string().min(8, {
+    message: "O número de telefone deve ter pelo menos 8 caracteres.",
+  }),
+})
 
 export const Modal = ({
   children,
   link,
   ...props
 }: React.PropsWithChildren<React.ComponentProps<"div">> & { link: string }) => {
-  const form = useForm<FormI>({
+  const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       name: "",
       company: "",
       email: "",
       phone: "",
     },
+    resolver: zodResolver(formSchema),
   })
 
-  const downloadCatalog = async (data: FormI) => {
-    console.log("aaaaaa")
+  const downloadCatalog = async (data: z.infer<typeof formSchema>) => {
     window.open(link, "_blank")
+  }
+
+  function mask(o: any, f: string) {
+    setTimeout(function () {
+      var v = mphone(o.value)
+      if (v != o.value) {
+        o.value = v
+      }
+    }, 1)
+  }
+
+  function mphone(v: string) {
+    var r = v.replace(/\D/g, "")
+    r = r.replace(/^0/, "")
+    if (r.length > 10) {
+      r = r.replace(/^(\d\d)(\d{5})(\d{4}).*/, "($1) $2-$3")
+    } else if (r.length > 5) {
+      r = r.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, "($1) $2-$3")
+    } else if (r.length > 2) {
+      r = r.replace(/^(\d\d)(\d{0,5})/, "($1) $2")
+    } else {
+      r = r.replace(/^(\d*)/, "($1")
+    }
+    return r
   }
   return (
     <Dialog>

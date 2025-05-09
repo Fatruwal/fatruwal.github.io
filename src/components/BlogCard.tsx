@@ -21,7 +21,7 @@ export const BlogCard = ({ data, className, ...props }: BlogCardProps) => {
     <div
       {...props}
       className={cn(
-        "flex max-w-80 flex-col rounded-sm bg-white p-4 shadow-sm",
+        "flex h-full max-w-80 flex-col rounded-sm bg-white p-4 shadow-sm",
         className,
       )}
     >
@@ -39,7 +39,7 @@ export const BlogCard = ({ data, className, ...props }: BlogCardProps) => {
         <span className="mb-1 text-xs text-primary-foreground-300">
           {DateFormat.isoDateToReadable(data.modified)}
         </span>
-        <div className="line-clamp-3 text-sm text-primary-foreground-400">
+        <div className="mb-2 line-clamp-3 text-sm text-primary-foreground-400">
           {HtmlFormat.getFirstParagraph(data.content)}
         </div>
         <Link

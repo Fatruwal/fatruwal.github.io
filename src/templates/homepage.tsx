@@ -1,6 +1,5 @@
 import React from "react"
 import Layout from "@/components/layout"
-import { BlogHighlight } from "@/components/BlogHighlight"
 import Seo from "@/components/Seo"
 import { Link, PageProps } from "gatsby"
 import {
@@ -11,6 +10,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import Container from "@/components/Container"
+import GradientBar from "@/components/GradientBar"
+import { BlogCard } from "@/components/BlogCard"
 
 interface HomePageProps {
   articles: Array<{
@@ -36,12 +37,24 @@ const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
     <Layout>
       <div className="min-h-dvh">
         <ProductHighlight products={products} />
-        <BlogHighlight.Container>
-          <BlogHighlight.List
-            className="items-center justify-center md:items-stretch"
-            data={articles}
-          />
-        </BlogHighlight.Container>
+        <section className="flex flex-col items-center justify-center gap-2 bg-primary-700 py-10">
+          <h3 className="my-2 text-center font-bold text-primary-foreground-100">
+            Blog fatruwal
+          </h3>
+          <GradientBar className="mb-4" />
+          <ul
+            className={
+              "grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
+            }
+          >
+            {articles.map(p => (
+              <li className="flex flex-col" key={p.title}>
+                <BlogCard data={p} />
+              </li>
+            ))}
+          </ul>
+        </section>
+        )
       </div>
     </Layout>
   )
