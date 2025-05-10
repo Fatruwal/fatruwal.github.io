@@ -12,26 +12,29 @@ interface PageBanner {
 }
 
 type PageCategoryTemplate = {
-  slug: string
-  title: string
-  banner?: PageBanner
-  description: string
-  download?: string
-  products: Array<{
-    name: string
-    text: string
-    path: string
-    image: {
-      alt: string
-      url: string
-    }
-  }>
+  content: {
+    slug: string
+    title: string
+    banner?: PageBanner
+    description: string
+    download?: string
+    products: Array<{
+      name: string
+      text: string
+      path: string
+      image: {
+        alt: string
+        url: string
+      }
+    }>
+  }
 }
 
-export const Category = ({
+const Category = ({
   pageContext,
 }: PageProps<unknown, PageCategoryTemplate>) => {
-  const { description, products, title, download, banner } = pageContext
+  const { content } = pageContext
+  const { description, products, title, download, banner } = content
   return (
     <Layout className="bg-white">
       <div className="2xl:flex 2xl:justify-center">
@@ -82,3 +85,5 @@ export const Category = ({
     </Layout>
   )
 }
+
+export default Category

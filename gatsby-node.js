@@ -346,75 +346,119 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
 async function CreateProductPages({ graphql, actions, reporter }) {
   const { createPage } = actions
 
-  const products = await graphql(`
+  const results = await graphql(`
     query {
-      allWcProducts {
-        nodes {
-          name
-          slug
-          attributes {
+      wpGraphql {
+        categoriasProduto {
+          nodes {
+            id
             name
-            options
-          }
-          categories {
-            name
-          }
-          short_description
-          description
-          images {
-            name
-            alt
-            localFile {
-              publicURL
-            }
-          }
-          related_products {
-            name
-            images {
-              alt
-              name
-              localFile {
-                publicURL
+            slug
+            description
+            categorias {
+              catalogo {
+                node {
+                  title
+                  link
+                }
+              }
+              imagemBannerDaCategoria {
+                node {
+                  title
+                  link
+                }
               }
             }
-            slug
-            short_description
+            produtos {
+              nodes {
+                content(format: RENDERED)
+                slug
+                title
+                featuredImage {
+                  node {
+                    title
+                    sourceUrl
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
   `)
-  if (products.errors) {
-    reporter.panicOnBuild(`Error while running GraphQL query.`, products)
+  if (results.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, results.errors)
     return
   }
 
-  const pages = products.data.allWcProducts.nodes.map(r => ({
-    name: r.name,
-    category: r.categories[0]?.name,
-    short_description: r.short_description,
+  const categories = results.data.wpGraphql.categoriasProduto.nodes.map(r => ({
+    title: r.name,
+    slug: r.slug,
     description: r.description,
-    path: `/product/${r.slug}`,
-    product: {
-      image: r.images[0]?.localFile?.publicURL || "",
-      alt: r.images[0]?.alt || r.images[0]?.name,
+    banner: {
+      url: r.categorias?.imagemBannerDaCategoria?.node?.link || "",
+      alt: r.categorias?.imagemBannerDaCategoria?.node?.title || "",
     },
-    attributes: r.attributes.map(a => ({
-      name: a.name,
-      options: a.options,
-    })),
-    related_products: r.related_products.map(p => ({
-      name: p.name,
-      short_description: p.short_description,
+    download: r.categorias?.catalogo?.node?.link,
+    products: r.produtos.nodes.map(p => ({
+      name: p.title,
+      text: p.content.substring(0, 120).concat("...") || "",
       path: `/product/${p.slug}`,
-      product: {
-        image: p.images[0]?.localFile?.publicURL || "",
-        alt: p.images[0]?.alt || p.images[0]?.name,
+      image: {
+        url: p.featuredImage?.node?.sourceUrl || "",
+        alt: p.featuredImage?.node?.title || "",
       },
     })),
+    path: `/category/${r.slug}`,
   }))
 
-  pages.forEach(row => {
+  categories.forEach(row => {
+    createPage({
+      path: row.path,
+      component: path.resolve("./src/templates/category.tsx"),
+      context: {
+        content: row,
+      },
+    })
+  })
+
+  let products = []
+
+  for (
+    let index = 0;
+    index < results.data.wpGraphql.categoriasProduto.nodes.length;
+    index++
+  ) {
+    const productsCategories =
+      results.data.wpGraphql.categoriasProduto.nodes[index]
+
+    const related_products = productsCategories.produtos.nodes.map(r => ({
+      name: r.title,
+      path: `/product/${r.slug}`,
+      short_description: r.content.substring(0, 120).concat("...") || "",
+      product: {
+        image: r.featuredImage?.node?.sourceUrl || "",
+        alt: r.featuredImage?.node?.title || "",
+      },
+    }))
+
+    const product = productsCategories.produtos.nodes.map(p => ({
+      name: p.title,
+      short_description: p.content.substring(0, 120).concat("...") || "",
+      description: p.content,
+      download: productsCategories.categorias?.catalogo?.node?.link,
+      product: {
+        url: p.featuredImage?.node?.sourceUrl || "",
+        alt: p.featuredImage?.node?.title || "",
+      },
+      path: `/product/${p.slug}`,
+      related_products,
+    }))
+    products = [...products, ...product]
+  }
+
+  products.forEach(row => {
     createPage({
       path: row.path,
       component: path.resolve("./src/templates/product.tsx"),

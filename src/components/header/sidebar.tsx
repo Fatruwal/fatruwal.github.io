@@ -79,7 +79,7 @@ const Sidebar = ({ links }: { links: FatherLinkTitle[] }) => {
                           {link.title}
                         </AccordionTrigger>
                         <AccordionContent>
-                          <div className="mt-2 grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
+                          <div className="mt-2 grid grid-cols-1 gap-6 p-6">
                             {link.childrens!.map(children => (
                               <li key={link.title}>
                                 <Link

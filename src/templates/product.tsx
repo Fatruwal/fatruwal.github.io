@@ -36,12 +36,9 @@ interface ProductPage {
   short_description: string
   description: string
   path: string
-  attributes: {
-    name: string
-    options: string[]
-  }[]
+  download: string | undefined
   product: {
-    image: string
+    url: string
     alt: string | undefined
   }
   related_products: RelatedProduct[]
@@ -59,10 +56,9 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
     short_description,
     product,
     description,
+    download,
     related_products,
-    attributes,
   } = content
-  const catalog = attributes.find(attr => attr.name === "catalogo")
   return (
     <Layout className="bg-white">
       <div className="flex justify-center bg-secondary-foreground-100">
@@ -71,8 +67,8 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
             <div className="col-span-2 flex h-full w-full items-center justify-center rounded-sm bg-white p-0">
               <img
                 className="object-fill"
-                src={product.image}
-                alt={product.alt}
+                src={product?.url}
+                alt={product?.alt}
               />
             </div>
             <div className="flex flex-col justify-between lg:col-span-4 lg:min-h-96">
@@ -103,8 +99,8 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                   <FaWhatsapp className="mr-1 text-lg" />
                   Orçamento pelo WhatsApp
                 </a>
-                {catalog && catalog?.options.length > 0 && (
-                  <CatalogDownload.Modal link={catalog.options[0]}>
+                {download && (
+                  <CatalogDownload.Modal link={download}>
                     <CatalogDownload.Trigger className="flex h-9 w-full items-center justify-center gap-2 rounded-sm bg-primary-900 px-4 py-7 text-sm font-bold uppercase text-white transition-colors hover:bg-primary-500">
                       <IoDownloadOutline className="mr-1 text-lg" />
                       Download do catalogo
@@ -126,7 +122,7 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
               <div dangerouslySetInnerHTML={{ __html: description }} />
             </section>
           )}
-          {related_products.length > 0 && (
+          {related_products?.length > 0 && (
             <section className="mt-10 w-full">
               <h2 className="font-bold">Outros modelos</h2>
               <GradientBar />

@@ -89,6 +89,14 @@ module.exports = {
         requestConcurrency: 5,
       },
     },
+    {
+      resolve: "gatsby-source-graphql",
+      options: {
+        typeName: "WPGraphQL",
+        fieldName: "wpGraphql",
+        url: process.env.WPGRAPHQL_URL,
+      },
+    },
 
     /**
      * We need this plugin so that it adds the "File.publicURL" to our site
