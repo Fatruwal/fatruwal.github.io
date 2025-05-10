@@ -1,12 +1,10 @@
 import React from "react"
-import Seo from "@/components/Seo"
 import { PageProps } from "gatsby"
 import Layout from "@/components/layout"
 import Container from "@/components/Container"
 import { FaWhatsapp } from "react-icons/fa"
 import { IoDownloadOutline } from "react-icons/io5"
 import Winner from "@/assets/Winner"
-import { cn } from "@/lib/utils"
 import IsoIcon from "@/assets/IsoIcon"
 import StarIcon from "@/assets/Start"
 import GradientBar from "@/components/GradientBar"
@@ -20,6 +18,7 @@ import {
 import { budget } from "@/components/budget-modal"
 import { ProductCard } from "@/components/ProductCard"
 import { CatalogDownload } from "@/components/CatalogDownload"
+import { aboutCompany } from "@/components/AboutCompany"
 
 interface RelatedProduct {
   name: string
@@ -114,23 +113,9 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                 )}
               </div>
               <div className="shadown-sm border-r-1 my-4 flex flex-col gap-4 border-primary-50 bg-white px-2 py-4 md:my-0 md:flex-row xl:p-6">
-                <AboutCompanyCard
-                  Icon={IsoIcon}
-                  title="Certificado"
-                  description="Somos certificados com o ISO 9001"
-                  className="border-primary-50 md:border-r-[1px]"
-                />
-                <AboutCompanyCard
-                  Icon={Winner}
-                  title="Excelência"
-                  description="Oferecemos produtos com excelência"
-                  className="border-primary-50 md:border-r-[1px]"
-                />
-                <AboutCompanyCard
-                  Icon={StarIcon}
-                  title="SATISFAÇÃO"
-                  description="Sua satisfação é nosso maior objetivo"
-                />
+                <aboutCompany.CertificateCard className="border-primary-50 md:border-r-[1px]" />
+                <aboutCompany.ExcellenceCard className="border-primary-50 md:border-r-[1px]" />
+                <aboutCompany.SatisfationCard />
               </div>
             </div>
           </section>
@@ -192,34 +177,5 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
     </Layout>
   )
 }
-
-const AboutCompanyCard = ({
-  className,
-  Icon,
-  title,
-  description,
-  ...props
-}: React.ComponentProps<"div"> & {
-  Icon: React.FC<React.SVGProps<SVGSVGElement>>
-  title: string
-  description: string
-}) => {
-  return (
-    <div
-      {...props}
-      className={cn("flex items-center gap-1 px-2 lg:gap-2 lg:px-4", className)}
-    >
-      <Icon className="h-10 w-20" />
-      <div className="flex flex-col space-y-1">
-        <h5 className="leading-2 text-sm font-bold uppercase">{title}</h5>
-        <span className="text-xs leading-[1.1] text-secondary-foreground-500">
-          {description}
-        </span>
-      </div>
-    </div>
-  )
-}
-
-export const Head = () => <Seo title="products" />
 
 export default ProductTemplate
