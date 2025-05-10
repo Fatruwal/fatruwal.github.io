@@ -1,15 +1,18 @@
+import { cn } from "@/lib/utils"
 import * as React from "react"
 
-function IsoIcon(props: React.SVGProps<SVGSVGElement>) {
+function IsoIcon({ className, ...props }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width={43}
       height={41}
+      className={cn("fill-current", className)}
+      {...props}
+      style={{ color: "inherit" }}
       viewBox="0 0 43 41"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      {...props}
     >
       <path fill="url(#pattern0_5616_22127)" d="M0 0H42.7749V41H0z" />
       <defs>

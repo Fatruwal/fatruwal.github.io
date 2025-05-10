@@ -115,7 +115,7 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
               <div className="shadown-sm border-r-1 my-4 flex flex-col gap-4 border-primary-50 bg-white px-2 py-4 md:my-0 md:flex-row xl:p-6">
                 <aboutCompany.CertificateCard className="border-primary-50 md:border-r-[1px]" />
                 <aboutCompany.ExcellenceCard className="border-primary-50 md:border-r-[1px]" />
-                <aboutCompany.SatisfationCard />
+                <aboutCompany.SatisfactionCard />
               </div>
             </div>
           </section>
