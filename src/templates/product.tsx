@@ -175,13 +175,13 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                     data-xl-hidden={related_products.length <= 4}
                     data-lg-hidden={related_products.length <= 3}
                     data-md-hidden={related_products.length <= 2}
-                    className="flex-initial md:data-[md-hidden=true]:hidden lg:data-[lg-hidden=true]:hidden xl:data-[xl-hidden=true]:hidden"
+                    className="hidden lg:flex"
                   />
                   <CarouselNext
                     data-xl-hidden={related_products.length <= 4}
                     data-lg-hidden={related_products.length <= 3}
                     data-md-hidden={related_products.length <= 2}
-                    className="flex-initial md:data-[md-hidden=true]:hidden lg:data-[lg-hidden=true]:hidden xl:data-[xl-hidden=true]:hidden"
+                    className="hidden lg:flex"
                   />
                 </Carousel>
               </div>

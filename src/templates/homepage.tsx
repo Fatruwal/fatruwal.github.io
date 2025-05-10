@@ -24,7 +24,10 @@ import caraiba from "@/assets/caraiba.png"
 import intertank from "@/assets/intertank.png"
 import panco from "@/assets/panco.png"
 import petrobras from "@/assets/petrobras.png"
-
+import WhoWeAreBanner from "@/assets/who-we-are-banner.png"
+import star from "@/assets/star.svg"
+import rocket from "@/assets/rocket.svg"
+import ProductsCarrousel from "@/components/ProductsCarrousel"
 interface HomePageProps {
   articles: Array<{
     title: string
@@ -62,46 +65,46 @@ const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
 
   return (
     <Layout>
-      <div>
-        <ProductHighlight products={products} />
-        <section className="mb-24 mt-8 flex w-full flex-col items-center justify-center gap-2 bg-[#80B6E710] py-10">
-          <h3 className="text-center font-bold uppercase">
-            EMPRESAS QUE CONFIAM EM NOSSOS PRODUTOS
-          </h3>
-          <GradientBar className="mb-4" />
-          <ul className="grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-6">
-            {logos.map(logo => (
-              <li
-                key={logo.alt}
-                className="flex h-24 w-40 items-center justify-center rounded-sm bg-white p-2 shadow-md"
-              >
-                <img
-                  className="max-h-full max-w-full object-contain"
-                  src={logo.src}
-                  alt={logo.alt}
-                />
-              </li>
-            ))}
-          </ul>
-        </section>
-        <section className="flex flex-col items-center justify-center gap-2 bg-primary-700 py-10">
-          <h3 className="my-2 text-center font-bold text-primary-foreground-100">
-            Blog fatruwal
-          </h3>
-          <GradientBar className="mb-4" />
-          <ul
-            className={
-              "grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
-            }
-          >
-            {articles.map(p => (
-              <li className="flex flex-col" key={p.title}>
-                <BlogCard data={p} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
+      <ProductsCarrousel />
+      <ProductHighlight products={products} />
+      <WhoWeAre />
+      <section className="mb-24 mt-8 flex w-full flex-col items-center justify-center gap-2 bg-[#80B6E710] py-10">
+        <h3 className="text-center font-bold uppercase">
+          EMPRESAS QUE CONFIAM EM NOSSOS PRODUTOS
+        </h3>
+        <GradientBar className="mb-10 mt-4" />
+        <ul className="grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-6">
+          {logos.map(logo => (
+            <li
+              key={logo.alt}
+              className="flex h-24 w-40 items-center justify-center rounded-sm bg-white p-2 shadow-md"
+            >
+              <img
+                className="max-h-full max-w-full object-contain"
+                src={logo.src}
+                alt={logo.alt}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className="flex flex-col items-center justify-center gap-2 bg-primary-700 py-10">
+        <h3 className="my-2 text-center font-bold text-primary-foreground-100">
+          Blog fatruwal
+        </h3>
+        <GradientBar className="mb-4" />
+        <ul
+          className={
+            "grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
+          }
+        >
+          {articles.map(p => (
+            <li className="flex flex-col" key={p.title}>
+              <BlogCard data={p} />
+            </li>
+          ))}
+        </ul>
+      </section>
     </Layout>
   )
 }
@@ -121,7 +124,7 @@ const ProductHighlight = ({
   }>
 }) => {
   return (
-    <section className="flex justify-center">
+    <section className="flex justify-center bg-[#80B6E710] py-10">
       <Container className="flex justify-center">
         <Carousel
           opts={{
@@ -177,19 +180,62 @@ const ProductHighlight = ({
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious
-            data-xl-hidden={products.length <= 4}
-            data-lg-hidden={products.length <= 3}
-            data-md-hidden={products.length <= 2}
-            className="flex-initial md:data-[md-hidden=true]:hidden lg:data-[lg-hidden=true]:hidden xl:data-[xl-hidden=true]:hidden"
-          />
-          <CarouselNext
-            data-xl-hidden={products.length <= 4}
-            data-lg-hidden={products.length <= 3}
-            data-md-hidden={products.length <= 2}
-            className="flex-initial md:data-[md-hidden=true]:hidden lg:data-[lg-hidden=true]:hidden xl:data-[xl-hidden=true]:hidden"
-          />
+          <CarouselPrevious className="hidden lg:block" />
+          <CarouselNext className="hidden lg:flex" />
         </Carousel>
+      </Container>
+    </section>
+  )
+}
+
+const WhoWeAre = () => {
+  return (
+    <section className="flex flex-col items-center justify-center gap-2 bg-white py-10">
+      <Container className="grid lg:grid-cols-2">
+        <div>
+          <h3 className="my-2 font-bold uppercase">Quem somos</h3>
+          <GradientBar className="mb-10" />
+          <p>
+            A Fatruwal® é uma empresa especializada na fabricação de vedações
+            industriais e peças técnicas em borracha para aplicações em diversos
+            setores.
+          </p>
+          <div>
+            <div className="mt-8 flex flex-col gap-4">
+              <span className="flex gap-4">
+                <img src={rocket} alt="Rocket" className="mx-auto h-16 w-16" />
+                <p>
+                  Com mais de 20 anos de experiência, é reconhecida pelo seu
+                  comprometimento com a qualidade de seus produtos e serviços,
+                  possuindo a certificação ISO-9001, que é o padrão
+                  internacional de qualidade mais reconhecido no mundo.
+                </p>
+              </span>
+              <span className="flex gap-4">
+                <img src={star} alt="Star" className="h-16 w-16" />
+                <p>
+                  Somos especialistas no desenvolvimento de produtos a partir de
+                  desenhos técnicos ou amostras.  Nosso foco é desenvolver
+                  produtos que atendem as suas necessidades específicas e
+                  superam suas expectativas.
+                </p>
+              </span>
+            </div>
+            <Link
+              to="/quem-somos"
+              className="mt-4 inline-flex items-center justify-center rounded-sm bg-primary-900 px-4 py-2 text-xs font-bold uppercase text-primary-foreground-100 transition-colors hover:bg-primary-700"
+            >
+              saiba mais
+            </Link>
+          </div>
+        </div>
+        <div className="rounded-sm bg-blue-gradient p-2">
+          <img
+            className="h-full w-full rounded-sm object-fill"
+            src={WhoWeAreBanner}
+            alt="quem somos"
+          />
+        </div>
       </Container>
     </section>
   )
