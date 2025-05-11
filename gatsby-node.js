@@ -20,13 +20,97 @@ exports.onCreateWebpackConfig = ({ actions }) => {
  * This function creates all the individual blog pages in this site
  */
 exports.createPages = async ({ graphql, actions, reporter }) => {
-  await CreateWpPages({ graphql, actions, reporter })
-  await CreateArticlePage({ graphql, actions, reporter })
-  await CreateProductPages({ graphql, actions, reporter })
-  await CreateHomePage({ graphql, actions, reporter })
+  const headerMenu = await getHeaderMenu({ graphql, actions, reporter })
+  const footerMenu = await getFooterMenu({ graphql, actions, reporter })
+  await createWpPages({ graphql, actions, reporter }, headerMenu, footerMenu)
+  await createArticlePage(
+    { graphql, actions, reporter },
+    headerMenu,
+    footerMenu,
+  )
+  await createProductPages(
+    { graphql, actions, reporter },
+    headerMenu,
+    footerMenu,
+  )
+  await createHomePage({ graphql, actions, reporter }, headerMenu, footerMenu)
 }
 
-async function CreateWpPages({ graphql, actions, reporter }) {
+async function getHeaderMenu({ graphql, actions, reporter }) {
+  const { data, errors } = await graphql(`
+    query {
+      allWpMenuItem(
+        filter: {
+          menu: { node: { name: { eq: "header-menu" } } }
+          parentId: { eq: null }
+        }
+        sort: { order: ASC }
+      ) {
+        nodes {
+          label
+          path
+          childItems {
+            nodes {
+              label
+              path
+            }
+          }
+        }
+      }
+    }
+  `)
+  if (errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, errors)
+    return
+  }
+  const menuItems = data.allWpMenuItem.nodes.map(item => ({
+    path: item.path || "/",
+    title: item.label,
+    childrens:
+      item.childItems.nodes.length > 0
+        ? item.childItems.nodes.map(child => ({
+            path: child.path || "/",
+            title: child.label,
+          }))
+        : undefined,
+  }))
+  return menuItems
+}
+
+async function getFooterMenu({ graphql, actions, reporter }) {
+  const { data, errors } = await graphql(`
+    query {
+      allWpMenuItem(
+        filter: {
+          menu: { node: { name: { eq: "footer-menu" } } }
+          parentId: { eq: null }
+        }
+        sort: { order: ASC }
+      ) {
+        nodes {
+          label
+          path
+        }
+      }
+    }
+  `)
+  if (errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, errors)
+    return
+  }
+
+  const menuItems = data.allWpMenuItem.nodes.map(item => ({
+    path: item.path || "/",
+    title: item.label,
+  }))
+  return menuItems
+}
+
+async function createWpPages(
+  { graphql, actions, reporter },
+  headerMenu,
+  footerMenu,
+) {
   const { createPage } = actions
 
   const result = await graphql(`
@@ -253,13 +337,19 @@ async function CreateWpPages({ graphql, actions, reporter }) {
       path: page.path,
       component: path.resolve("./src/templates/page/index.tsx"),
       context: {
+        headerMenu,
+        footerMenu,
         page: page,
       },
     })
   })
 }
 
-async function CreateArticlePage({ graphql, actions, reporter }) {
+async function createArticlePage(
+  { graphql, actions, reporter },
+  headerMenu,
+  footerMenu,
+) {
   const { createPage } = actions
 
   const results = await graphql(`
@@ -328,6 +418,8 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
       path: row.path,
       component: path.resolve("./src/templates/article.tsx"),
       context: {
+        headerMenu,
+        footerMenu,
         article: row,
         related: related,
       },
@@ -338,6 +430,8 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
       path: row.path,
       component: path.resolve("./src/templates/blog.tsx"),
       context: {
+        headerMenu,
+        footerMenu,
         page: row,
         articles: posts,
       },
@@ -345,7 +439,11 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
   })
 }
 
-async function CreateProductPages({ graphql, actions, reporter }) {
+async function createProductPages(
+  { graphql, actions, reporter },
+  headerMenu,
+  footerMenu,
+) {
   const { createPage } = actions
 
   const results = await graphql(`
@@ -420,6 +518,8 @@ async function CreateProductPages({ graphql, actions, reporter }) {
       path: row.path,
       component: path.resolve("./src/templates/category.tsx"),
       context: {
+        headerMenu,
+        footerMenu,
         content: row,
       },
     })
@@ -465,12 +565,18 @@ async function CreateProductPages({ graphql, actions, reporter }) {
       path: row.path,
       component: path.resolve("./src/templates/product.tsx"),
       context: {
+        headerMenu,
+        footerMenu,
         content: row,
       },
     })
   })
 }
-async function CreateHomePage({ graphql, actions, reporter }) {
+async function createHomePage(
+  { graphql, actions, reporter },
+  headerMenu,
+  footerMenu,
+) {
   const { createPage } = actions
 
   const result = await graphql(`
@@ -540,6 +646,8 @@ async function CreateHomePage({ graphql, actions, reporter }) {
     path: "/",
     component: path.resolve("./src/templates/homepage.tsx"),
     context: {
+      headerMenu,
+      footerMenu,
       articles: posts,
       products: products,
     },

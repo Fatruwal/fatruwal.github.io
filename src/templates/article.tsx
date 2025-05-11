@@ -5,6 +5,8 @@ import Seo from "@/components/Seo"
 import { BlogCard } from "@/components/BlogCard"
 import GradientBar from "@/components/GradientBar"
 import Container from "@/components/Container"
+import { HeaderMenuItem } from "@/components/header"
+import { FooterMenuItem } from "@/components/footer"
 
 interface ArticleTemplateProps {
   article: {
@@ -14,15 +16,17 @@ interface ArticleTemplateProps {
     content: string
   }
   related: BlogCard[]
+  headerMenu: HeaderMenuItem[]
+  footerMenu: FooterMenuItem[]
 }
 
 const ArticleTemplate = ({
   pageContext,
 }: PageProps<unknown, ArticleTemplateProps>) => {
-  const { article, related } = pageContext
+  const { article, related, headerMenu, footerMenu } = pageContext
 
   return (
-    <Layout>
+    <Layout headerMenu={headerMenu} footerMenu={footerMenu}>
       <div className="bg-[#F3F3F3] pb-8">
         <article className="block bg-[#F3F3F3] pb-6">
           <div className="w-full">

@@ -16,6 +16,8 @@ import { budget } from "@/components/budget-modal"
 import { ProductCard } from "@/components/ProductCard"
 import { CatalogDownload } from "@/components/CatalogDownload"
 import { aboutCompany } from "@/components/AboutCompany"
+import { FooterMenuItem } from "@/components/footer"
+import { HeaderMenuItem } from "@/components/header"
 
 interface RelatedProduct {
   name: string
@@ -42,11 +44,13 @@ interface ProductPage {
 }
 
 interface PageTemplateProps {
+  headerMenu: HeaderMenuItem[]
+  footerMenu: FooterMenuItem[]
   content: ProductPage
 }
 
 const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
-  const { content } = props.pageContext
+  const { content, headerMenu, footerMenu } = props.pageContext
   const {
     name,
     category,
@@ -57,7 +61,11 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
     related_products,
   } = content
   return (
-    <Layout className="bg-white">
+    <Layout
+      footerMenu={footerMenu}
+      headerMenu={headerMenu}
+      className="bg-white"
+    >
       <div className="flex justify-center bg-secondary-foreground-100">
         <Container className="rounded-sm p-4">
           <section className="flex flex-col gap-5 lg:grid lg:grid-cols-6 xl:gap-10">

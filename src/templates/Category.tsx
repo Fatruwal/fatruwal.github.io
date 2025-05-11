@@ -1,6 +1,8 @@
 import { CatalogDownload } from "@/components/CatalogDownload"
 import Container from "@/components/Container"
+import { FooterMenuItem } from "@/components/footer"
 import GradientBar from "@/components/GradientBar"
+import { HeaderMenuItem } from "@/components/header"
 import Layout from "@/components/layout"
 import { ProductCard } from "@/components/ProductCard"
 import { PageProps } from "gatsby"
@@ -28,6 +30,8 @@ type PageCategoryTemplate = {
       }
     }>
   }
+  headerMenu: HeaderMenuItem[]
+  footerMenu: FooterMenuItem[]
 }
 
 const Category = ({
@@ -36,7 +40,11 @@ const Category = ({
   const { content } = pageContext
   const { description, products, title, download, banner } = content
   return (
-    <Layout className="bg-white">
+    <Layout
+      headerMenu={pageContext.headerMenu}
+      footerMenu={pageContext.footerMenu}
+      className="bg-white"
+    >
       <div className="2xl:flex 2xl:justify-center">
         {banner && (
           <img className="items-center" src={banner.url} alt={banner.alt} />

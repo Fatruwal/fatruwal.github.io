@@ -1,7 +1,6 @@
 import React from "react"
-import { graphql, Link, useStaticQuery } from "gatsby"
+import { Link } from "gatsby"
 import Sidebar from "./sidebar"
-import { FatherLinkTitle } from "./model"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,56 +11,13 @@ import LogoImage from "@/assets/logo"
 import Topbar from "./Topbar"
 import BudgetFormIcon from "@/assets/BudgetFormIcon"
 
-interface MenuQueryData {
-  allWpMenuItem: {
-    nodes: Array<{
-      label: string
-      path: string
-      childItems: {
-        nodes: Array<{
-          label: string
-          path: string
-        }>
-      }
-    }>
-  }
+export interface HeaderMenuItem {
+  path: string
+  title: string
+  childrens?: HeaderMenuItem[]
 }
 
-const Header: React.FC = () => {
-  const data = useStaticQuery<MenuQueryData>(graphql`
-    query HeaderMenuQuery {
-      allWpMenuItem(
-        filter: {
-          menu: { node: { name: { eq: "header-menu" } } }
-          parentId: { eq: null }
-        }
-        sort: { order: ASC }
-      ) {
-        nodes {
-          label
-          path
-          childItems {
-            nodes {
-              label
-              path
-            }
-          }
-        }
-      }
-    }
-  `)
-  const menuItems: FatherLinkTitle[] = data.allWpMenuItem.nodes.map(item => ({
-    path: item.path || "/",
-    title: item.label,
-    childrens:
-      item.childItems.nodes.length > 0
-        ? item.childItems.nodes.map(child => ({
-            path: child.path || "/",
-            title: child.label,
-          }))
-        : undefined,
-  }))
-
+const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
   return (
     <header className="shadow-lg">
       <Topbar />

@@ -28,6 +28,8 @@ import WhoWeAreBanner from "@/assets/who-we-are-banner.png"
 import star from "@/assets/star.svg"
 import rocket from "@/assets/rocket.svg"
 import ProductsCarrousel from "@/components/ProductsCarrousel"
+import { HeaderMenuItem } from "@/components/header"
+import { FooterMenuItem } from "@/components/footer"
 interface HomePageProps {
   articles: Array<{
     title: string
@@ -43,6 +45,8 @@ interface HomePageProps {
     short_description: string
     path: string
   }>
+  headerMenu: HeaderMenuItem[]
+  footerMenu: FooterMenuItem[]
 }
 
 const logos = [
@@ -61,10 +65,10 @@ const logos = [
 ]
 
 const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
-  const { articles, products } = pageContext
+  const { articles, products, headerMenu, footerMenu } = pageContext
 
   return (
-    <Layout>
+    <Layout headerMenu={headerMenu} footerMenu={footerMenu}>
       <ProductsCarrousel />
       <ProductHighlight products={products} />
       <WhoWeAre />

@@ -20,16 +20,8 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ContactForm } from "../services/contact-form"
 import { useToast } from "@/hooks/use-toast"
-interface MenuQueryData {
-  allWpMenuItem: {
-    nodes: Array<{
-      label: string
-      path: string
-    }>
-  }
-}
 
-type LinkTitle = {
+export type FooterMenuItem = {
   path: string
   title: string
 }
@@ -40,24 +32,8 @@ const formSchema = z.object({
   }),
 })
 
-const Footer: React.FC = () => {
+const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
   const { toast } = useToast()
-  const data = useStaticQuery<MenuQueryData>(graphql`
-    query FooterMenuQuery {
-      allWpMenuItem(
-        filter: {
-          menu: { node: { name: { eq: "footer-menu" } } }
-          parentId: { eq: null }
-        }
-        sort: { order: ASC }
-      ) {
-        nodes {
-          label
-          path
-        }
-      }
-    }
-  `)
 
   const subscribeNewsletter = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -79,11 +55,6 @@ const Footer: React.FC = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
   })
-
-  const menuItems: LinkTitle[] = data.allWpMenuItem.nodes.map(item => ({
-    path: item.path || "/",
-    title: item.label,
-  }))
 
   return (
     <footer className="bg-white text-white">

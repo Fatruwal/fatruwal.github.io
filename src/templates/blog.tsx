@@ -4,6 +4,8 @@ import { PageProps } from "gatsby"
 import { BlogCard } from "@/components/BlogCard"
 import Seo from "@/components/Seo"
 import Container from "@/components/Container"
+import { HeaderMenuItem } from "@/components/header"
+import { FooterMenuItem } from "@/components/footer"
 
 interface BlogTemplateProps {
   page: {
@@ -12,12 +14,14 @@ interface BlogTemplateProps {
     content: string
   }
   articles: BlogCard[]
+  headerMenu: HeaderMenuItem[]
+  footerMenu: FooterMenuItem[]
 }
 
 const Blog = ({ pageContext }: PageProps<unknown, BlogTemplateProps>) => {
-  const { page, articles } = pageContext
+  const { page, articles, headerMenu, footerMenu } = pageContext
   return (
-    <Layout>
+    <Layout headerMenu={headerMenu} footerMenu={footerMenu}>
       <section className="flex justify-center bg-[#F3F3F3]">
         <Container className="mx-8 mb-32 max-w-screen-2xl justify-start xl:w-10/12">
           <h2 className="mt-4 font-bold uppercase">{page.title}</h2>
