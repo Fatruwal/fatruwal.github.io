@@ -1,7 +1,8 @@
-import React, { PropsWithChildren, ReactHTMLElement } from "react"
+import React, { PropsWithChildren } from "react"
 import Header from "../components/header"
 import Footer from "../components/footer"
 import { cn } from "@/lib/utils"
+import { Toaster } from "./Toaster"
 
 const Layout = ({
   children,
@@ -13,6 +14,7 @@ const Layout = ({
       <Header />
       <main>{children}</main>
       <Footer />
+      <Toaster />
     </div>
   )
 }

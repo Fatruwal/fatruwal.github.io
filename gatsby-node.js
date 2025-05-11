@@ -9,6 +9,8 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         "@/components": path.resolve(__dirname, "src/components"),
         "@/lib/utils": path.resolve(__dirname, "src/lib/utils"),
         "@/templates": path.resolve(__dirname, "src/templates"),
+        "@/hooks": path.resolve(__dirname, "src/hooks"),
+        "@/services": path.resolve(__dirname, "src/services"),
       },
     },
   })

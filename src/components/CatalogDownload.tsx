@@ -15,20 +15,39 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import GradientBar from "./GradientBar"
 import { cn } from "@/lib/utils"
+import { ContactForm } from "./services/contact-form"
+import { useToast } from "@/hooks/use-toast"
 
-const formSchema = z.object({
-  name: z.string().min(4, {
-    message: "O nome deve ter pelo menos 4 caracteres.",
-  }),
-  company: z.string().min(2, {
-    message: "A empresa deve ter pelo menos 2 caracteres.",
-  }),
-  email: z.string().email({
-    message: "Por favor, insira um endereço de e-mail válido.",
-  }),
-  phone: z.string().min(8, {
-    message: "O número de telefone deve ter pelo menos 8 caracteres.",
-  }),
+export const formSchema = z.object({
+  name: z
+    .string({ required_error: "Por favor, insira seu nome." })
+    .regex(/^[a-zA-Z\s]+$/, { message: "Apenas letras são permitidas." })
+    .min(2, {
+      message: "O nome deve ter pelo menos 2 caracteres.",
+    })
+    .max(100, {
+      message: "O nome deve ter no máximo 100 caracteres.",
+    }),
+  company: z
+    .string({ required_error: "Por favor, insira o nome da empresa." })
+    .min(2, {
+      message: "O nome da empresa deve ter pelo menos 2 caracteres.",
+    })
+    .max(100, {
+      message: "O nome da empresa deve ter no máximo 100 caracteres.",
+    }),
+  email: z
+    .string()
+    .email({ message: "Por favor, insira um endereço de e-mail válido." }),
+  phone: z
+    .string({ required_error: "Por favor, insira seu telefone." })
+    .min(8, {
+      message: "O telefone deve ter pelo menos 8 caracteres.",
+    })
+    .max(15, {
+      message: "O telefone deve ter no máximo 15 caracteres.",
+    }),
+  message: z.string().min(0).max(500).optional(),
 })
 
 export const Modal = ({
@@ -36,6 +55,7 @@ export const Modal = ({
   link,
   ...props
 }: React.PropsWithChildren<React.ComponentProps<"div">> & { link: string }) => {
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       name: "",
@@ -47,32 +67,23 @@ export const Modal = ({
   })
 
   const downloadCatalog = async (data: z.infer<typeof formSchema>) => {
-    window.open(link, "_blank")
-  }
-
-  function mask(o: any, f: string) {
-    setTimeout(function () {
-      var v = mphone(o.value)
-      if (v != o.value) {
-        o.value = v
-      }
-    }, 1)
-  }
-
-  function mphone(v: string) {
-    var r = v.replace(/\D/g, "")
-    r = r.replace(/^0/, "")
-    if (r.length > 10) {
-      r = r.replace(/^(\d\d)(\d{5})(\d{4}).*/, "($1) $2-$3")
-    } else if (r.length > 5) {
-      r = r.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, "($1) $2-$3")
-    } else if (r.length > 2) {
-      r = r.replace(/^(\d\d)(\d{0,5})/, "($1) $2")
-    } else {
-      r = r.replace(/^(\d*)/, "($1")
+    try {
+      await ContactForm.downloadCatalog(
+        data.name,
+        data.company,
+        data.email,
+        data.phone,
+      )
+      window.open(link, "_blank")
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Erro ao baixar o catálogo.",
+      })
     }
-    return r
   }
+
   return (
     <Dialog>
       {children}
@@ -102,6 +113,8 @@ export const Modal = ({
                         <Input
                           className="w-full rounded-sm border-0 bg-white px-2 py-6 outline-none placeholder:text-primary-foreground-300"
                           placeholder="Insira seu nome"
+                          autoComplete="name"
+                          type="text"
                           {...field}
                         />
                       </FormControl>
@@ -123,6 +136,8 @@ export const Modal = ({
                         <Input
                           className="w-full rounded-sm border-0 bg-white px-2 py-6 outline-none placeholder:text-primary-foreground-300"
                           placeholder="Insira o nome da empresa"
+                          autoComplete="off"
+                          type="text"
                           {...field}
                         />
                       </FormControl>
@@ -144,6 +159,8 @@ export const Modal = ({
                         <Input
                           className="w-full rounded-sm border-0 bg-white px-2 py-6 outline-none placeholder:text-primary-foreground-300"
                           placeholder="Insira seu e-mail"
+                          autoComplete="email"
+                          type="email"
                           {...field}
                         />
                       </FormControl>
@@ -165,6 +182,8 @@ export const Modal = ({
                         <Input
                           className="w-full rounded-sm border-0 bg-white px-2 py-6 outline-none placeholder:text-primary-foreground-300"
                           placeholder="Insira seu telefone"
+                          autoComplete="phone"
+                          type="number"
                           {...field}
                         />
                       </FormControl>

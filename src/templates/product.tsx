@@ -4,9 +4,6 @@ import Layout from "@/components/layout"
 import Container from "@/components/Container"
 import { FaWhatsapp } from "react-icons/fa"
 import { IoDownloadOutline } from "react-icons/io5"
-import Winner from "@/assets/Winner"
-import IsoIcon from "@/assets/IsoIcon"
-import StarIcon from "@/assets/Start"
 import GradientBar from "@/components/GradientBar"
 import {
   Carousel,

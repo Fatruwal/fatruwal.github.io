@@ -1,6 +1,6 @@
 import React from "react"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { ContactComponent } from "../ContactComponent"
+import { ContactComponent } from "./ContactComponent"
 import GradientBar from "@/components/GradientBar"
 import { Budget } from "@/components/Budget"
 import { cn } from "@/lib/utils"
