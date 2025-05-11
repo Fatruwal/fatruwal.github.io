@@ -47,7 +47,12 @@ const Category = ({
     >
       <div className="2xl:flex 2xl:justify-center">
         {banner && (
-          <img className="items-center" src={banner.url} alt={banner.alt} />
+          <img
+            loading="lazy"
+            className="items-center"
+            src={banner.url}
+            alt={banner.alt}
+          />
         )}
       </div>
       <div className="flex justify-center bg-[#F3F3F3]">

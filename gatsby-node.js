@@ -581,6 +581,23 @@ async function createHomePage(
 
   const result = await graphql(`
     query {
+      wpGraphql {
+        categoriasProduto {
+          nodes {
+            categorias {
+              imagemDeDestaqueHome {
+                node {
+                  title
+                  sourceUrl
+                }
+              }
+            }
+            description
+            name
+            slug
+          }
+        }
+      }
       allWpPost {
         nodes {
           title
@@ -596,21 +613,6 @@ async function createHomePage(
           }
         }
       }
-      allWcProducts {
-        nodes {
-          name
-          slug
-          short_description
-          description
-          images {
-            name
-            alt
-            localFile {
-              publicURL
-            }
-          }
-        }
-      }
     }
   `)
 
@@ -620,7 +622,6 @@ async function createHomePage(
     return
   }
 
-  // Access the data through result.data, not directly from result
   const posts = result.data.allWpPost.nodes.slice(0, 3).map(post => ({
     title: post.title,
     path: `/blog/${post.slug}`,
@@ -629,27 +630,24 @@ async function createHomePage(
     banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
   }))
 
-  const products = result.data.allWcProducts.nodes
+  const categories = result.data.wpGraphql.categoriasProduto.nodes
     .slice(0, 20)
-    .map(product => ({
-      name: product.name,
-      image: product.images?.[0]?.localFile?.publicURL || "",
-      alt: product.images?.[0]?.alt || "produto",
-      short_description:
-        product.short_description?.trim().substring(0, 120).concat("...") ||
-        product.description?.trim().substring(0, 120).concat("...") ||
-        "",
-      path: `/product/${product.slug}`,
+    .map(r => ({
+      name: r.name,
+      short_description: r.description,
+      image: r.categorias?.imagemDeDestaqueHome?.node?.sourceUrl || "",
+      alt: r.categorias?.imagemDeDestaqueHome?.node?.title || "",
+      path: `/category/${r.slug}`,
     }))
 
   createPage({
     path: "/",
     component: path.resolve("./src/templates/homepage.tsx"),
     context: {
+      categories: categories,
       headerMenu,
       footerMenu,
       articles: posts,
-      products: products,
     },
   })
 }

@@ -27,7 +27,7 @@ import petrobras from "@/assets/petrobras.png"
 import WhoWeAreBanner from "@/assets/who-we-are-banner.png"
 import star from "@/assets/star.svg"
 import rocket from "@/assets/rocket.svg"
-import ProductsCarrousel from "@/components/ProductsCarrousel"
+import CategoriesHighlight from "@/components/CategoryHightlight"
 import { HeaderMenuItem } from "@/components/header"
 import { FooterMenuItem } from "@/components/footer"
 interface HomePageProps {
@@ -38,7 +38,7 @@ interface HomePageProps {
     path: string
     banner: string
   }>
-  products: Array<{
+  categories: Array<{
     name: string
     image: string
     alt: string
@@ -65,11 +65,11 @@ const logos = [
 ]
 
 const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
-  const { articles, products, headerMenu, footerMenu } = pageContext
+  const { articles, categories: products, headerMenu, footerMenu } = pageContext
 
   return (
     <Layout headerMenu={headerMenu} footerMenu={footerMenu}>
-      <ProductsCarrousel />
+      <CategoriesHighlight />
       <ProductHighlight products={products} />
       <WhoWeAre />
       <section className="mb-24 mt-8 flex w-full flex-col items-center justify-center gap-2 bg-[#80B6E710] py-10">

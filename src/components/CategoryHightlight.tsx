@@ -1,9 +1,8 @@
 import React from "react"
 import { Link } from "gatsby"
-
 import { aboutCompany } from "@/components/AboutCompany"
-import ventosaEspeciais from "@/assets/ventosas-especiais.png"
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel"
+import ventosasEspeciais from "@/assets/ventosas-especiais.png"
 
 const aboutCompanyItems = [
   aboutCompany.CertificateCard,
@@ -12,30 +11,37 @@ const aboutCompanyItems = [
   aboutCompany.QualityCard,
 ]
 
-const Categories = [
+export type CategoryHighlight = {
+  title: string
+  description: string
+  path: string
+  image: {
+    url: string
+    alt: string
+  }
+}
+
+const categories: CategoryHighlight[] = [
   {
-    title: "Ventosas especiais",
-    description: `Oferecemos serviços de desenvolvimento de ventosas a partir de
-              desenhos ou amostras, atendendo as necessidades espefícicas dos
-              projetos. Fabricamos ventosas para máquinas com esteiras
-              transportadoras, máquinas seladoras, máquinas embaladoras e outros
-              equipamentos de processamento de materiais.`,
-    path: "/products/ventosas",
+    title: "ventosas especiais",
+    description:
+      "Oferecemos serviços de desenvolvimento de ventosas a partir de desenhos ou amostras, atendendo as necessidades espefícicas dos projetos. Fabricamos ventosas para máquinas com esteiras transportadoras, máquinas seladoras, máquinas embaladoras e outros equipamentos de processamento de materiais. ",
+    path: "/category/ventosas-especiais",
     image: {
-      url: ventosaEspeciais,
-      alt: "ventosa especiais",
+      url: ventosasEspeciais,
+      alt: "Ventosas Especiais",
     },
   },
 ]
 
-export default function ProductsCarrousel() {
+export default function CategoriesHighlight() {
   return (
     <section className="h-full w-full">
       <div className="relative bg-[#0E9CFE] py-12">
         <div className="flex flex-col items-center justify-center">
           <Carousel>
             <CarouselContent>
-              {Categories.map((category, index) => (
+              {categories.map((category, index) => (
                 <CarouselItem
                   key={`carousel-item-${index}`}
                   className="lg-container flex h-full flex-col items-center justify-center px-2 py-4"
