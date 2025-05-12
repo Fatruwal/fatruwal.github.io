@@ -1,6 +1,7 @@
 import React from "react"
 import { budget } from "./budget-modal"
 import { Link } from "gatsby"
+import { cn } from "@/lib/utils"
 
 export type ProductCardProps = {
   image: {
@@ -10,12 +11,27 @@ export type ProductCardProps = {
   html: string
   path: string
   name: string
-}
+} & React.ComponentProps<"div">
 
-export const ProductCard = ({ html, image, path, name }: ProductCardProps) => {
+export const ProductCard = ({
+  html,
+  image,
+  path,
+  name,
+  className,
+  ...props
+}: ProductCardProps) => {
   return (
-    <div className="h-fit w-full rounded-sm border-none bg-white shadow-none">
-      <div className="h-fit w-full">
+    <div
+      className={cn(
+        "flex h-full w-full flex-col rounded-sm border-none bg-white shadow-none",
+        className,
+      )}
+      {...props}
+    >
+      <div className="flex h-full flex-col">
+        {" "}
+        {/* Alterado para flex-col e h-full */}
         <div className="mx-auto flex h-[140px] w-40 items-center justify-center rounded-sm lg:h-[200px] lg:w-10/12">
           <img
             className="max-h-full max-w-full object-contain"
@@ -23,16 +39,20 @@ export const ProductCard = ({ html, image, path, name }: ProductCardProps) => {
             alt={image.alt}
           />
         </div>
-        <span className="px-4 text-start text-xl font-bold">{name}</span>
+        <span className="flex-wrap px-4 text-start text-xl font-bold">
+          {name}
+        </span>
         <div className="mt-4 border-t-[1px] border-light-support-300 px-4 pt-4">
           <div
             className="text-xs text-primary-foreground-400"
             dangerouslySetInnerHTML={{
-              __html: html.substring(0, 120).trim().concat("..."),
+              __html: html.substring(0, 130).trim().concat("..."),
             }}
           />
         </div>
-        <div className="flex flex-col items-stretch justify-between gap-4 p-4 sm:flex-row">
+        <div className="mt-auto flex flex-col gap-4 p-4 sm:flex-row">
+          {" "}
+          {/* mt-auto funciona somente em flex containers */}
           <Link
             to={path}
             className="flex w-full items-center justify-center text-nowrap rounded-sm bg-primary-500 p-2 text-xs font-bold uppercase text-primary-foreground-100"

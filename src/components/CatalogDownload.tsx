@@ -17,6 +17,7 @@ import GradientBar from "./GradientBar"
 import { cn } from "@/lib/utils"
 import { ContactForm } from "./services/contact-form"
 import { useToast } from "@/hooks/use-toast"
+import { set } from "lodash"
 
 export const formSchema = z.object({
   name: z
@@ -41,11 +42,11 @@ export const formSchema = z.object({
     .email({ message: "Por favor, insira um endereço de e-mail válido." }),
   phone: z
     .string({ required_error: "Por favor, insira seu telefone." })
-    .min(8, {
-      message: "O telefone deve ter pelo menos 8 caracteres.",
+    .min(14, {
+      message: "O telefone deve ter pelo menos 10 dígitos.",
     })
     .max(15, {
-      message: "O telefone deve ter no máximo 15 caracteres.",
+      message: "O telefone deve ter no máximo 15 dígitos.",
     }),
   message: z.string().min(0).max(500).optional(),
 })
@@ -183,8 +184,21 @@ export const Modal = ({
                           className="w-full rounded-sm border-0 bg-white px-2 py-6 outline-none placeholder:text-primary-foreground-300"
                           placeholder="Insira seu telefone"
                           autoComplete="phone"
-                          type="number"
                           {...field}
+                          onChange={e => {
+                            const value = e.target.value.replace(/\D/g, "")
+
+                            let formattedValue = ""
+                            if (value.length <= 2) {
+                              formattedValue = value
+                            } else if (value.length <= 7) {
+                              formattedValue = `(${value.slice(0, 2)}) ${value.slice(2)}`
+                            } else {
+                              formattedValue = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`
+                            }
+
+                            field.onChange(formattedValue)
+                          }}
                         />
                       </FormControl>
                       <FormMessage />

@@ -45,11 +45,11 @@ const Category = ({
       footerMenu={pageContext.footerMenu}
       className="bg-white"
     >
-      <div className="2xl:flex 2xl:justify-center">
+      <div className="w-screen">
         {banner && (
           <img
             loading="lazy"
-            className="items-center"
+            className="h-auto max-h-[400px] w-full object-cover 2xl:max-h-[400px]"
             src={banner.url}
             alt={banner.alt}
           />
@@ -77,6 +77,7 @@ const Category = ({
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product, index) => (
               <ProductCard
+                className="h-full"
                 key={index}
                 html={product.text}
                 image={product.image}

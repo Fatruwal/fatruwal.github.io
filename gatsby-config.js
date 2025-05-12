@@ -70,26 +70,6 @@ module.exports = {
       },
     },
     {
-      resolve: "@pasdo501/gatsby-source-woocommerce",
-      options: {
-        api: process.env.WOOCOMMERCE_URL || "fatruwal.5minds.com.br",
-        https: true,
-        api_keys: {
-          consumer_key: process.env.CONSUMER_KEY,
-          consumer_secret: process.env.CONSUMER_SECRET,
-        },
-        api_version: "wc/v3",
-        wpAPIPrefix: "wp-json",
-        fields: ["products", "products/categories", "products/attributes"],
-
-        queryStringAuth: true,
-        verboseOutput: true,
-
-        perPage: 100,
-        requestConcurrency: 5,
-      },
-    },
-    {
       resolve: "gatsby-source-graphql",
       options: {
         typeName: "WPGraphQL",

@@ -210,24 +210,6 @@ async function createWpPages(
           }
         }
       }
-      allWcProducts {
-        nodes {
-          name
-          slug
-          categories {
-            name
-          }
-          short_description
-          description
-          images {
-            name
-            alt
-            localFile {
-              publicURL
-            }
-          }
-        }
-      }
     }
   `)
 
@@ -235,17 +217,6 @@ async function createWpPages(
     reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
     return
   }
-
-  const products = result.data.allWcProducts.nodes.map(r => ({
-    name: r.name,
-    category: r.categories[0]?.name,
-    text: r.short_description || r.description || "",
-    path: `/product/${r.slug}`,
-    image: {
-      url: r.images[0]?.localFile?.publicURL || "",
-      alt: r.images[0]?.alt || r.images[0]?.name,
-    },
-  }))
 
   const pages = result.data.allWpPage.nodes.map(p => {
     let content
@@ -474,6 +445,7 @@ async function createProductPages(
                 content(format: RENDERED)
                 slug
                 title
+                excerpt
                 featuredImage {
                   node {
                     title
@@ -503,7 +475,7 @@ async function createProductPages(
     download: r.categorias?.catalogo?.node?.link,
     products: r.produtos.nodes.map(p => ({
       name: p.title,
-      text: p.content.substring(0, 120).concat("...") || "",
+      text: p.excerpt || "",
       path: `/product/${p.slug}`,
       image: {
         url: p.featuredImage?.node?.sourceUrl || "",
@@ -538,7 +510,7 @@ async function createProductPages(
     const related_products = productsCategories.produtos.nodes.map(r => ({
       name: r.title,
       path: `/product/${r.slug}`,
-      short_description: r.content.substring(0, 120).concat("...") || "",
+      short_description: r.excerpt || "",
       product: {
         image: r.featuredImage?.node?.sourceUrl || "",
         alt: r.featuredImage?.node?.title || "",
@@ -547,7 +519,7 @@ async function createProductPages(
 
     const product = productsCategories.produtos.nodes.map(p => ({
       name: p.title,
-      short_description: p.content.substring(0, 120).concat("...") || "",
+      short_description: p.excerpt || "",
       description: p.content,
       download: productsCategories.categorias?.catalogo?.node?.link,
       product: {
@@ -616,7 +588,6 @@ async function createHomePage(
     }
   `)
 
-  // Check for errors
   if (result.errors) {
     reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
     return
