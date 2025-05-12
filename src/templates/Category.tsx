@@ -5,6 +5,7 @@ import GradientBar from "@/components/GradientBar"
 import { HeaderMenuItem } from "@/components/header"
 import Layout from "@/components/layout"
 import { ProductCard } from "@/components/ProductCard"
+import Seo from "@/components/Seo"
 import { PageProps } from "gatsby"
 import React from "react"
 
@@ -99,5 +100,7 @@ const Category = ({
     </Layout>
   )
 }
+
+export const Head = () => <Seo title="Categoria" />
 
 export default Category

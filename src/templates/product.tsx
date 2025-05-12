@@ -18,6 +18,7 @@ import { CatalogDownload } from "@/components/CatalogDownload"
 import { aboutCompany } from "@/components/AboutCompany"
 import { FooterMenuItem } from "@/components/footer"
 import { HeaderMenuItem } from "@/components/header"
+import Seo from "@/components/Seo"
 
 interface RelatedProduct {
   name: string
@@ -178,5 +179,7 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
     </Layout>
   )
 }
+
+export const Head = () => <Seo title="produtos" />
 
 export default ProductTemplate
