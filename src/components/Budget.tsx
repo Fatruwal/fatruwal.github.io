@@ -18,6 +18,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ContactForm } from "./services/contact-form"
 import { useToast } from "@/hooks/use-toast"
+import { PhoneFormat } from "@/common/PhoneFormat"
 
 const Contacts = () => {
   return (
@@ -182,6 +183,11 @@ const Form = ({ className, ...props }: React.HTMLProps<HTMLDivElement>) => {
                       className="w-full rounded border-0 bg-white px-2 py-8 outline-none"
                       placeholder="Insira seu telefone"
                       {...field}
+                      onChange={e =>
+                        field.onChange(
+                          PhoneFormat.formatPhoneNumber(e.target.value),
+                        )
+                      }
                     />
                   </FormControl>
                   <FormMessage />

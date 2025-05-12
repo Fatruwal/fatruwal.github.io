@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils"
 import { ContactForm } from "./services/contact-form"
 import { useToast } from "@/hooks/use-toast"
 import { set } from "lodash"
+import { PhoneFormat } from "@/common/PhoneFormat"
 
 export const formSchema = z.object({
   name: z
@@ -185,20 +186,11 @@ export const Modal = ({
                           placeholder="Insira seu telefone"
                           autoComplete="phone"
                           {...field}
-                          onChange={e => {
-                            const value = e.target.value.replace(/\D/g, "")
-
-                            let formattedValue = ""
-                            if (value.length <= 2) {
-                              formattedValue = value
-                            } else if (value.length <= 7) {
-                              formattedValue = `(${value.slice(0, 2)}) ${value.slice(2)}`
-                            } else {
-                              formattedValue = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`
-                            }
-
-                            field.onChange(formattedValue)
-                          }}
+                          onChange={e =>
+                            field.onChange(
+                              PhoneFormat.formatPhoneNumber(e.target.value),
+                            )
+                          }
                         />
                       </FormControl>
                       <FormMessage />
