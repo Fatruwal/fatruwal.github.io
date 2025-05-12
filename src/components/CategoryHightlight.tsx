@@ -26,7 +26,7 @@ const categories: CategoryHighlight[] = [
     title: "ventosas especiais",
     description:
       "Oferecemos serviços de desenvolvimento de ventosas a partir de desenhos ou amostras, atendendo as necessidades espefícicas dos projetos. Fabricamos ventosas para máquinas com esteiras transportadoras, máquinas seladoras, máquinas embaladoras e outros equipamentos de processamento de materiais. ",
-    path: "/category/ventosas-especiais",
+    path: "/category/pecas-especiais",
     image: {
       url: ventosasEspeciais,
       alt: "Ventosas Especiais",
