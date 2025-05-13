@@ -17,7 +17,9 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "docker:dev": "docker-compose up gatsby-dev",
+    "docker:install": "docker-compose run --rm gatsby-dev npm install",
+    "docker:clean": "docker-compose run --rm gatsby-dev npm run clean"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

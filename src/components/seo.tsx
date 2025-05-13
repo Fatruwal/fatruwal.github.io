@@ -17,22 +17,9 @@ interface SeoProps {
 }
 
 const Seo = ({ title: overrideTitle }: SeoProps) => {
-  const {
-    wp: { generalSettings },
-  } = useStaticQuery<SeoQuery>(graphql`
-    query {
-      wp {
-        generalSettings {
-          title
-          description
-          language
-        }
-      }
-    }
-  `)
-
-  const { title: siteTitle, description, language } = generalSettings
-  const title = overrideTitle || siteTitle
+  const title = overrideTitle || `Fatruwal - Borracharia e Indústria`
+  const description = `A Fatruwal é uma empresa especializada na fabricação de coxins, retentores, anéis de vedação, diafragmas, juntas, ventosas, peças, arruelas e buchas.`
+  const language = `pt-BR`
 
   const metaDescription = description
   const socialMedia = {
