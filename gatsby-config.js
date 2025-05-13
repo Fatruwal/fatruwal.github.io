@@ -23,13 +23,15 @@ module.exports = {
    * If you need any more you can search here: https://www.gatsbyjs.com/plugins/
    */
   plugins: [
-    // {
-    //   resolve: `gatsby-plugin-alias-imports`,
-    //   options: {
-    //     alias: {},
-    //     extensions: [],
-    //   },
-    // },
+    {
+      resolve: "gatsby-plugin-google-tagmanager",
+      options: {
+        id: process.env.GTM_ID,
+        includeInDevelopment: false,
+        defaultDataLayer: { platform: "gatsby" },
+        enableWebVitalsTracking: true,
+      },
+    },
     {
       resolve: `gatsby-omni-font-loader`,
       options: {
