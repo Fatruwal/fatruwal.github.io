@@ -16,52 +16,44 @@ import {
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { SocialMedia } from "../SocialMedia"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ContactForm } from "../services/contact-form"
+import { useToast } from "@/hooks/use-toast"
 
-interface MenuQueryData {
-  allWpMenuItem: {
-    nodes: Array<{
-      label: string
-      path: string
-    }>
-  }
-}
-
-type LinkTitle = {
+export type FooterMenuItem = {
   path: string
   title: string
 }
 
-interface NewletterForm {
-  email: string
-}
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Por favor, insira um endereço de e-mail válido.",
+  }),
+})
 
-const Footer: React.FC = () => {
-  const data = useStaticQuery<MenuQueryData>(graphql`
-    query FooterMenuQuery {
-      allWpMenuItem(
-        filter: {
-          menu: { node: { name: { eq: "footer-menu" } } }
-          parentId: { eq: null }
-        }
-        sort: { order: ASC }
-      ) {
-        nodes {
-          label
-          path
-        }
-      }
+const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
+  const { toast } = useToast()
+
+  const subscribeNewsletter = async (data: z.infer<typeof formSchema>) => {
+    try {
+      await ContactForm.newsletter(data.email)
+      toast({
+        title: "Sucesso!",
+        description: "Inscrição realizada com sucesso.",
+        variant: "default",
+      })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Ocorreu um erro ao se inscrever na newsletter.",
+      })
     }
-  `)
+  }
 
-  const menuItems: LinkTitle[] = data.allWpMenuItem.nodes.map(item => ({
-    path: item.path || "/",
-    title: item.label,
-  }))
-
-  const form = useForm<NewletterForm>({
-    defaultValues: {
-      email: "",
-    },
+  const form = useForm({
+    resolver: zodResolver(formSchema),
   })
 
   return (
@@ -72,35 +64,40 @@ const Footer: React.FC = () => {
             {/* First column */}
             <div className="space-y-6 lg:col-span-4">
               <Form {...form}>
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel className="mb-2 text-center text-lg font-semibold lg:text-start">
-                        Novidades e ofertas por email
-                      </FormLabel>
-                      <div className="flex">
-                        <div className="relative flex-grow">
-                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                            <FaRegEnvelope className="text-white" />
+                <form onSubmit={form.handleSubmit(subscribeNewsletter)}>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel className="mb-2 text-center text-lg font-semibold lg:text-start">
+                          Novidades e ofertas por email
+                        </FormLabel>
+                        <div className="flex">
+                          <div className="relative flex-grow">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                              <FaRegEnvelope className="text-white" />
+                            </div>
+                            <FormControl>
+                              <Input
+                                className="h-[40px] rounded-none pl-10 placeholder:text-white autofill:bg-primary-500"
+                                placeholder="Insira seu melhor e-mail"
+                                {...field}
+                              />
+                            </FormControl>
                           </div>
-                          <FormControl>
-                            <Input
-                              className="h-[40px] rounded-none pl-10 placeholder:text-white"
-                              placeholder="Insira seu melhor e-mail"
-                              {...field}
-                            />
-                          </FormControl>
+                          <Button
+                            type="submit"
+                            className="h-[40px] rounded-none bg-white text-primary-700"
+                          >
+                            Enviar
+                          </Button>
                         </div>
-                        <Button className="h-[40px] rounded-none bg-white text-primary-700">
-                          Enviar
-                        </Button>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </form>
               </Form>
               <SocialMedia
                 theme="dark"

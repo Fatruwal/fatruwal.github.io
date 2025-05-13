@@ -21,26 +21,34 @@ export const BlogCard = ({ data, className, ...props }: BlogCardProps) => {
     <div
       {...props}
       className={cn(
-        "flex h-full w-fit flex-col rounded-sm bg-white p-1",
+        "flex h-full max-w-80 flex-col rounded-sm bg-white p-4 shadow-sm",
         className,
       )}
     >
-      <img src={data.banner} alt={data.title} className="h-48 w-[367px]" />
-      <h5 className="mt-4 text-wrap text-lg font-bold text-primary-foreground-500">
-        {data.title}
-      </h5>
-      <span className="mb-2 text-xs text-primary-foreground-300">
-        {DateFormat.isoDateToReadable(data.modified)}
-      </span>
-      <div className="mb-2 w-fit text-sm text-primary-foreground-400">
-        {HtmlFormat.getFirstParagraph(data.content)}
+      <div className="relative h-40 w-full overflow-hidden">
+        <img
+          src={data.banner}
+          alt={data.title}
+          className="h-full w-full object-cover"
+        />
       </div>
-      <Link
-        className="mt-auto h-fit w-fit rounded-sm bg-primary-500 px-4 py-2 text-sm font-bold text-primary-foreground-100 md:px-2 md:py-1 md:text-sm"
-        to={data.path}
-      >
-        Veja mais
-      </Link>
+      <div className="flex flex-1 flex-col">
+        <h5 className="mt-3 line-clamp-2 text-lg font-bold text-primary-foreground-500">
+          {data.title}
+        </h5>
+        <span className="mb-1 text-xs text-primary-foreground-300">
+          {DateFormat.isoDateToReadable(data.modified)}
+        </span>
+        <div className="mb-2 line-clamp-3 text-sm text-primary-foreground-400">
+          {HtmlFormat.getFirstParagraph(data.content)}
+        </div>
+        <Link
+          className="mt-auto self-start rounded-sm bg-primary-500 px-4 py-2 text-sm font-bold text-primary-foreground-100"
+          to={data.path}
+        >
+          Veja mais
+        </Link>
+      </div>
     </div>
   )
 }

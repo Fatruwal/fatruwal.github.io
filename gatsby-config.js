@@ -70,23 +70,11 @@ module.exports = {
       },
     },
     {
-      resolve: "@pasdo501/gatsby-source-woocommerce",
+      resolve: "gatsby-source-graphql",
       options: {
-        api: process.env.WOOCOMMERCE_URL || "fatruwal.5minds.com.br",
-        https: true,
-        api_keys: {
-          consumer_key: process.env.CONSUMER_KEY,
-          consumer_secret: process.env.CONSUMER_SECRET,
-        },
-        api_version: "wc/v3",
-        wpAPIPrefix: "wp-json",
-        fields: ["products", "products/categories", "products/attributes"],
-
-        queryStringAuth: true,
-        verboseOutput: true,
-
-        perPage: 100,
-        requestConcurrency: 5,
+        typeName: "WPGraphQL",
+        fieldName: "wpGraphql",
+        url: process.env.WPGRAPHQL_URL,
       },
     },
 
@@ -111,7 +99,6 @@ module.exports = {
      */
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    `gatsby-plugin-image`,
     {
       // See https://www.gatsbyjs.com/plugins/gatsby-plugin-manifest/?=gatsby-plugin-manifest
       resolve: `gatsby-plugin-manifest`,

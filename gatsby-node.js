@@ -9,6 +9,8 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         "@/components": path.resolve(__dirname, "src/components"),
         "@/lib/utils": path.resolve(__dirname, "src/lib/utils"),
         "@/templates": path.resolve(__dirname, "src/templates"),
+        "@/hooks": path.resolve(__dirname, "src/hooks"),
+        "@/services": path.resolve(__dirname, "src/services"),
       },
     },
   })
@@ -18,12 +20,97 @@ exports.onCreateWebpackConfig = ({ actions }) => {
  * This function creates all the individual blog pages in this site
  */
 exports.createPages = async ({ graphql, actions, reporter }) => {
-  await CreateWpPages({ graphql, actions, reporter })
-  await CreateArticlePage({ graphql, actions, reporter })
-  await CreateProductPages({ graphql, actions, reporter })
+  const headerMenu = await getHeaderMenu({ graphql, actions, reporter })
+  const footerMenu = await getFooterMenu({ graphql, actions, reporter })
+  await createWpPages({ graphql, actions, reporter }, headerMenu, footerMenu)
+  await createArticlePage(
+    { graphql, actions, reporter },
+    headerMenu,
+    footerMenu,
+  )
+  await createProductPages(
+    { graphql, actions, reporter },
+    headerMenu,
+    footerMenu,
+  )
+  await createHomePage({ graphql, actions, reporter }, headerMenu, footerMenu)
 }
 
-async function CreateWpPages({ graphql, actions, reporter }) {
+async function getHeaderMenu({ graphql, actions, reporter }) {
+  const { data, errors } = await graphql(`
+    query {
+      allWpMenuItem(
+        filter: {
+          menu: { node: { name: { eq: "header-menu" } } }
+          parentId: { eq: null }
+        }
+        sort: { order: ASC }
+      ) {
+        nodes {
+          label
+          path
+          childItems {
+            nodes {
+              label
+              path
+            }
+          }
+        }
+      }
+    }
+  `)
+  if (errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, errors)
+    return
+  }
+  const menuItems = data.allWpMenuItem.nodes.map(item => ({
+    path: item.path || "/",
+    title: item.label,
+    childrens:
+      item.childItems.nodes.length > 0
+        ? item.childItems.nodes.map(child => ({
+            path: child.path || "/",
+            title: child.label,
+          }))
+        : undefined,
+  }))
+  return menuItems
+}
+
+async function getFooterMenu({ graphql, actions, reporter }) {
+  const { data, errors } = await graphql(`
+    query {
+      allWpMenuItem(
+        filter: {
+          menu: { node: { name: { eq: "footer-menu" } } }
+          parentId: { eq: null }
+        }
+        sort: { order: ASC }
+      ) {
+        nodes {
+          label
+          path
+        }
+      }
+    }
+  `)
+  if (errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, errors)
+    return
+  }
+
+  const menuItems = data.allWpMenuItem.nodes.map(item => ({
+    path: item.path || "/",
+    title: item.label,
+  }))
+  return menuItems
+}
+
+async function createWpPages(
+  { graphql, actions, reporter },
+  headerMenu,
+  footerMenu,
+) {
   const { createPage } = actions
 
   const result = await graphql(`
@@ -37,13 +124,8 @@ async function CreateWpPages({ graphql, actions, reporter }) {
             templateName
             ... on WpTemplate_Categoria {
               templateName
-              categorias {
-                catalogo {
-                  node {
-                    altText
-                    publicUrl
-                  }
-                }
+              taxonomyTerm {
+                linkParaOCatalogo
               }
             }
             ... on WpTemplate_Qualidade {
@@ -128,24 +210,6 @@ async function CreateWpPages({ graphql, actions, reporter }) {
           }
         }
       }
-      allWcProducts {
-        nodes {
-          name
-          slug
-          categories {
-            name
-          }
-          short_description
-          description
-          images {
-            name
-            alt
-            localFile {
-              publicURL
-            }
-          }
-        }
-      }
     }
   `)
 
@@ -153,17 +217,6 @@ async function CreateWpPages({ graphql, actions, reporter }) {
     reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
     return
   }
-
-  const products = result.data.allWcProducts.nodes.map(r => ({
-    name: r.name,
-    category: r.categories[0]?.name,
-    text: r.short_description || r.description || "",
-    path: `/product/${r.slug}`,
-    image: {
-      url: r.images[0]?.localFile?.publicURL || "",
-      alt: r.images[0]?.alt || r.images[0]?.name,
-    },
-  }))
 
   const pages = result.data.allWpPage.nodes.map(p => {
     let content
@@ -225,7 +278,7 @@ async function CreateWpPages({ graphql, actions, reporter }) {
 
     if (p.template?.templateName === "Categoria") {
       content = {
-        download: p.template?.categorias?.catalogo?.node?.publicUrl,
+        download: p.template?.taxonomyTerm?.linkParaOCatalogo,
         products: products.filter(r => r.category === p.title),
       }
     }
@@ -255,18 +308,31 @@ async function CreateWpPages({ graphql, actions, reporter }) {
       path: page.path,
       component: path.resolve("./src/templates/page/index.tsx"),
       context: {
+        headerMenu,
+        footerMenu,
         page: page,
       },
     })
   })
 }
 
-async function CreateArticlePage({ graphql, actions, reporter }) {
+async function createArticlePage(
+  { graphql, actions, reporter },
+  headerMenu,
+  footerMenu,
+) {
   const { createPage } = actions
 
-  const article = await graphql(`
+  const results = await graphql(`
     query {
-      allWpPost {
+      allWpPage(filter: { template: { templateName: { eq: "Blog" } } }) {
+        nodes {
+          slug
+          title
+          content
+        }
+      }
+      allWpPost(sort: { modified: DESC }) {
         nodes {
           id
           title
@@ -278,17 +344,31 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
               publicUrl
             }
           }
+          imagemBlogDestaque {
+            imagemBlogDestaque {
+              node {
+                publicUrl
+              }
+            }
+          }
         }
       }
     }
   `)
 
-  if (article.errors) {
-    reporter.panicOnBuild(`Error while running GraphQL query.`, article.errors)
+  if (results.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, results.errors)
     return
   }
 
-  const posts = article.data.allWpPost.nodes.map(p => ({
+  const blogPages = results.data.allWpPage.nodes.map(p => ({
+    slug: p.slug,
+    title: p.title,
+    content: p.content,
+    path: `/${p.slug}`,
+  }))
+
+  const posts = results.data.allWpPost.nodes.map(p => ({
     banner: p.featuredImage?.node.publicUrl,
     title: p.title,
     modified: p.modified,
@@ -296,9 +376,201 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
     path: `/blog/${p.slug}`,
   }))
 
-  const relatedArticles = await graphql(`
+  const related = results.data.allWpPost.nodes.splice(0, 3).map(r => ({
+    title: r.title,
+    path: `/blog/${r.slug}`,
+    modified: r.modified,
+    content: r.content,
+    banner: r.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
+  }))
+
+  posts.forEach(row => {
+    createPage({
+      path: row.path,
+      component: path.resolve("./src/templates/article.tsx"),
+      context: {
+        headerMenu,
+        footerMenu,
+        article: row,
+        related: related,
+      },
+    })
+  })
+  blogPages.forEach(row => {
+    createPage({
+      path: row.path,
+      component: path.resolve("./src/templates/blog.tsx"),
+      context: {
+        headerMenu,
+        footerMenu,
+        page: row,
+        articles: posts,
+      },
+    })
+  })
+}
+
+async function createProductPages(
+  { graphql, actions, reporter },
+  headerMenu,
+  footerMenu,
+) {
+  const { createPage } = actions
+
+  const results = await graphql(`
     query {
-      allWpPost(limit: 3, sort: { modified: DESC }) {
+      wpGraphql {
+        categoriasProduto {
+          nodes {
+            id
+            name
+            slug
+            description
+            categorias {
+              catalogo {
+                node {
+                  title
+                  link
+                }
+              }
+              imagemBannerDaCategoria {
+                node {
+                  title
+                  link
+                }
+              }
+            }
+            produtos {
+              nodes {
+                content(format: RENDERED)
+                slug
+                title
+                excerpt
+                featuredImage {
+                  node {
+                    title
+                    sourceUrl
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `)
+  if (results.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, results.errors)
+    return
+  }
+
+  const categories = results.data.wpGraphql.categoriasProduto.nodes.map(r => ({
+    title: r.name,
+    slug: r.slug,
+    description: r.description,
+    banner: {
+      url: r.categorias?.imagemBannerDaCategoria?.node?.link || "",
+      alt: r.categorias?.imagemBannerDaCategoria?.node?.title || "",
+    },
+    download: r.categorias?.catalogo?.node?.link,
+    products: r.produtos.nodes.map(p => ({
+      name: p.title,
+      text: p.excerpt || "",
+      path: `/product/${p.slug}`,
+      image: {
+        url: p.featuredImage?.node?.sourceUrl || "",
+        alt: p.featuredImage?.node?.title || "",
+      },
+    })),
+    path: `/category/${r.slug}`,
+  }))
+
+  categories.forEach(row => {
+    createPage({
+      path: row.path,
+      component: path.resolve("./src/templates/category.tsx"),
+      context: {
+        headerMenu,
+        footerMenu,
+        content: row,
+      },
+    })
+  })
+
+  let products = []
+
+  for (
+    let index = 0;
+    index < results.data.wpGraphql.categoriasProduto.nodes.length;
+    index++
+  ) {
+    const productsCategories =
+      results.data.wpGraphql.categoriasProduto.nodes[index]
+
+    const related_products = productsCategories.produtos.nodes.map(r => ({
+      name: r.title,
+      path: `/product/${r.slug}`,
+      short_description: r.excerpt || "",
+      product: {
+        image: r.featuredImage?.node?.sourceUrl || "",
+        alt: r.featuredImage?.node?.title || "",
+      },
+    }))
+
+    const product = productsCategories.produtos.nodes.map(p => ({
+      name: p.title,
+      short_description: p.excerpt || "",
+      description: p.content,
+      download: productsCategories.categorias?.catalogo?.node?.link,
+      product: {
+        url: p.featuredImage?.node?.sourceUrl || "",
+        alt: p.featuredImage?.node?.title || "",
+      },
+      path: `/product/${p.slug}`,
+      related_products,
+    }))
+    products = [...products, ...product]
+  }
+
+  products.forEach(row => {
+    createPage({
+      path: row.path,
+      component: path.resolve("./src/templates/product.tsx"),
+      context: {
+        headerMenu,
+        footerMenu,
+        content: row,
+      },
+    })
+  })
+}
+async function createHomePage(
+  { graphql, actions, reporter },
+  headerMenu,
+  footerMenu,
+) {
+  const { createPage } = actions
+
+  const result = await graphql(`
+    query {
+      wpGraphql {
+        categoriasProduto {
+          nodes {
+            categorias {
+              imagemDeDestaqueHome {
+                node {
+                  title
+                  sourceUrl
+                }
+              }
+            }
+            description
+            name
+            slug
+          }
+        }
+      }
+      allWpPost {
         nodes {
           title
           modified
@@ -315,109 +587,38 @@ async function CreateArticlePage({ graphql, actions, reporter }) {
       }
     }
   `)
-  if (relatedArticles.errors) {
-    reporter.panicOnBuild(`Error while running GraphQL query.`, relatedArticles)
+
+  if (result.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`, result.errors)
     return
   }
 
-  const related = relatedArticles.data.allWpPost.nodes.map(r => ({
-    title: r.title,
-    path: `/blog/${r.slug}`,
-    modified: r.modified,
-    content: r.content,
-    banner: r.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
+  const posts = result.data.allWpPost.nodes.slice(0, 3).map(post => ({
+    title: post.title,
+    path: `/blog/${post.slug}`,
+    modified: post.modified,
+    content: post.content,
+    banner: post.imagemBlogDestaque?.imagemBlogDestaque?.node.publicUrl,
   }))
 
-  posts.forEach(row => {
-    createPage({
-      path: row.path,
-      component: path.resolve("./src/templates/article.tsx"),
-      context: {
-        article: row,
-        related: related,
-      },
-    })
-  })
-}
+  const categories = result.data.wpGraphql.categoriasProduto.nodes
+    .slice(0, 20)
+    .map(r => ({
+      name: r.name,
+      short_description: r.description,
+      image: r.categorias?.imagemDeDestaqueHome?.node?.sourceUrl || "",
+      alt: r.categorias?.imagemDeDestaqueHome?.node?.title || "",
+      path: `/category/${r.slug}`,
+    }))
 
-async function CreateProductPages({ graphql, actions, reporter }) {
-  const { createPage } = actions
-
-  const products = await graphql(`
-    query {
-      allWcProducts {
-        nodes {
-          name
-          slug
-          attributes {
-            name
-            options
-          }
-          categories {
-            name
-          }
-          short_description
-          description
-          images {
-            name
-            alt
-            localFile {
-              publicURL
-            }
-          }
-          related_products {
-            name
-            images {
-              alt
-              name
-              localFile {
-                publicURL
-              }
-            }
-            slug
-            short_description
-          }
-        }
-      }
-    }
-  `)
-  if (products.errors) {
-    reporter.panicOnBuild(`Error while running GraphQL query.`, products)
-    return
-  }
-
-  const pages = products.data.allWcProducts.nodes.map(r => ({
-    name: r.name,
-    category: r.categories[0]?.name,
-    short_description: r.short_description,
-    description: r.description,
-    path: `/product/${r.slug}`,
-    product: {
-      image: r.images[0]?.localFile?.publicURL || "",
-      alt: r.images[0]?.alt || r.images[0]?.name,
+  createPage({
+    path: "/",
+    component: path.resolve("./src/templates/homepage.tsx"),
+    context: {
+      categories: categories,
+      headerMenu,
+      footerMenu,
+      articles: posts,
     },
-    attributes: r.attributes.map(a => ({
-      name: a.name,
-      options: a.options,
-    })),
-    related_products: r.related_products.map(p => ({
-      name: p.name,
-      short_description: p.short_description,
-      path: `/product/${p.slug}`,
-      product: {
-        image: p.images[0]?.localFile?.publicURL || "",
-        alt: p.images[0]?.alt || p.images[0]?.name,
-      },
-    })),
-  }))
-
-  pages.forEach(row => {
-    createPage({
-      path: row.path,
-      component: path.resolve("./src/templates/product.tsx"),
-      context: {
-        content: row,
-      },
-    })
   })
 }

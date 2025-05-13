@@ -1,67 +1,23 @@
 import React from "react"
-import { graphql, Link, useStaticQuery } from "gatsby"
+import { Link } from "gatsby"
 import Sidebar from "./sidebar"
-import { FatherLinkTitle } from "./model"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
-import BudgetModal from "../budget-modal"
+import { budget } from "../budget-modal"
 import LogoImage from "@/assets/logo"
 import Topbar from "./Topbar"
 import BudgetFormIcon from "@/assets/BudgetFormIcon"
 
-interface MenuQueryData {
-  allWpMenuItem: {
-    nodes: Array<{
-      label: string
-      path: string
-      childItems: {
-        nodes: Array<{
-          label: string
-          path: string
-        }>
-      }
-    }>
-  }
+export interface HeaderMenuItem {
+  path: string
+  title: string
+  childrens?: HeaderMenuItem[]
 }
 
-const Header: React.FC = () => {
-  const data = useStaticQuery<MenuQueryData>(graphql`
-    query HeaderMenuQuery {
-      allWpMenuItem(
-        filter: {
-          menu: { node: { name: { eq: "header-menu" } } }
-          parentId: { eq: null }
-        }
-        sort: { order: ASC }
-      ) {
-        nodes {
-          label
-          path
-          childItems {
-            nodes {
-              label
-              path
-            }
-          }
-        }
-      }
-    }
-  `)
-  const menuItems: FatherLinkTitle[] = data.allWpMenuItem.nodes.map(item => ({
-    path: item.path || "/",
-    title: item.label,
-    childrens:
-      item.childItems.nodes.length > 0
-        ? item.childItems.nodes.map(child => ({
-            path: child.path || "/",
-            title: child.label,
-          }))
-        : undefined,
-  }))
-
+const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
   return (
     <header className="shadow-lg">
       <Topbar />
@@ -80,15 +36,17 @@ const Header: React.FC = () => {
               </Link>
             </div>
             <div className="lg:hidden">
-              <BudgetModal>
-                <BudgetFormIcon className="mr-1 bg-white md:mr-2" />
-                <div className="flex flex-col items-center justify-center leading-[10px] md:text-sm md:leading-5">
-                  <span className="text-xxs font-normal md:text-sm">
-                    Solicite um
-                  </span>
-                  <strong className="text-xxs md:text-sm">Orçamento </strong>
-                </div>
-              </BudgetModal>
+              <budget.Modal>
+                <budget.Trigger>
+                  <BudgetFormIcon className="mr-1 bg-white md:mr-2" />
+                  <div className="flex flex-col items-center justify-center leading-[10px] md:text-sm md:leading-5">
+                    <span className="text-xxs font-normal md:text-sm">
+                      Solicite um
+                    </span>
+                    <strong className="text-xxs md:text-sm">Orçamento </strong>
+                  </div>
+                </budget.Trigger>
+              </budget.Modal>
             </div>
           </div>
 
@@ -158,15 +116,17 @@ const Header: React.FC = () => {
             <div className="hidden h-[3.5rem] w-[1px] bg-primary-500 md:block"></div>
 
             <div className="pb-1 pr-4 text-center lg:pr-0">
-              <BudgetModal>
-                <BudgetFormIcon className="mr-1 bg-white md:mr-2" />
-                <div className="flex flex-col items-center justify-center leading-[10px] md:text-sm md:leading-5">
-                  <span className="text-xxs font-normal md:text-sm">
-                    Solicite um
-                  </span>
-                  <strong className="text-xxs md:text-sm">Orçamento </strong>
-                </div>
-              </BudgetModal>
+              <budget.Modal>
+                <budget.Trigger>
+                  <BudgetFormIcon className="mr-1 bg-white md:mr-2" />
+                  <div className="flex flex-col items-center justify-center leading-[10px] md:text-sm md:leading-5">
+                    <span className="text-xxs font-normal md:text-sm">
+                      Solicite um
+                    </span>
+                    <strong className="text-xxs md:text-sm">Orçamento </strong>
+                  </div>
+                </budget.Trigger>
+              </budget.Modal>
             </div>
           </div>
         </div>
