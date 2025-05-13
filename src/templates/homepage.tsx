@@ -128,7 +128,7 @@ const ProductHighlight = ({
   }>
 }) => {
   return (
-    <section className="flex justify-center bg-[#80B6E710] py-10">
+    <section className="mt-10 flex justify-center bg-[#80B6E710] py-10">
       <Container className="flex justify-center">
         <Carousel
           opts={{
