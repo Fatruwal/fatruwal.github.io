@@ -1,5 +1,5 @@
 import React from "react"
-import Seo from "@/components/Seo"
+import Seo from "@/components/seo"
 import { PageProps } from "gatsby"
 import Layout from "@/components/layout"
 import Quality, { QualityComponent } from "./quality"
