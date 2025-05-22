@@ -5,7 +5,7 @@ import GradientBar from "@/components/GradientBar"
 import { HeaderMenuItem } from "@/components/header"
 import Layout from "@/components/layout"
 import { ProductCard } from "@/components/ProductCard"
-import Seo from "@/components/Seo"
+import Seo from "@/components/seo"
 import { PageProps } from "gatsby"
 import React from "react"
 

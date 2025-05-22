@@ -18,7 +18,7 @@ import { CatalogDownload } from "@/components/CatalogDownload"
 import { aboutCompany } from "@/components/AboutCompany"
 import { FooterMenuItem } from "@/components/footer"
 import { HeaderMenuItem } from "@/components/header"
-import Seo from "@/components/Seo"
+import Seo from "@/components/seo"
 
 interface RelatedProduct {
   name: string

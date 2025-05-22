@@ -1,0 +1,22 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Instalar dependências necessárias para compilação
+RUN apk add --no-cache python3 make g++ git
+
+# NÃO instale o Gatsby CLI globalmente - prefira usar a versão local
+# (isso às vezes causa conflitos)
+
+# Definir permissões para hot reloading
+RUN mkdir -p node_modules .cache public
+RUN chown -R node:node /app
+
+# Definir usuário não-root
+USER node
+
+# Expor portas
+EXPOSE 8000 9929 9230
+
+# Comando padrão - não vai ser executado se usar docker-compose
+CMD ["sh", "-c", "npm install && npm run develop"]

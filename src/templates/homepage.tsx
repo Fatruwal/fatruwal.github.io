@@ -1,6 +1,6 @@
 import React from "react"
 import Layout from "@/components/layout"
-import Seo from "@/components/Seo"
+import Seo from "@/components/seo"
 import { Link, PageProps } from "gatsby"
 import {
   Carousel,
@@ -128,7 +128,7 @@ const ProductHighlight = ({
   }>
 }) => {
   return (
-    <section className="flex justify-center bg-[#80B6E710] py-10">
+    <section className="mt-10 flex justify-center bg-[#80B6E710] py-10">
       <Container className="flex justify-center">
         <Carousel
           opts={{

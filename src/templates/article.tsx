@@ -1,7 +1,7 @@
 import React from "react"
 import Layout from "@/components/layout"
 import { PageProps } from "gatsby"
-import Seo from "@/components/Seo"
+import Seo from "@/components/seo"
 import { BlogCard } from "@/components/BlogCard"
 import GradientBar from "@/components/GradientBar"
 import Container from "@/components/Container"

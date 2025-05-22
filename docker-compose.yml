@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  gatsby-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: fatruwal-dev
+    ports:
+      - "8000:8000"
+      - "9929:9929"
+      - "9230:9230"
+    volumes:
+      - ./:/app
+      - gatsby-node-modules:/app/node_modules
+      - gatsby-cache:/app/.cache
+      - gatsby-public:/app/public
+    environment:
+      - NODE_ENV=development
+      - GATSBY_TELEMETRY_DISABLED=1
+      - CHOKIDAR_USEPOLLING=true
+      - GATSBY_WEBPACK_PUBLICPATH=/
+    command: sh -c "npm install && npm run develop"
+    restart: unless-stopped
+    networks:
+      - gatsby-network
+
+networks:
+  gatsby-network: 
+    driver: bridge
+# Use volumes nomeados ao invés de anônimos para melhor gerenciamento
+volumes:
+  gatsby-node-modules:
+  gatsby-cache:
+  gatsby-public:
