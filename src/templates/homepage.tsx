@@ -93,7 +93,7 @@ const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
         </ul>
       </section>
       <section className="flex flex-col items-center justify-center gap-2 bg-primary-700 py-10">
-        <h3 className="my-2 text-center font-bold text-primary-foreground-100">
+        <h3 className="my-2 text-center font-bold uppercase text-primary-foreground-100">
           Blog fatruwal
         </h3>
         <GradientBar className="mb-4" />
