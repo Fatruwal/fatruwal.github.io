@@ -1,10 +1,10 @@
 import React from "react"
 import { FaRegEnvelope } from "react-icons/fa"
 import { useForm } from "react-hook-form"
-import CertificateSGS from "@/assets/CertificateSGS.png"
+import LogoSGSFooter from "@/assets/logo_sgs_footer.png"
 import { BottomBar } from "./BottomBar"
 import { ContactComponent } from "../ContactComponent"
-import { graphql, Link, useStaticQuery } from "gatsby"
+import { Link } from "gatsby"
 import {
   Form,
   FormControl,
@@ -70,7 +70,7 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
                     name="email"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel className="mb-2 text-center text-lg font-semibold lg:text-start">
+                        <FormLabel className="mb-2 text-center text-lg font-semibold uppercase lg:text-start">
                           Novidades e ofertas por email
                         </FormLabel>
                         <div className="flex">
@@ -88,7 +88,7 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
                           </div>
                           <Button
                             type="submit"
-                            className="h-[40px] rounded-none bg-white text-primary-700"
+                            className="h-[40px] rounded-none bg-white uppercase text-primary-700"
                           >
                             Enviar
                           </Button>
@@ -106,7 +106,9 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
                 className="mx-auto w-full justify-center lg:justify-start"
               />
               <div className="flex flex-col items-center justify-center text-white lg:items-start">
-                <h3 className="mb-2 font-semibold">Endereço</h3>
+                <h3 className="mb-2 text-sm font-semibold uppercase">
+                  Endereço
+                </h3>
                 <p className="text-center text-sm lg:text-start">
                   Rua Hamilton Fernandes, 56 - Sônia Maria - Mauá-SP - CEP:
                   09380-390
@@ -114,11 +116,11 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
               </div>
             </div>
 
-            <div className="border-t-hairline border-white pt-8 lg:col-span-2 lg:border-l-hairline lg:border-t-0 lg:pl-8">
+            <div className="border-t-hairline border-white pt-4 lg:col-span-2 lg:border-l-hairline lg:border-t-0 lg:pl-8">
               <ul className="flex flex-col items-center space-y-3 text-white">
                 {menuItems.map(link => (
                   <li key={link.title} className="first-of-type:font-bold">
-                    <Link to={link.path} className="text-white">
+                    <Link to={link.path} className="uppercase text-white">
                       {link.title}
                     </Link>
                   </li>
@@ -126,8 +128,8 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
               </ul>
             </div>
 
-            <div className="border-t-hairline border-white pt-8 lg:col-span-2 lg:border-l-hairline lg:border-t-0 lg:pl-8">
-              <h3 className="mb-4 text-center text-lg font-semibold lg:text-start">
+            <div className="border-t-hairline border-white pt-4 lg:col-span-2 lg:border-l-hairline lg:border-t-0 lg:pl-8">
+              <h3 className="mb-4 text-center text-lg font-semibold uppercase lg:text-start">
                 Contatos
               </h3>
               <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 lg:items-start">
@@ -136,15 +138,15 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
               </div>
             </div>
 
-            <div className="border-t-hairline border-white pt-8 md:mt-0 lg:col-span-2 lg:border-t-0">
-              <h3 className="mb-4 text-center text-lg font-semibold lg:text-start">
-                Certificados
+            <div className="border-t-hairline border-white pt-4 md:mt-0 lg:col-span-2 lg:border-t-0">
+              <h3 className="mb-4 text-center text-lg font-semibold uppercase lg:text-start">
+                Certificado
               </h3>
               <div className="flex justify-center lg:justify-start">
                 <img
-                  width="92"
-                  height="90"
-                  src={CertificateSGS}
+                  width="120"
+                  height="100"
+                  src={LogoSGSFooter}
                   alt="Empresa com certificação ISO 9001"
                 />
               </div>
