@@ -105,14 +105,16 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
                   <FaWhatsapp className="mr-1 text-lg" />
                   Orçamento pelo WhatsApp
                 </a>
+                {/* 
+                Commented because requested by ux team
                 {download && (
-                  <CatalogDownload.Modal link={download}>
+                  <CatalogDownload.Modal className="hidden" link={download}>
                     <CatalogDownload.Trigger className="flex h-9 w-full items-center justify-center gap-2 rounded-sm bg-primary-900 px-4 py-7 text-sm font-bold uppercase text-white transition-colors hover:bg-primary-500">
                       <IoDownloadOutline className="mr-1 text-lg" />
                       Download do catalogo
                     </CatalogDownload.Trigger>
                   </CatalogDownload.Modal>
-                )}
+                )} */}
               </div>
               <div className="shadown-sm border-r-1 my-4 flex flex-col gap-4 border-primary-50 bg-white px-2 py-4 md:my-0 md:flex-row xl:p-6">
                 <aboutCompany.CertificateCard className="border-primary-50 md:border-r-[1px]" />
@@ -130,7 +132,7 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
           )}
           {related_products?.length > 0 && (
             <section className="mt-10 w-full">
-              <h2 className="font-bold">Outros modelos</h2>
+              <h2 className="font-bold uppercase">Outros modelos</h2>
               <GradientBar />
               <div className="px-10 lg:px-8">
                 <Carousel
