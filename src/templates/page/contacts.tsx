@@ -16,12 +16,16 @@ export default function Contacts({ content }: ContactsProps) {
     <div>
       <div className="mt-8 flex flex-col items-center justify-center">
         <Container>
+          <h1 className="text-start font-bold uppercase">Contato</h1>
+          <GradientBar className="my-6" />
           <section className="flex w-full flex-col justify-between gap-10 rounded-sm md:flex-row md:items-stretch lg:gap-20">
             <div className="w-full md:w-2/5">
               <Budget.Form className="h-full" />
             </div>
             <div className="w-full md:w-3/5">
-              <h2 className="font-bold">OUTROS CANAIS PARA CONTATO</h2>
+              <h2 className="font-bold uppercase">
+                OUTROS CANAIS PARA CONTATO
+              </h2>
               <GradientBar />
               <Budget.Contacts />
               <Budget.Banner />
@@ -30,7 +34,7 @@ export default function Contacts({ content }: ContactsProps) {
         </Container>
         <Container>
           <section className="flex w-full flex-col justify-between gap-10 rounded-sm lg:gap-20">
-            <h2>{title}</h2>
+            <h2 className="font-bold uppercase">{title}</h2>
             <iframe
               className="h-96 w-full rounded-sm"
               title="Localização da Fatruwal Vedações Industriais em Borracha"

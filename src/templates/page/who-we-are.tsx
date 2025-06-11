@@ -28,7 +28,7 @@ export default function WhoWeAre({ content }: WhoWeAreProps) {
     <>
       <div className="flex justify-center">
         <Container className="rounded-sm p-4 py-8">
-          <h1 className="font-bold">{content.title}</h1>
+          <h1 className="font-bold uppercase">{content.title}</h1>
           <GradientBar className="my-6" />
           <div dangerouslySetInnerHTML={{ __html: content.text }} />
         </Container>
