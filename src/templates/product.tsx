@@ -135,7 +135,7 @@ const ProductTemplate = (props: PageProps<unknown, PageTemplateProps>) => {
               <div className="px-10 lg:px-8">
                 <Carousel
                   opts={{
-                    align: "center",
+                    align: "start",
                   }}
                   className="w-full"
                 >
