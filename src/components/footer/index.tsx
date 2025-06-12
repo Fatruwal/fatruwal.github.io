@@ -117,7 +117,7 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
             </div>
 
             <div className="border-t-hairline border-white pt-4 lg:col-span-2 lg:border-l-hairline lg:border-t-0 lg:pl-8">
-              <ul className="flex flex-col items-center space-y-3 text-white">
+              <ul className="flex flex-col items-start space-y-3 text-white">
                 {menuItems.map(link => (
                   <li key={link.title} className="first-of-type:font-bold">
                     <Link to={link.path} className="uppercase text-white">
@@ -129,7 +129,7 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
             </div>
 
             <div className="border-t-hairline border-white pt-4 lg:col-span-2 lg:border-l-hairline lg:border-t-0 lg:pl-8">
-              <h3 className="mb-4 text-center text-lg font-semibold uppercase lg:text-start">
+              <h3 className="mb-4 text-start text-lg font-semibold uppercase lg:text-start">
                 Contatos
               </h3>
               <div className="mx-auto flex w-full flex-col items-center justify-center gap-4 lg:items-start">
@@ -139,7 +139,7 @@ const Footer = ({ menuItems }: { menuItems: FooterMenuItem[] }) => {
             </div>
 
             <div className="border-t-hairline border-white pt-4 md:mt-0 lg:col-span-2 lg:border-t-0">
-              <h3 className="mb-4 text-center text-lg font-semibold uppercase lg:text-start">
+              <h3 className="mb-4 text-start text-lg font-semibold uppercase lg:text-start">
                 Certificado
               </h3>
               <div className="flex justify-center lg:justify-start">
