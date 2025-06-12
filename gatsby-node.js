@@ -148,7 +148,14 @@ async function createWpPages(
                 downloadCertificate {
                   node {
                     altText
-                    publicUrl
+                    mediaItemUrl
+                  }
+                }
+                tabelaDeCompatibilidade {
+                  node {
+                    altText
+                    mediaItemUrl
+                    title
                   }
                 }
               }
@@ -238,7 +245,11 @@ async function createWpPages(
         },
         download: {
           file: p.template.certificadosNaTelaDeQualidade?.downloadCertificate
-            ?.node?.publicUrl,
+            ?.node?.mediaItemUrl,
+        },
+        table: {
+          file: p.template.certificadosNaTelaDeQualidade
+            ?.tabelaDeCompatibilidade?.node?.mediaItemUrl,
         },
       }
     }

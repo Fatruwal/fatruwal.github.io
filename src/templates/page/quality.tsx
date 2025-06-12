@@ -1,5 +1,6 @@
 import Container from "@/components/Container"
 import GradientBar from "@/components/GradientBar"
+import { Link } from "gatsby"
 import React from "react"
 
 export interface QualityComponent {
@@ -18,7 +19,9 @@ export interface QualityComponent {
     }
   }
   download?: {
-    text?: string
+    file?: string
+  }
+  table?: {
     file?: string
   }
 }
@@ -32,9 +35,10 @@ export interface QualityProps {
 }
 
 export default function Quality({ content }: QualityProps) {
+  console.log(content)
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex justify-center bg-[#f1f1f1]">
         <Container className="rounded-sm p-4">
           <h1 className="font-bold uppercase">{content.title}</h1>
           <GradientBar className="my-6" />
@@ -42,8 +46,8 @@ export default function Quality({ content }: QualityProps) {
         </Container>
       </div>
       <div className="flex flex-col items-center justify-center bg-primary-25">
-        <div className="w-full sm:w-10/12 xl:max-w-screen-2xl">
-          <div className="flex flex-col gap-4 rounded-sm p-4 px-8 sm:px-4 md:flex-row md:items-center md:justify-between lg:gap-20">
+        <div className="w-full px-8 sm:w-11/12 xl:max-w-screen-2xl">
+          <div className="flex flex-col gap-4 rounded-sm p-4 px-8 sm:px-0 md:flex-row md:items-center md:justify-between lg:gap-20">
             <div className="">
               <h2 className="my-4 text-lg font-bold">
                 {content.content.certificate?.header}
@@ -69,17 +73,30 @@ export default function Quality({ content }: QualityProps) {
               )}
             </div>
           </div>
-          {content.content.download && (
-            <div className="mb-8 mt-2 w-full px-8 sm:px-4">
-              <a
-                href={content.content.download?.file}
-                className="rounded-sm bg-primary-500 p-2 px-6 text-center text-xs font-bold text-white hover:bg-primary-600"
-                target="_blank"
-              >
-                Download do certificado
-              </a>
-            </div>
-          )}
+          <div className="flex flex-col gap-2 px-8 md:flex-row md:px-0">
+            {content.content.download && (
+              <div className="mb-8 mt-2">
+                <a
+                  href={content.content.download?.file}
+                  className="md:text-md cursor-pointer rounded-sm bg-primary-900 p-4 px-6 text-center text-sm font-bold uppercase text-white transition-colors hover:bg-primary-600"
+                  target="_blank"
+                >
+                  Download do certificado
+                </a>
+              </div>
+            )}
+            {content.content.table && (
+              <div className="mb-8 mt-2">
+                <a
+                  href={content.content.table?.file}
+                  className="md:text-md cursor-pointer rounded-sm bg-primary-900 p-4 px-6 text-center text-sm font-bold uppercase text-white transition-colors hover:bg-primary-600"
+                  target="_blank"
+                >
+                  tabela de compatibilidade
+                </a>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
