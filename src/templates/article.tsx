@@ -31,7 +31,7 @@ const ArticleTemplate = ({
         <article className="block bg-[#F3F3F3] pb-6">
           <div className="w-full">
             <img
-              className="mb-8 h-96 w-full object-cover"
+              className="mb-16 h-96 w-full object-cover"
               src={article.banner}
               alt={article.title}
             />
@@ -54,7 +54,7 @@ const ArticleTemplate = ({
 
             <GradientBar className="mb-4 mt-2" />
             <div>
-              <ul className="flex flex-col items-center justify-between gap-4 lg:gap-14 xl:grid xl:grid-cols-3 xl:items-stretch">
+              <ul className="flex flex-col items-center justify-between gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:gap-14 xl:items-stretch">
                 {related.map(p => (
                   <li className="rounded-sm" key={p.title}>
                     <BlogCard className="max-w-full" data={p} />
