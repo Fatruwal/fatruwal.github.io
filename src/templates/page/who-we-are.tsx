@@ -27,8 +27,8 @@ export default function WhoWeAre({ content }: WhoWeAreProps) {
   return (
     <>
       <div className="flex justify-center">
-        <Container className="rounded-sm p-4">
-          <h1 className="font-bold">{content.title}</h1>
+        <Container className="rounded-sm p-4 py-8">
+          <h1 className="font-bold uppercase">{content.title}</h1>
           <GradientBar className="my-6" />
           <div dangerouslySetInnerHTML={{ __html: content.text }} />
         </Container>
@@ -46,13 +46,13 @@ export default function WhoWeAre({ content }: WhoWeAreProps) {
   )
 }
 
-const Column = ({ content }: { content: Content }) => {
+const Column = ({ content }: { content: WhoWeAreContentComponent }) => {
   return (
     <div className="flex flex-col items-center p-4 px-0 sm:px-8">
       <div className="flex h-20 w-20 items-center justify-center">
         <img src={content.icon.publicUrl} alt={content.icon.altText} />
       </div>
-      <h2 className="my-4 text-center text-xl font-bold text-primary-500">
+      <h2 className="my-4 text-center text-xl font-bold uppercase text-primary-500">
         {content.title}
       </h2>
       <p className="text-md text-center">{content.description}</p>

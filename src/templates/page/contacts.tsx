@@ -2,7 +2,7 @@ import React from "react"
 import { Budget } from "@/components/Budget"
 import GradientBar from "@/components/GradientBar"
 import Container from "@/components/Container"
-import WeServeAllOfBrazil from "@/components/WeServeAllOfBrazil"
+// import WeServeAllOfBrazil from "@/components/WeServeAllOfBrazil"
 
 export interface ContactsProps {
   content: {
@@ -17,20 +17,21 @@ export default function Contacts({ content }: ContactsProps) {
       <div className="mt-8 flex flex-col items-center justify-center">
         <Container>
           <section className="flex w-full flex-col justify-between gap-10 rounded-sm md:flex-row md:items-stretch lg:gap-20">
-            <div className="w-full md:w-2/5">
-              <Budget.Form className="h-full" />
-            </div>
             <div className="w-full md:w-3/5">
-              <h2 className="font-bold">OUTROS CANAIS PARA CONTATO</h2>
+              <h2 className="font-bold uppercase">
+                Nossos canais para contato
+              </h2>
               <GradientBar />
               <Budget.Contacts />
-              <Budget.Banner />
             </div>
           </section>
         </Container>
         <Container>
-          <section className="flex w-full flex-col justify-between gap-10 rounded-sm lg:gap-20">
-            <h2>{title}</h2>
+          <section className="flex w-full flex-col justify-between rounded-sm">
+            <div>
+              <h2 className="text-center font-bold uppercase">{title}</h2>
+              <GradientBar className="mx-auto text-center" />
+            </div>
             <iframe
               className="h-96 w-full rounded-sm"
               title="Localização da Fatruwal Vedações Industriais em Borracha"
@@ -45,7 +46,7 @@ export default function Contacts({ content }: ContactsProps) {
             Atendemos para todo o Brasil
           </h2>
           <GradientBar className="mx-auto text-center" />
-          <WeServeAllOfBrazil />
+          {/* <WeServeAllOfBrazil /> */}
         </Container>
       </section>
     </div>

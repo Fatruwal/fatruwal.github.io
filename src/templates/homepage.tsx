@@ -93,7 +93,7 @@ const Home = ({ pageContext }: PageProps<unknown, HomePageProps>) => {
         </ul>
       </section>
       <section className="flex flex-col items-center justify-center gap-2 bg-primary-700 py-10">
-        <h3 className="my-2 text-center font-bold text-primary-foreground-100">
+        <h3 className="my-2 text-center font-bold uppercase text-primary-foreground-100">
           Blog fatruwal
         </h3>
         <GradientBar className="mb-4" />
@@ -128,11 +128,11 @@ const ProductHighlight = ({
   }>
 }) => {
   return (
-    <section className="mt-10 flex justify-center bg-[#80B6E710] py-10">
+    <section className="flex justify-center bg-[#80B6E710] py-20">
       <Container className="flex justify-center">
         <Carousel
           opts={{
-            align: "center",
+            align: "start",
           }}
           className="w-10/12 md:w-full"
         >
@@ -142,7 +142,7 @@ const ProductHighlight = ({
             {products.map(row => (
               <CarouselItem
                 key={row.name}
-                className="ml-1 md:basis-1/2 lg:ml-0 xl:basis-1/3 2xl:basis-1/4"
+                className="pl-4 md:basis-1/2 xl:basis-1/3 2xl:basis-1/4"
               >
                 {/* Container principal com altura fixa */}
                 <div className="shadow-full flex h-[400px] w-full flex-col overflow-hidden rounded-sm border-none bg-white">

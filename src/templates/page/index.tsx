@@ -51,9 +51,13 @@ const Page = (props: PageProps<unknown, PageTemplateProps>) => {
       footerMenu={props.pageContext.footerMenu}
       className="bg-white"
     >
-      <div className="2xl:flex 2xl:justify-center">
+      <div className="h-full w-screen">
         {banner && (
-          <img className="items-center" src={banner.url} alt={banner.alt} />
+          <img
+            className="h-full w-full object-fill"
+            src={banner.url}
+            alt={banner.alt}
+          />
         )}
       </div>
       {template.name === "Contato" && <Contacts content={template.content} />}

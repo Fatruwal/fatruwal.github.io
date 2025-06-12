@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Link } from "gatsby"
 import Sidebar from "./sidebar"
 import {
@@ -7,9 +7,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { budget } from "../budget-modal"
-import LogoImage from "@/assets/logo"
+import LogoImage from "@/assets/logo.webp"
 import Topbar from "./Topbar"
 import BudgetFormIcon from "@/assets/BudgetFormIcon"
+import logoSGS from "@/assets/logo_sgs.png"
 
 export interface HeaderMenuItem {
   path: string
@@ -18,6 +19,13 @@ export interface HeaderMenuItem {
 }
 
 const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
+  const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>(
+    {},
+  )
+
+  const handleDropdownChange = (title: string, isOpen: boolean) => {
+    setOpenDropdowns(prev => ({ ...prev, [title]: isOpen }))
+  }
   return (
     <header className="shadow-lg">
       <Topbar />
@@ -32,7 +40,11 @@ const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
 
             <div>
               <Link to="/">
-                <LogoImage />
+                <img
+                  src={LogoImage}
+                  alt="Logo"
+                  className="h-14 w-auto md:h-16 lg:h-24"
+                />
               </Link>
             </div>
             <div className="lg:hidden">
@@ -53,25 +65,32 @@ const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
           {/* Right Section - Desktop Navigation & Badge */}
           <div className="lg:w-screen-2xl hidden text-sm text-primary-900 hover:text-[#0E6ABF] lg:flex lg:items-center lg:space-x-6">
             {/* Desktop Navigation */}
-            <nav className="mr-[1.1rem] hidden lg:block">
+            <nav className="hidden lg:block">
               <ul className="flex w-full space-x-[36px]">
                 {menuItems.map(link =>
                   !link.childrens ? (
                     <li key={link.title}>
                       <Link
                         to={link.path}
-                        className="text-nowrap text-primary-900 transition-colors hover:text-[#0E6ABF]"
+                        className="text-nowrap text-primary-900 transition-all hover:text-[#0E6ABF]"
                       >
                         {link.title}
                       </Link>
                     </li>
                   ) : (
-                    <DropdownMenu key={link.title}>
+                    <DropdownMenu
+                      key={link.title}
+                      onOpenChange={isOpen =>
+                        handleDropdownChange(link.title, isOpen)
+                      }
+                    >
                       <DropdownMenuTrigger>
-                        <div className="flex cursor-pointer items-center text-primary-900 transition-colors hover:text-[#0E6ABF]">
+                        <div className="flex cursor-pointer items-center text-primary-900 transition-all hover:text-[#0E6ABF]">
                           {link.title}
                           <svg
-                            className="ml-1 h-4 w-4"
+                            className={`ml-1 h-4 w-4 transition-transform duration-75 ${
+                              openDropdowns[link.title] ? "-rotate-180" : ""
+                            }`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -86,8 +105,8 @@ const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
                           </svg>
                         </div>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="rounded-none">
-                        <ul className="grid grid-cols-2 py-4">
+                      <DropdownMenuContent className="translate-x-1/4 rounded-sm py-2">
+                        <ul className="grid grid-cols-2">
                           {link.childrens.map((child, index) => (
                             <li
                               key={child.title}
@@ -98,7 +117,7 @@ const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
                             >
                               <Link
                                 to={child.path}
-                                className="block px-4 py-2 text-sm transition-all hover:bg-primary-25 hover:font-medium hover:text-primary-300"
+                                className="block px-4 py-2 text-xs text-primary-foreground-500 transition-all hover:bg-primary-25 hover:font-medium hover:text-primary-300"
                               >
                                 {child.title}
                               </Link>
@@ -113,21 +132,13 @@ const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
             </nav>
 
             {/* Vertical Divider */}
-            <div className="hidden h-[3.5rem] w-[1px] bg-primary-500 md:block"></div>
+            <div className="hidden h-[48px] w-[1px] md:block"></div>
 
-            <div className="pb-1 pr-4 text-center lg:pr-0">
-              <budget.Modal>
-                <budget.Trigger>
-                  <BudgetFormIcon className="mr-1 bg-white md:mr-2" />
-                  <div className="flex flex-col items-center justify-center leading-[10px] md:text-sm md:leading-5">
-                    <span className="text-xxs font-normal md:text-sm">
-                      Solicite um
-                    </span>
-                    <strong className="text-xxs md:text-sm">Orçamento </strong>
-                  </div>
-                </budget.Trigger>
-              </budget.Modal>
-            </div>
+            <img
+              src={logoSGS}
+              alt="Logo SGS"
+              className="h-8 max-h-14 border-l-primary-500 pl-10 md:h-10 md:border-l-[1px] lg:h-20"
+            />
           </div>
         </div>
       </section>

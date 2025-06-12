@@ -25,7 +25,7 @@ export const BlogCard = ({ data, className, ...props }: BlogCardProps) => {
         className,
       )}
     >
-      <div className="relative h-40 w-full overflow-hidden">
+      <div className="relative h-48 w-full overflow-hidden">
         <img
           src={data.banner}
           alt={data.title}
@@ -33,7 +33,7 @@ export const BlogCard = ({ data, className, ...props }: BlogCardProps) => {
         />
       </div>
       <div className="flex flex-1 flex-col">
-        <h5 className="mt-3 line-clamp-2 text-lg font-bold text-primary-foreground-500">
+        <h5 className="mt-3 line-clamp-2 text-lg font-bold uppercase text-primary-foreground-500">
           {data.title}
         </h5>
         <span className="mb-1 text-xs text-primary-foreground-300">
@@ -43,7 +43,7 @@ export const BlogCard = ({ data, className, ...props }: BlogCardProps) => {
           {HtmlFormat.getFirstParagraph(data.content)}
         </div>
         <Link
-          className="mt-auto self-start rounded-sm bg-primary-500 px-4 py-2 text-sm font-bold text-primary-foreground-100"
+          className="mt-auto self-start rounded-sm bg-primary-500 px-4 py-2 text-sm font-bold uppercase text-primary-foreground-100"
           to={data.path}
         >
           Veja mais

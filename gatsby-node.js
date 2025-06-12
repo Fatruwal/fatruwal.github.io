@@ -148,7 +148,14 @@ async function createWpPages(
                 downloadCertificate {
                   node {
                     altText
-                    publicUrl
+                    mediaItemUrl
+                  }
+                }
+                tabelaDeCompatibilidade {
+                  node {
+                    altText
+                    mediaItemUrl
+                    title
                   }
                 }
               }
@@ -238,7 +245,11 @@ async function createWpPages(
         },
         download: {
           file: p.template.certificadosNaTelaDeQualidade?.downloadCertificate
-            ?.node?.publicUrl,
+            ?.node?.mediaItemUrl,
+        },
+        table: {
+          file: p.template.certificadosNaTelaDeQualidade
+            ?.tabelaDeCompatibilidade?.node?.mediaItemUrl,
         },
       }
     }
@@ -376,7 +387,7 @@ async function createArticlePage(
     path: `/blog/${p.slug}`,
   }))
 
-  const related = results.data.allWpPost.nodes.splice(0, 3).map(r => ({
+  const related = results.data.allWpPost.nodes.splice(0, 5).map(r => ({
     title: r.title,
     path: `/blog/${r.slug}`,
     modified: r.modified,

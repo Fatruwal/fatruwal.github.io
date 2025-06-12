@@ -60,7 +60,7 @@ const Category = ({
         <Container className="rounded-sm p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="font-bold">{title}</h1>
+              <h1 className="font-bold uppercase">{title}</h1>
             </div>
             {download && (
               <CatalogDownload.Modal link={download}>
