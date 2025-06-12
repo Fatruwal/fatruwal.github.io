@@ -17,7 +17,7 @@ export class HtmlFormat {
       paragraphHtml = paragraphHtml.replace(/&nbsp;/g, " ")
 
       firstParagraph.innerHTML = paragraphHtml
-      const text = paragraphHtml.substring(0, 120).trim()
+      const text = paragraphHtml.substring(0, 300).trim()
       return text.length > 0 ? text + "..." : ""
     }
 

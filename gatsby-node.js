@@ -376,7 +376,7 @@ async function createArticlePage(
     path: `/blog/${p.slug}`,
   }))
 
-  const related = results.data.allWpPost.nodes.splice(0, 3).map(r => ({
+  const related = results.data.allWpPost.nodes.splice(0, 5).map(r => ({
     title: r.title,
     path: `/blog/${r.slug}`,
     modified: r.modified,

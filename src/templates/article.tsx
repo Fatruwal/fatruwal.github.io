@@ -49,15 +49,15 @@ const ArticleTemplate = ({
           </div>
         </article>
         <div className="flex w-full justify-center">
-          <Container>
-            <h2>Materiais relacionados</h2>
+          <Container className="md:pl-0 md:pr-0">
+            <h2 className="font-bold uppercase">Materiais relacionadas</h2>
 
             <GradientBar className="mb-4 mt-2" />
             <div>
-              <ul className="flex flex-col items-center justify-between gap-4 xl:flex-row xl:items-stretch">
+              <ul className="flex flex-col items-center justify-between gap-4 lg:gap-14 xl:grid xl:grid-cols-3 xl:items-stretch">
                 {related.map(p => (
-                  <li className="max-w-fit rounded-sm" key={p.title}>
-                    <BlogCard data={p} />
+                  <li className="rounded-sm" key={p.title}>
+                    <BlogCard className="max-w-full" data={p} />
                   </li>
                 ))}
               </ul>
