@@ -105,19 +105,19 @@ const Header = ({ menuItems }: { menuItems: HeaderMenuItem[] }) => {
                           </svg>
                         </div>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="translate-x-1/4 rounded-sm py-2">
-                        <ul className="grid grid-cols-2">
+                      <DropdownMenuContent className="translate-x-[40%] rounded-sm py-2">
+                        <ul className="grid grid-cols-2 py-2">
                           {link.childrens.map((child, index) => (
                             <li
                               key={child.title}
                               data-first-col-of-grid={
                                 Math.round(link.childrens!.length) / 2 > index
                               }
-                              className="border-gray-200 data-[first-col-of-grid]:border-l"
+                              className="border-gray-200 data-[first-col-of-grid]:border-r"
                             >
                               <Link
                                 to={child.path}
-                                className="block px-4 py-2 text-xs text-primary-foreground-500 transition-all hover:bg-primary-25 hover:font-medium hover:text-primary-300"
+                                className="block w-full min-w-36 px-10 py-3 text-xs font-normal text-[#002B53] transition-all hover:bg-primary-25 hover:font-medium hover:text-primary-300"
                               >
                                 {child.title}
                               </Link>
