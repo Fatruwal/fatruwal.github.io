@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.fatruwal.com.br/sitemap-index.xml
+Host: https://www.fatruwal.com.br
